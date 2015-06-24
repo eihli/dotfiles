@@ -16,6 +16,12 @@ alias gp="git push"
 alias gb="git branch"
 alias gd="git diff"
 
+# Greenfield git aliases
+branch_name="$(git symbolic-ref HEAD 2>/dev/null)" ||
+branch_name="(unnamed branch)"
+branch_name=${branch_name##refs/heads/}
+alias gfp="git pull --rebase upstream master && git push origin $branch_name"
+
 # productivity aliases
 alias sc="cd ~/code/scratch"
 alias tp="cd ~/hackreactor/toy-problems"
@@ -23,10 +29,12 @@ alias td="cd ~/Projects/todoist"
 alias tlm="cd ~/hackreactor/tlm"
 alias selfa="cd ~/hackreactor/sa"
 alias hr="cd ~/hackreactor"
+alias gf="cd ~/hackreactor/greenfield"
 
 # docker
 alias bd="boot2docker"
 alias dk="docker"
+alias doc="docker-compose"
 # alias dockerrma="docker rm $(docker ps -a -q)"
 
 # productivity functions

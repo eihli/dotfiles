@@ -5,6 +5,10 @@ export PS1='${debian_chroot:+($debian_chroot)}\[\033[01;32m\]\u@\h\[\033[00m\]:\
 alias prof="subl ~/.bash_profile"
 alias reprof=". ~/.bash_profile"
 
+# command line aliases
+alias ls='ls -GFh'
+alias lsa='ls -GFha'
+
 # git alias
 alias gs="git status"
 alias ga="git add"
@@ -15,6 +19,9 @@ alias gl="git log --oneline"
 alias gp="git push"
 alias gb="git branch"
 alias gd="git diff"
+alias grc="git rebase --continue"
+alias gpr="git pull --rebase upstream master"
+alias glg="git log --pretty=format:'%h %ad | %s%d [%an]' --graph --date=short"
 
 # Greenfield git aliases
 branch_name="$(git symbolic-ref HEAD 2>/dev/null)" ||
@@ -23,6 +30,7 @@ branch_name=${branch_name##refs/heads/}
 alias gfp="git pull --rebase upstream master && git push origin $branch_name"
 
 # productivity aliases
+alias lg="cd ~/hackreactor/legacy"
 alias sc="cd ~/code/scratch"
 alias tp="cd ~/hackreactor/toy-problems"
 alias td="cd ~/Projects/todoist"

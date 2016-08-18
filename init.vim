@@ -2,14 +2,23 @@ map ,e :CtrlPMixed<Enter>
 map ,f :bn<CR>
 map ,a :bp<CR>
 map ,b :ls<CR>:b 
-map ,r :vertical resize 80<CR>
-map ,x <C-W>h
-map ,c <C-W>l
+map ,r :vertical resize 100<CR>
+map ,h <C-W>h
+map ,l <C-W>l
+map ,j <C-W>j
+map ,k <C-W>k
 map ,g <C-W>=
 map ,s :grep -Rn '' ./<Left><Left><Left><Left>
 map ,q :copen
 map ,z y/<C-R>"<CR>
+imap <C-l> <ESC>:w<CR>
 
+" Switch to previous buffer then delete next buffer
+" This closes buffer without closing split
+map ,m :bp|bd #
+
+highlight TrailSpace guibg=red ctermbg=darkred
+match TrailSpace /\s\+$/
 
 set dir=~/.tmp/swap
 set backup
@@ -38,4 +47,7 @@ filetype plugin on
 call plug#begin('~/.vim/plugged')
 Plug 'ctrlpvim/ctrlp.vim'
 Plug 'kchmck/vim-coffee-script'
+Plug 'jiangmiao/auto-pairs'
+Plug '/pangloss/vim-javascript'
+Plug 'mxw/vim-jsx'
 call plug#end()

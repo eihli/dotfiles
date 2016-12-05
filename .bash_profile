@@ -2,6 +2,11 @@ export EDITOR=vim
 export CLICOLOR=1
 export LSCOLORS=GxFxCxDxBxegedabagaced
 export PS1='${debian_chroot:+($debian_chroot)}\[\033[01;32m\]\u@\h\[\033[00m\]:\[\033[01;35m\]\W\[\033[00m\]\$ '
+
+# pyenv setup
+export PYENV_ROOT="$HOME/.pyenv"
+export PATH="$PYENV_ROOT/bin:$PATH"
+
 # Meta alias's
 alias prof="subl ~/.bash_profile"
 alias reprof=". ~/.bash_profile"

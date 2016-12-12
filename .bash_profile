@@ -3,10 +3,6 @@ export CLICOLOR=1
 export LSCOLORS=GxFxCxDxBxegedabagaced
 export PS1='${debian_chroot:+($debian_chroot)}\[\033[01;32m\]\u@\h\[\033[00m\]:\[\033[01;35m\]\W\[\033[00m\]\$ '
 
-# pyenv setup
-export PYENV_ROOT="$HOME/.pyenv"
-export PATH="$PYENV_ROOT/bin:$PATH"
-
 # TODO: Move aliases to .bash_aliases
 # http://askubuntu.com/questions/121413/understanding-bashrc-and-bash-profile
 # Meta alias's

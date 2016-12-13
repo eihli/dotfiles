@@ -22,6 +22,9 @@ map ,w :%s/\s\+$//e<CR>
 
 imap <C-l> <ESC>:w<CR>
 
+" Remove whitespace
+nnoremap ,w :%s/\s\+$//e<CR>
+
 " Navigation
 map <c-j> 10j
 map <c-k> 10k

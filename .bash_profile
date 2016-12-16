@@ -88,3 +88,5 @@ function mktest() {
   npm install
   grunt watch   
 }
+
+eval "$(pyenv init -)"

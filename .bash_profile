@@ -1,3 +1,8 @@
+# Source secrets that aren't committed to repo
+if [ -a ~/.secrets ]
+  source ~/.secrets
+fi
+
 export EDITOR=vim
 export CLICOLOR=1
 export LSCOLORS=GxFxCxDxBxegedabagaced

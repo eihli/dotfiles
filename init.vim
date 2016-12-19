@@ -17,6 +17,9 @@ map ,z y/<C-R>"<CR>
 map ,v :w<cr>
 map <C-O> :Explore<CR>
 
+" Delete trailing whitespaces
+map ,w :%s/\s\+$//e<CR>
+
 imap <C-l> <ESC>:w<CR>
 
 " Navigation

@@ -6,7 +6,7 @@ export PS1='${debian_chroot:+($debian_chroot)}\[\033[01;32m\]\u@\h\[\033[00m\]:\
 # TODO: Move aliases to .bash_aliases
 # http://askubuntu.com/questions/121413/understanding-bashrc-and-bash-profile
 # Meta alias's
-alias prof="subl ~/.bash_profile"
+alias prof="nvim ~/.bash_profile"
 alias reprof=". ~/.bash_profile"
 
 # command line aliases
@@ -86,7 +86,20 @@ function mktest() {
   mv ./test-skeleton*/* ./
   rm -r ./test-skeleton* temp.zip
   npm install
-  grunt watch   
+  grunt watch
+}
+
+function toggle-utc() {
+  touch ~/.timezone_info
+  PREV=$(echo $(ls -al /etc/localtime | awk '{print $11}'))
+  echo 'Previous timezone was: '$PREV
+  NEW=$(cat ~/.timezone_info)
+  if [ -z $NEW ]; then
+    echo '/usr/share/zoneinfo/UTC' >> ~/.timezone_info
+    NEW=$(cat ~/.timezone_info)
+  fi
+  echo 'New timezone is: '$NEW
+  sudo ln -sf $NEW /etc/localtime && echo $PREV > ~/.timezone_info
 }
 
 eval "$(pyenv init -)"

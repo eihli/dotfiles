@@ -1,5 +1,5 @@
 # Source secrets that aren't committed to repo
-if [ -a ~/.secrets ]
+if [ -a ~/.secrets ]; then
   source ~/.secrets
 fi
 

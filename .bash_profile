@@ -3,6 +3,11 @@ if [ -a ~/.secrets ]; then
   source ~/.secrets
 fi
 
+# Source git completion
+if [ -a ~/.git-completion.bash ]; then
+  source ~/.git-completion.bash
+fi
+
 export EDITOR=vim
 export CLICOLOR=1
 export LSCOLORS=GxFxCxDxBxegedabagaced

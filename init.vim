@@ -52,6 +52,8 @@ set ruler
 set number
 
 set wildignore+=*/vendor/*,*/tmp/*
+set wildignore+=*\.pyc
+set wildignore+=tags
 
 filetype on
 

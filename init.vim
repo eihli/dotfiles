@@ -66,6 +66,7 @@ Plug 'pangloss/vim-javascript'
 Plug 'jiangmiao/auto-pairs'
 Plug 'mxw/vim-jsx'
 Plug 'kovisoft/slimv'
+Plug 'tpope/vim-obsession'
 call plug#end()
 
 

@@ -116,6 +116,12 @@ if ! shopt -oq posix; then
   fi
 fi
 
+# Generate tags for python modules
+pyctags() {
+  ctags -R --fields=+l --languages=python --python-kinds=-iv \
+    -f ./tags $(python -c "import os, sys; \
+    print(' '.join('{}'.format(d) for d in sys.path if os.path.isdir(d)) + ' ./')")
+}
 export PYENV_ROOT="$HOME/.pyenv"
 export PATH="$PYENV_ROOT/bin:$PATH"
 

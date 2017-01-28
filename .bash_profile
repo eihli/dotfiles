@@ -107,4 +107,7 @@ function toggle-utc() {
   sudo ln -sf $NEW /etc/localtime && echo $PREV > ~/.timezone_info
 }
 
+# If login shell, source bashrc
+case $- in *i*) . ~/.bashrc;; esac
+
 eval "$(pyenv init -)"

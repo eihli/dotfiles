@@ -59,6 +59,16 @@ filetype on
 
 au FileType python nnoremap ,t :!python -m unittest %<CR>
 
+" Syntastic
+set statusline+=%#warningmsg#
+set statusline+=%{SyntasticStatuslineFlag()}
+set statusline+=%*
+
+let g:syntastic_always_populate_loc_list = 1
+let g:syntastic_auto_loc_list = 1
+let g:syntastic_check_on_open = 1
+let g:syntastic_check_on_wq = 0
+
 call plug#begin('~/.vim/plugged')
 Plug 'ctrlpvim/ctrlp.vim'
 Plug 'kchmck/vim-coffee-script'
@@ -67,6 +77,7 @@ Plug 'jiangmiao/auto-pairs'
 Plug 'mxw/vim-jsx'
 Plug 'kovisoft/slimv'
 Plug 'tpope/vim-obsession'
+Plug 'vim-syntastic/syntastic'
 call plug#end()
 
 

@@ -84,11 +84,6 @@ function gts() {
   cd $folder
 }
 
-function test() {
-  moduleName=$1
-  sed "s/{{.*}}/$moduleName/g" empty.js > $moduleName.js
-}
-
 function mktest() {
   moduleName=$1
   wget https://github.com/eihli/test-skeleton/archive/0.9.zip -O temp.zip

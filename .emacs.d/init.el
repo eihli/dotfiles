@@ -28,3 +28,5 @@
 
 (add-hook 'python-mode-hook
 	  (lambda () (add-to-list 'write-file-functions 'delete-trailing-whitespace)))
+
+(setq js-indent-level 2)

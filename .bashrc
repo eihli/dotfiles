@@ -124,8 +124,13 @@ pyctags() {
 
   echo $(python -c "import os, sys; print(' '.join('{}'.format(d) for d in sys.path if os.path.isdir(d)))")
 }
+
+# Android Development
+export PATH="$PATH:$HOME/Library/Android/sdk/platform-tools/"
+
 export PYENV_ROOT="$HOME/.pyenv"
 export PATH="$PYENV_ROOT/bin:$PATH"
 export PYTHONSTARTUP="$HOME/.pythonrc"
-
+export PATH="$PATH:$HOME/.rbenv/bin"
+eval "$(rbenv init -)"
 eval "$(pyenv init -)"

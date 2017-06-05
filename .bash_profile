@@ -111,3 +111,5 @@ function toggle-utc() {
 case $- in *i*) . ~/.bashrc;; esac
 
 eval "$(pyenv init -)"
+
+[[ -s "$HOME/.rvm/scripts/rvm" ]] && source "$HOME/.rvm/scripts/rvm" # Load RVM into a shell session *as a function*

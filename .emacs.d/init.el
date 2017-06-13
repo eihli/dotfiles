@@ -6,6 +6,8 @@
 (package-initialize)
 
 (global-set-key (kbd "C-x f") 'fiplr-find-file)
+(setq fiplr-ignored-globs '((directories ("node_modules"))
+			    (files ("*~"))))
 
 (require 'package)
 (add-to-list

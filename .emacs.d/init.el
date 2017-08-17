@@ -15,6 +15,11 @@
  '("melpa" . "https://melpa.org/packages/")
  t)
 
+;; Custom load path
+(add-to-list
+ 'load-path
+ "~/.emacs.d/extensions/")
+
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
@@ -100,3 +105,7 @@
 
 ;; Delete trailing whitespace before save
 (add-hook 'before-save-hook 'delete-trailing-whitespace)
+
+;; sr-speedbar
+(require 'sr-speedbar)
+(setq speedbar-show-unknown-files t)

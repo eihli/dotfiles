@@ -108,4 +108,7 @@
 
 ;; sr-speedbar
 (require 'sr-speedbar)
-(setq speedbar-show-unknown-files t)
+(setq speedbar-show-unknown-files t
+      sr-speedbar-width 50)
+(global-set-key (kbd "C-t") 'sr-speedbar-toggle)
+

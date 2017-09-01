@@ -82,9 +82,6 @@
 
 (global-linum-mode t)
 
-;; yasnippet
-(yas-global-mode 1)
-
 ;; TypeScript Stuff/Tide
 (defun setup-tide-mode ()
   (interactive)

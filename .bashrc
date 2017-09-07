@@ -128,6 +128,9 @@ pyctags() {
 # Android Development
 export PATH="$PATH:$HOME/Library/Android/sdk/platform-tools/"
 
+# Misc shell
+export EDITOR="emacs"
+
 export PYENV_ROOT="$HOME/.pyenv"
 export PATH="$PYENV_ROOT/bin:$PATH"
 export PYTHONSTARTUP="$HOME/.pythonrc"

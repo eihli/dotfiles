@@ -26,7 +26,7 @@
  ;; If there is more than one, they won't work right.
  '(package-selected-packages
    (quote
-    (emmet-mode tide json-mode autopair auto-complete fiplr)))
+    (slime emmet-mode tide json-mode autopair auto-complete fiplr)))
  '(safe-local-variable-values
    (quote
     ((eval progn
@@ -56,7 +56,7 @@
  )
 
 (elpy-enable)
-(load "elpy")
+(require 'elpy)
 (define-key elpy-mode-map (kbd "M-n") 'elpy-nav-forward-block)
 (define-key elpy-mode-map (kbd "M-p") 'elpy-nav-backward-block)
 
@@ -104,6 +104,9 @@
 
 (add-hook 'typescript-mode-hook #'setup-tide-mode)
 
+;; override indent.el so we have autocomplete
+(global-set-key (kbd "C-q") 'company-complete)
+
 ;; Delete trailing whitespace before save
 (add-hook 'before-save-hook 'delete-trailing-whitespace)
 
@@ -116,3 +119,10 @@
 ;; Emmet mode for autocompleting html/markup
 (add-hook 'sgml-mode-hook 'emmet-mode) ;; Auto-start on any markup modes
 (add-hook 'css-mode-hook  'emmet-mode) ;; enable Emmet's css abbreviation.
+
+;; Fixes error running python through emacs
+;; https://github.com/jorgenschaefer/elpy/issues/887
+(setq python-shell-completion-native-enable nil)
+
+;; Slime/Lisp
+(setq inferior-lisp-program "/usr/local/bin/sbcl")

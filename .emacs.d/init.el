@@ -126,3 +126,9 @@
 
 ;; Slime/Lisp
 (setq inferior-lisp-program "/usr/local/bin/sbcl")
+
+;; Don't clutter every folder with backups
+(setq backup-directory-alist
+      `((".*" . "~/.ebaks")))
+(setq auto-save-file-name-transforms
+      `((".*" "~/.ebaks" t)))

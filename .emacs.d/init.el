@@ -26,10 +26,21 @@
  ;; If there is more than one, they won't work right.
  '(package-selected-packages
    (quote
-    (slime emmet-mode tide json-mode autopair auto-complete fiplr)))
+    (magit slime emmet-mode tide json-mode autopair auto-complete fiplr)))
  '(safe-local-variable-values
    (quote
     ((eval progn
+	   (require
+	    (quote find-file-in-project))
+	   (setq ffip-prune-patterns
+		 (\`
+		  ("*/env/*"
+		   (\,@ ffip-prune-patterns))))
+	   (setq ffip-prune-patterns
+		 (\`
+		  ("*.csv"
+		   (\,@ ffip-prune-patterns)))))
+     (eval progn
 	   (require
 	    (quote find-file-in-project))
 	   (setq ffip-prune-patterns
@@ -109,6 +120,9 @@
 
 ;; Delete trailing whitespace before save
 (add-hook 'before-save-hook 'delete-trailing-whitespace)
+
+;; Magit
+(global-set-key (kbd "C-x g") 'magit-status)
 
 ;; sr-speedbar
 (require 'sr-speedbar)

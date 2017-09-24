@@ -131,6 +131,8 @@ export PATH="$PATH:$HOME/Library/Android/sdk/platform-tools/"
 # Misc shell
 export EDITOR="emacs"
 
+# User specific bin
+export PATH="$PATH:$HOME/bin"
 export PYENV_ROOT="$HOME/.pyenv"
 export PATH="$PYENV_ROOT/bin:$PATH"
 export PYTHONSTARTUP="$HOME/.pythonrc"

@@ -105,7 +105,7 @@
 (add-hook 'typescript-mode-hook #'setup-tide-mode)
 
 ;; override indent.el so we have autocomplete
-(global-set-key (kbd "C-q") 'company-complete)
+(global-set-key (kbd "M-q") 'company-complete)
 
 ;; Delete trailing whitespace before save
 (add-hook 'before-save-hook 'delete-trailing-whitespace)

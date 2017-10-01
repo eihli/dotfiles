@@ -26,10 +26,25 @@
  ;; If there is more than one, they won't work right.
  '(package-selected-packages
    (quote
-    (magit slime emmet-mode tide json-mode autopair auto-complete fiplr)))
+    (projectile magit slime emmet-mode tide json-mode autopair auto-complete fiplr)))
  '(safe-local-variable-values
    (quote
     ((eval progn
+	   (require
+	    (quote find-file-in-project))
+	   (setq ffip-prune-patterns
+		 (\`
+		  ("*/node_modules/*"
+		   (\,@ ffip-prune-patterns))))
+	   (setq ffip-prune-patterns
+		 (\`
+		  ("*/env/*"
+		   (\,@ ffip-prune-patterns))))
+	   (setq ffip-prune-patterns
+		 (\`
+		  ("*.csv"
+		   (\,@ ffip-prune-patterns)))))
+     (eval progn
 	   (require
 	    (quote find-file-in-project))
 	   (setq ffip-prune-patterns

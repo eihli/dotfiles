@@ -91,12 +91,17 @@
 
 ;; Fuzzy search
 (global-set-key (kbd "C-x f") 'find-file-in-project)
+(global-set-key (kbd "C-i") 'find-file-in-project)
 
 ;; Interactive-do-things
 (ido-mode t)
 
 ;; Comment/uncomment line
 (global-set-key (kbd "C-x ;") 'comment-line)
+
+;; Buffer switching
+(global-set-key (kbd "M-N") 'next-buffer)
+(global-set-key (kbd "M-P") 'previous-buffer)
 
 
 (autopair-global-mode)

@@ -91,7 +91,7 @@
 
 ;; Fuzzy search
 (global-set-key (kbd "C-x f") 'find-file-in-project)
-(global-set-key (kbd "C-i") 'find-file-in-project)
+(global-set-key (kbd "M-i") 'find-file-in-project)
 
 ;; Interactive-do-things
 (ido-mode t)

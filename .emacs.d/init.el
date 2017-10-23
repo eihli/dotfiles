@@ -86,6 +86,9 @@
 (define-key elpy-mode-map (kbd "M-n") 'elpy-nav-forward-block)
 (define-key elpy-mode-map (kbd "M-p") 'elpy-nav-backward-block)
 
+;; Graphviz Dot Mode
+(load-file "~/dotfiles/.emacs.d/graphviz-dot-mode.el")
+
 ;; Use jedi for stuff
 (setq elpy-rpc-backend "jedi")
 

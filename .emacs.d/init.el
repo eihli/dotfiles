@@ -172,3 +172,7 @@
       `((".*" . "~/.ebaks")))
 (setq auto-save-file-name-transforms
       `((".*" "~/.ebaks" t)))
+
+;; Enable markdown export for org-mode
+(eval-after-load "org"
+  '(require 'ox-md nil t))

@@ -86,6 +86,9 @@
 (define-key elpy-mode-map (kbd "M-n") 'elpy-nav-forward-block)
 (define-key elpy-mode-map (kbd "M-p") 'elpy-nav-backward-block)
 
+;; Graphviz Dot Mode
+(load-file "~/dotfiles/.emacs.d/graphviz-dot-mode.el")
+
 ;; Use jedi for stuff
 (setq elpy-rpc-backend "jedi")
 
@@ -104,7 +107,10 @@
 (global-set-key (kbd "M-P") 'previous-buffer)
 
 
-(autopair-global-mode)
+(add-to-list 'load-path "~/.emacs.d/autopair") ;; comment if autopair.el is in standard load path
+(require 'autopair)
+(autopair-global-mode) ;; enable autopair in all buffers
+
 
 (add-hook 'python-mode-hook
 	  (lambda () (add-to-list 'write-file-functions 'delete-trailing-whitespace)))
@@ -175,3 +181,8 @@
 
 ;; Speed up things like ffip
 (setq gc-cons-threshold 20000000)
+
+;; Enable markdown export for org-mode
+(eval-after-load "org"
+  '(require 'ox-md nil t))
+

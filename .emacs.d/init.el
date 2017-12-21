@@ -26,7 +26,7 @@
  ;; If there is more than one, they won't work right.
  '(package-selected-packages
    (quote
-    (projectile magit slime emmet-mode tide json-mode autopair auto-complete fiplr)))
+    (## markdown-mode yaml-mode projectile magit slime emmet-mode tide json-mode autopair auto-complete fiplr)))
  '(safe-local-variable-values
    (quote
     ((eval progn

@@ -147,7 +147,8 @@
 ;; sr-speedbar
 (require 'sr-speedbar)
 (setq speedbar-show-unknown-files t
-      sr-speedbar-width 50)
+      sr-speedbar-width 50
+      sr-speedbar-auto-refresh nil)
 (global-set-key (kbd "C-t") 'sr-speedbar-toggle)
 
 ;; Emmet mode for autocompleting html/markup
@@ -166,3 +167,11 @@
       `((".*" . "~/.ebaks")))
 (setq auto-save-file-name-transforms
       `((".*" "~/.ebaks" t)))
+
+;; Easier switching windows
+(global-set-key (kbd "C-o") 'other-window)
+
+(setq projectile-enable-caching t)
+
+;; Speed up things like ffip
+(setq gc-cons-threshold 20000000)

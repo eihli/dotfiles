@@ -1,14 +1,10 @@
 # Source secrets that aren't committed to repo
-if [ -a ~/.secrets ]; then
-  source ~/.secrets
-fi
+[[ -f ~/.secrets ]] && . ~/.secrets
 
 # Source git completion
-if [ -a ~/.git-completion.bash ]; then
-  source ~/.git-completion.bash
-fi
+[[ -f ~/.git-completion.bash ]] && . ~/.git-completion.bash
 
-export EDITOR=vim
+export EDITOR=emacs -nw
 export CLICOLOR=1
 export LSCOLORS=GxFxCxDxBxegedabagaced
 export PS1='${debian_chroot:+($debian_chroot)}\[\033[01;32m\]\u@\h\[\033[00m\]:\[\033[01;35m\]\W\[\033[00m\]\$ '
@@ -113,4 +109,4 @@ case $- in *i*) . ~/.bashrc;; esac
 eval "$(pyenv init -)"
 
 [[ -s "$HOME/.rvm/scripts/rvm" ]] && source "$HOME/.rvm/scripts/rvm" # Load RVM into a shell session *as a function*
-source $HOME/.fh_bash_profile
+[[ -f ~/.fh_bash_profile ]] && . ~/.fh_bash_profile

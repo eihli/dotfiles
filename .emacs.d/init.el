@@ -26,7 +26,7 @@
  ;; If there is more than one, they won't work right.
  '(package-selected-packages
    (quote
-    (## markdown-mode yaml-mode projectile magit slime emmet-mode tide json-mode autopair auto-complete fiplr)))
+    (elpy graphviz-dot-mode ## markdown-mode yaml-mode projectile magit slime emmet-mode tide json-mode autopair auto-complete fiplr)))
  '(safe-local-variable-values
    (quote
     ((eval progn
@@ -85,9 +85,6 @@
 (require 'elpy)
 (define-key elpy-mode-map (kbd "M-n") 'elpy-nav-forward-block)
 (define-key elpy-mode-map (kbd "M-p") 'elpy-nav-backward-block)
-
-;; Graphviz Dot Mode
-(load-file "~/dotfiles/.emacs.d/graphviz-dot-mode.el")
 
 ;; Use jedi for stuff
 (setq elpy-rpc-backend "jedi")

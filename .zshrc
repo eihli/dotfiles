@@ -95,6 +95,5 @@ source $ZSH/oh-my-zsh.sh
 
 [[ -f ~/.bash_aliases ]] && . ~/.bash_aliases
 [[ -f ~/.secrets ]] && . ~/.secrets
-[[ 
-export EDITOR="emacs -nw"
+export EDITOR="emacs"
 

@@ -11,6 +11,7 @@ alias ls='ls -GFh'
 alias lsa='ls -GFha'
 
 # git alias
+alias gbs="git branch --sort=committerdate"
 alias gm="git merge"
 alias gs="git status"
 alias ga="git add"

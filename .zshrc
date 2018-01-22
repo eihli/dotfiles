@@ -93,7 +93,29 @@ source $ZSH/oh-my-zsh.sh
 # alias zshconfig="mate ~/.zshrc"
 # alias ohmyzsh="mate ~/.oh-my-zsh"
 
-[[ -f ~/.bash_aliases ]] && . ~/.bash_aliases
+which go &> /dev/null && eval "$(go env)"
+which go &> /dev/null && [[ -d "$GOPATH/bin" ]] && PATH=$PATH:$GOPATH/bin
 [[ -f ~/.secrets ]] && . ~/.secrets
+[[ -d $HOME/src/ansible/hacking ]] && . $HOME/src/ansible/hacking/env-setup -q
+
+export NVM_DIR="$HOME/.nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh" # This loads nvm
+
+# Don't use .Xmodmap! https://bugs.launchpad.net/ubuntu/+source/linux/+bug/998310
+setxkbmap -option ctrl:swapcaps
+
 export EDITOR="emacs"
 
+# The following lines were added by compinstall
+
+zstyle ':completion:*' completer _complete _ignored
+zstyle :compinstall filename '/home/eihli/.zshrc'
+
+autoload -Uz compinit
+compinit
+# End of lines added by compinstall
+# Lines configured by zsh-newuser-install
+HISTFILE=~/.histfile
+HISTSIZE=50000
+SAVEHIST=100000
+# End of lines configured by zsh-newuser-install

@@ -104,9 +104,9 @@ function toggle-utc() {
 }
 
 # If login shell, source bashrc
-case $- in *i*) . ~/.bashrc;; esac
+# case $- in *i*) . ~/.bashrc;; esac
 
-eval "$(pyenv init -)"
+which pyenv &> /dev/null && eval "$(pyenv init -)"
 
 [[ -s "$HOME/.rvm/scripts/rvm" ]] && source "$HOME/.rvm/scripts/rvm" # Load RVM into a shell session *as a function*
 [[ -f ~/.fh_bash_profile ]] && . ~/.fh_bash_profile

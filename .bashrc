@@ -28,7 +28,7 @@ shopt -s checkwinsize
 # shopt -s globstar
 
 # make less more friendly for non-text input files, see lesspipe(1)
-[ -x /usr/bin/lesspipe ] && eval "$(SHELL=/bin/sh lesspipe)"
+# [ -x /usr/bin/lesspipe ] && eval "$(SHELL=/bin/sh lesspipe)"
 
 # set variable identifying the chroot you work in (used in the prompt below)
 if [ -z "${debian_chroot:-}" ] && [ -r /etc/debian_chroot ]; then
@@ -137,5 +137,5 @@ export PYENV_ROOT="$HOME/.pyenv"
 export PATH="$PYENV_ROOT/bin:$PATH"
 export PYTHONSTARTUP="$HOME/.pythonrc"
 export PATH="$PATH:$HOME/.rbenv/bin"
-eval "$(rbenv init -)"
-eval "$(pyenv init -)"
+which rbenv &> /dev/null && eval "$(rbenv init -)"
+which pyenv &> /dev/null && eval "$(pyenv init -)"

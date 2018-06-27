@@ -1,7 +1,5 @@
 # http://askubuntu.com/questions/121413/understanding-bashrc-and-bash-profile
 
-alias emacs="emacs -nw" # No windows mode
-
 # Meta alias's
 alias prof="nvim ~/.bash_profile"
 alias reprof=". ~/.bash_profile"
@@ -20,6 +18,7 @@ alias gcl="git clone"
 alias gch="git checkout"
 alias gl="git log --oneline"
 alias gps="git push"
+alias gpsh="git push origin head"
 alias gpl="git pull"
 alias gb="git branch"
 alias gd="git diff"
@@ -39,3 +38,5 @@ alias dk="docker"
 alias doc="docker-compose"
 alias dkrmi='docker rmi $(docker images | grep "^<none>" | awk "{print $3}")'
 # alias dockerrma="docker rm $(docker ps -a -q)"
+
+alias ssa='eval "$(ssh-agent -s)"'

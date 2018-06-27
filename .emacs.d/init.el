@@ -183,3 +183,9 @@
 (eval-after-load "org"
   '(require 'ox-md nil t))
 
+;; Enable python evaluation in code blocks in org mode
+(with-eval-after-load 'org
+  (org-babel-do-load-languages
+   'org-babel-load-languages
+   '((python . t)))
+  )

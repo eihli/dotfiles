@@ -94,6 +94,8 @@ source $ZSH/oh-my-zsh.sh
 # alias ohmyzsh="mate ~/.oh-my-zsh"
 alias ap='ansible-playbook'
 
+alias xcp='xclip -selection clipboard'
+
 which go &> /dev/null && eval "$(go env)"
 which go &> /dev/null && [[ -d "$GOPATH/bin" ]] && PATH=$PATH:$GOPATH/bin
 [[ -f ~/.secrets ]] && . ~/.secrets

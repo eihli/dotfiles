@@ -14,10 +14,17 @@
  '("melpa" . "https://melpa.org/packages/")
  t)
 
+;; Turn off that annoying beep in window mode
+(setq visible-bell 1)
+
 ;; Custom load path
 (add-to-list
  'load-path
  "~/.emacs.d/extensions/")
+(add-to-list
+ 'load-path
+ "~/.emacs.d/extensions/node-ac")
+(require 'node-ac-mode)
 
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
@@ -26,10 +33,29 @@
  ;; If there is more than one, they won't work right.
  '(package-selected-packages
    (quote
-    (elpy graphviz-dot-mode ## markdown-mode yaml-mode projectile magit slime emmet-mode tide json-mode autopair auto-complete fiplr)))
+    (nlinum yasnippet indium elpy graphviz-dot-mode ## markdown-mode yaml-mode projectile magit slime emmet-mode tide json-mode autopair auto-complete fiplr)))
  '(safe-local-variable-values
    (quote
     ((eval progn
+	   (require
+	    (quote find-file-in-project))
+	   (setq ffip-prune-patterns
+		 (\`
+		  ("*/node_modules/*"
+		   (\,@ ffip-prune-patterns))))
+	   (setq ffip-prune-patterns
+		 (\`
+		  ("*/env/*"
+		   (\,@ ffip-prune-patterns))))
+	   (setq ffip-prune-patterns
+		 (\`
+		  ("*.csv"
+		   (\,@ ffip-prune-patterns))))
+	   (setq ffip-prune-patterns
+		 (\`
+		  ("*/static/*"
+		   (\,@ ffip-prune-patterns)))))
+     (eval progn
 	   (require
 	    (quote find-file-in-project))
 	   (setq ffip-prune-patterns
@@ -79,7 +105,7 @@
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- )
+ '(company-tooltip ((t (:foreground "yellow")))))
 
 (elpy-enable)
 (require 'elpy)
@@ -87,11 +113,11 @@
 (define-key elpy-mode-map (kbd "M-p") 'elpy-nav-backward-block)
 
 ;; Use jedi for stuff
-(setq elpy-rpc-backend "jedi")
+(setq elpy-rpc-backend "rope")
 
 ;; Fuzzy search
 (global-set-key (kbd "C-x f") 'find-file-in-project)
-(global-set-key (kbd "M-i") 'find-file-in-project)
+(global-set-key (kbd "M-i") 'fiplr-find-file)
 
 ;; Interactive-do-things
 (ido-mode t)
@@ -114,7 +140,7 @@
 
 (setq js-indent-level 2)
 
-(global-linum-mode t)
+(global-nlinum-mode t)  ;; nlinum way better perf than linum
 
 ;; TypeScript Stuff/Tide
 (defun setup-tide-mode ()
@@ -150,8 +176,7 @@
 ;; sr-speedbar
 (require 'sr-speedbar)
 (setq speedbar-show-unknown-files t
-      sr-speedbar-width 50
-      sr-speedbar-auto-refresh nil)
+      sr-speedbar-width 40)
 (global-set-key (kbd "C-t") 'sr-speedbar-toggle)
 
 ;; Emmet mode for autocompleting html/markup
@@ -183,9 +208,14 @@
 (eval-after-load "org"
   '(require 'ox-md nil t))
 
+
 ;; Enable python evaluation in code blocks in org mode
 (with-eval-after-load 'org
   (org-babel-do-load-languages
    'org-babel-load-languages
    '((python . t)))
   )
+
+(org-babel-do-load-languages
+ 'org-babel-load-languages
+ '((dot . t)))

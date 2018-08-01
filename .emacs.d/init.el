@@ -31,6 +31,7 @@
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
+ '(elpy-rpc-backend "rope")
  '(package-selected-packages
    (quote
     (nlinum yasnippet indium elpy graphviz-dot-mode ## markdown-mode yaml-mode projectile magit slime emmet-mode tide json-mode autopair auto-complete fiplr)))
@@ -192,9 +193,9 @@
 
 ;; Don't clutter every folder with backups
 (setq backup-directory-alist
-      `((".*" . "~/.ebaks")))
+      `((".*" . "~/.ebaks/")))
 (setq auto-save-file-name-transforms
-      `((".*" "~/.ebaks" t)))
+      `((".*" "~/.ebaks/" t)))
 
 ;; Easier switching windows
 (global-set-key (kbd "C-o") 'other-window)
@@ -219,3 +220,6 @@
 (org-babel-do-load-languages
  'org-babel-load-languages
  '((dot . t)))
+
+;; Enable projectile mode
+(projectile-mode)

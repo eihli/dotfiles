@@ -15,7 +15,7 @@
  t)
 
 ;; Turn off that annoying beep in window mode
-(setq visible-bell 1)
+(setq visible-bell nil)
 
 ;; Custom load path
 (add-to-list

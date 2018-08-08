@@ -223,8 +223,9 @@
 
 
 ;; hs-minor-mode and shortcuts
+(hs-minor-mode)
 (defvar my-hs-hide nil "Current state of hideshow for toggling all.")
-  ;;;###autoload
+;;;###autoload
 (defun my-toggle-hideshow-all () "Toggle hideshow all."
        (interactive)
        (setq my-hs-hide (not my-hs-hide))

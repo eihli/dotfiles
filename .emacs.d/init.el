@@ -223,7 +223,7 @@
 
 
 ;; hs-minor-mode and shortcuts
-(hs-minor-mode)
+(add-hook 'prog-mode-hook 'hs-minor-mode)
 (defvar my-hs-hide nil "Current state of hideshow for toggling all.")
 ;;;###autoload
 (defun my-toggle-hideshow-all () "Toggle hideshow all."
@@ -232,8 +232,9 @@
        (if my-hs-hide
 	   (hs-hide-all)
 	 (hs-show-all)))
-(global-set-key (kbd "C-c h") 'my-toggle-hideshow-all)
-
+(global-set-key (kbd "C-c h a") 'my-toggle-hideshow-all)
+(global-set-key (kbd "C-c h l") 'hs-hide-level)
+(global-set-key (kbd "C-c h t") 'hs-toggle-hiding)
 
 ;; Enable projectile mode
 (projectile-mode)

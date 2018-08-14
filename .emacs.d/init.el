@@ -238,3 +238,7 @@
 
 ;; Enable projectile mode
 (projectile-mode)
+
+;; Fix shell path on Mac
+(when (memq window-system '(mac ns x))
+  (exec-path-from-shell-initialize))

@@ -1,0 +1,3 @@
+[submodule ".emacs.d/extensions/node-ac"]
+	path = .emacs.d/extensions/node-ac
+	url = git://github.com/MaokaiLin/node-ac.git

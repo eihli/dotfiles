@@ -122,3 +122,5 @@ HISTFILE=~/.histfile
 HISTSIZE=50000
 SAVEHIST=100000
 # End of lines configured by zsh-newuser-install
+
+export PATH="$HOME/.local/bin:$HOME/bin:$PATH"

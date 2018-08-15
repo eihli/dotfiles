@@ -173,6 +173,7 @@
 
 ;; Magit
 (global-set-key (kbd "C-x g") 'magit-status)
+(setq-default magit-save-repository-buffers 'dontask)
 
 ;; sr-speedbar
 (require 'sr-speedbar)

@@ -16,6 +16,7 @@
 
 ;; Turn off that annoying beep in window mode
 (setq visible-bell nil)
+(setq ring-bell-function 'ignore)
 
 ;; Custom load path
 (add-to-list

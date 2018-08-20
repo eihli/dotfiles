@@ -32,10 +32,10 @@
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- '(elpy-rpc-backend "rope")
+ '(elpy-rpc-backend "rope" t)
  '(package-selected-packages
    (quote
-    (nlinum yasnippet indium elpy graphviz-dot-mode ## markdown-mode yaml-mode projectile magit slime emmet-mode tide json-mode autopair auto-complete fiplr)))
+    (yasnippet-snippets nlinum yasnippet indium elpy graphviz-dot-mode ## markdown-mode yaml-mode projectile magit slime emmet-mode tide json-mode autopair auto-complete fiplr)))
  '(safe-local-variable-values
    (quote
     ((eval progn

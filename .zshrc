@@ -96,8 +96,6 @@ alias ap='ansible-playbook'
 
 alias xcp='xclip -selection clipboard'
 
-which go &> /dev/null && eval "$(go env)"
-which go &> /dev/null && [[ -d "$GOPATH/bin" ]] && PATH=$PATH:$GOPATH/bin
 [[ -f ~/.secrets ]] && . ~/.secrets
 [[ -d $HOME/src/ansible/hacking ]] && . $HOME/src/ansible/hacking/env-setup -q
 
@@ -124,3 +122,9 @@ SAVEHIST=100000
 # End of lines configured by zsh-newuser-install
 
 export PATH="$HOME/.local/bin:$HOME/bin:$PATH"
+
+export PYENV_ROOT="$HOME/.pyenv"
+export PATH="$PYENV_ROOT/shims:$PATH"
+
+which go &> /dev/null && eval "$(go env)"
+which go &> /dev/null && [[ -d "$GOPATH/bin" ]] && PATH=$PATH:$GOPATH/bin

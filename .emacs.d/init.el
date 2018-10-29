@@ -35,7 +35,7 @@
  '(elpy-rpc-backend "rope" t)
  '(package-selected-packages
    (quote
-    (yasnippet-snippets nlinum yasnippet indium elpy graphviz-dot-mode ## markdown-mode yaml-mode projectile magit slime emmet-mode tide json-mode autopair auto-complete fiplr)))
+    (yasnippet-classic-snippets js-format magit yasnippet-snippets elpy elpygen nlinum yasnippet indium graphviz-dot-mode ## markdown-mode yaml-mode projectile slime emmet-mode tide json-mode autopair auto-complete fiplr)))
  '(safe-local-variable-values
    (quote
     ((eval progn
@@ -192,6 +192,12 @@
 
 ;; Slime/Lisp
 (setq inferior-lisp-program "/usr/local/bin/sbcl")
+(setq slime-contribs '(slime-fancy))
+
+(load (expand-file-name "~/quicklisp/slime-helper.el"))
+;; Replace "sbcl" with the path to your implementation
+(setq inferior-lisp-program "/home/eihli/bin/sbcl")
+
 
 ;; Don't clutter every folder with backups
 (setq backup-directory-alist
@@ -239,7 +245,8 @@
 (global-set-key (kbd "C-c h t") 'hs-toggle-hiding)
 
 ;; Enable projectile mode
-(projectile-mode)
+(projectile-mode +1)
+(define-key projectile-mode-map (kbd "C-c p") 'projectile-command-map)
 
 ;; Fix shell path on Mac
 (when (memq window-system '(mac ns x))

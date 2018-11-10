@@ -123,10 +123,18 @@ HISTSIZE=50000
 SAVEHIST=100000
 # End of lines configured by zsh-newuser-install
 
-export PATH="$HOME/.local/bin:$HOME/bin:$PATH"
+export ANDROID_SDK_ROOT="$HOME/Android/Sdk"
+export ANDROID_HOME="$HOME/Android/Sdk"
+export PATH="$HOME/Android/Sdk/tools/bin:$HOME/Android/Sdk/platform-tools:$HOME/.local/bin:$HOME/bin:$PATH"
 
 export PYENV_ROOT="$HOME/.pyenv"
 export PATH="$PYENV_ROOT/shims:$PATH"
 
 which go &> /dev/null && eval "$(go env)"
 which go &> /dev/null && [[ -d "$GOPATH/bin" ]] && PATH=$PATH:$GOPATH/bin
+
+###-tns-completion-start-###
+if [ -f /home/eihli/.tnsrc ]; then
+    source /home/eihli/.tnsrc
+fi
+###-tns-completion-end-###

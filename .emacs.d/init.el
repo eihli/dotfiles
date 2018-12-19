@@ -2,17 +2,12 @@
 ;; installed packages.  Don't delete this line.  If you don't want it,
 ;; just comment it out by adding a semicolon to the start of the line.
 ;; You may delete these explanatory comments.
-(package-initialize)
-
-;; (global-set-key (kbd "C-x f") 'fiplr-find-file)
-;; (setq fiplr-ignored-globs '((directories ("node_modules"))
-;;			    (files ("*~"))))
-
 (require 'package)
 (add-to-list
  'package-archives
  '("melpa" . "https://melpa.org/packages/")
  t)
+(package-initialize)
 
 ;; Turn off that annoying beep in window mode
 (setq visible-bell nil)
@@ -35,7 +30,7 @@
  '(elpy-rpc-backend "rope" t)
  '(package-selected-packages
    (quote
-    (yasnippet-classic-snippets js-format magit yasnippet-snippets elpy elpygen nlinum yasnippet indium graphviz-dot-mode ## markdown-mode yaml-mode projectile slime emmet-mode tide json-mode autopair auto-complete fiplr)))
+    (cider clojure-mode unicode-fonts yasnippet-classic-snippets js-format magit yasnippet-snippets elpy elpygen nlinum yasnippet indium graphviz-dot-mode ## markdown-mode yaml-mode projectile slime emmet-mode tide json-mode autopair auto-complete)))
  '(safe-local-variable-values
    (quote
     ((eval progn
@@ -97,10 +92,9 @@
 		(\`
 		 ("*/python-environments/*"
 		  (\,@ ffip-prune-patterns)))))
-     (ffip-find-options . "-not -size +64k -not -iwholename 'db.sqlite'")
-     (fiplr-ignored-globs quote
-			  ((directories
-			    ("python-environments"))))))))
+     (ffip-find-options
+      .
+      "-not -size +64k -not -iwholename 'db.sqlite'")))))
 
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
@@ -119,10 +113,10 @@
 
 ;; Fuzzy search
 (global-set-key (kbd "C-x f") 'find-file-in-project)
-(global-set-key (kbd "M-i") 'fiplr-find-file)
 
 ;; Interactive-do-things
 (ido-mode t)
+(setq ido-enable-flex-matching t)
 
 ;; Comment/uncomment line
 (global-set-key (kbd "C-x ;") 'comment-line)

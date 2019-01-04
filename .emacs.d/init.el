@@ -250,7 +250,7 @@
 (define-key projectile-mode-map (kbd "C-c p") 'projectile-command-map)
 
 ;; Fix shell path on Mac
-(when (memq window-system '(mac ns x))
+(when (memq window-system '(mac))
   (exec-path-from-shell-initialize))
 
 ;; (require 'unicode-fonts)

@@ -192,7 +192,8 @@
 (setq inferior-lisp-program "/usr/local/bin/sbcl")
 (setq slime-contribs '(slime-fancy))
 
-(load (expand-file-name "~/quicklisp/slime-helper.el"))
+(if (file-exists-p (expand-file-name "~/quicklisp/slime-helper.el"))
+    (load (expand-file-name "~/quicklisp/slime-helper.el")))
 ;; Replace "sbcl" with the path to your implementation
 (setq inferior-lisp-program "/home/eihli/bin/sbcl")
 

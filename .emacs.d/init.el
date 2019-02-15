@@ -137,11 +137,6 @@
 (global-set-key (kbd "M-P") 'previous-buffer)
 
 
-(add-to-list 'load-path "~/.emacs.d/autopair") ;; comment if autopair.el is in standard load path
-(require 'autopair)
-(autopair-global-mode) ;; enable autopair in all buffers
-
-
 (add-hook 'python-mode-hook
 	  (lambda () (add-to-list 'write-file-functions 'delete-trailing-whitespace)))
 

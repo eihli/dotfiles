@@ -257,3 +257,7 @@
 ;; (unicode-fonts-setup)
 
 (set-fontset-font "fontset-default" 'unicode "Noto Emoji" nil 'prepend)
+
+(require 'helm-config)
+(helm-mode 1)
+(put 'scroll-left 'disabled nil)

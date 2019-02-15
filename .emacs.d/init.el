@@ -111,7 +111,14 @@
 (setq elpy-rpc-backend "rope")
 
 ;; Fuzzy search
-(global-set-key (kbd "C-x f") 'find-file-in-project)
+(global-set-key (kbd "C-x f") #'helm-find-files)
+
+;; Tags searching
+(global-set-key (kbd "s-f") #'helm-etags-select)
+
+;; Allow passing args
+(defun ow-rg (regexp &optional args)
+  (ripgrep-regexp regexp (projectile-project-root) args))
 
 ;; Interactive-do-things
 (require 'flx-ido)

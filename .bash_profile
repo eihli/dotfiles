@@ -104,7 +104,7 @@ function toggle-utc() {
 }
 
 # If login shell, source bashrc
-# case $- in *i*) . ~/.bashrc;; esac
+case $- in *i*) . ~/.bashrc;; esac
 
 which pyenv &> /dev/null && eval "$(pyenv init -)"
 

@@ -127,7 +127,7 @@ SAVEHIST=100000
 
 export ANDROID_SDK_ROOT="$HOME/Android/Sdk"
 export ANDROID_HOME="$HOME/Android/Sdk"
-export PATH="$HOME/Android/Sdk/tools/bin:$HOME/Android/Sdk/platform-tools:$HOME/.local/bin:$HOME/bin:$PATH"
+export PATH="$PATH:$HOME/.local/bin:$HOME/bin:$HOME/Android/Sdk/tools/bin:$HOME/Android/Sdk/platform-tools"
 
 export PYENV_ROOT="$HOME/.pyenv"
 export PATH="$PYENV_ROOT/shims:$PATH"

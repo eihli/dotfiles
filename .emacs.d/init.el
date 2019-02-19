@@ -260,3 +260,6 @@
 (require 'helm-config)
 (helm-mode 1)
 (put 'scroll-left 'disabled nil)
+
+(when (file-exists-p "env.el")
+  (load "env.el"))

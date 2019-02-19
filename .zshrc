@@ -140,3 +140,6 @@ if [ -f /home/eihli/.tnsrc ]; then
     source /home/eihli/.tnsrc
 fi
 ###-tns-completion-end-###
+
+autoload -U +X bashcompinit && bashcompinit
+complete -o nospace -C /home/eihli/.local/bin/vault vault

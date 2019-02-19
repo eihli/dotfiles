@@ -105,7 +105,9 @@ alias xcp='xclip -selection clipboard'
 [[ -f ~/.secrets ]] && . ~/.secrets
 
 # Don't use .Xmodmap! https://bugs.launchpad.net/ubuntu/+source/linux/+bug/998310
-setxkbmap -option ctrl:swapcaps
+# Commenting this out because it gets annoying to switch back and forth
+# so maybe I'll just train msyelf to enjoy the keyboard I'm working with.
+# setxkbmap -option ctrl:swapcaps
 
 export EDITOR="emacs"
 

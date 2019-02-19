@@ -30,7 +30,7 @@
  '(elpy-rpc-backend "rope" t)
  '(package-selected-packages
    (quote
-    (flx-ido cider clojure-mode unicode-fonts yasnippet-classic-snippets js-format magit yasnippet-snippets elpy elpygen nlinum yasnippet indium graphviz-dot-mode ## markdown-mode yaml-mode projectile slime emmet-mode tide json-mode autopair auto-complete)))
+    (ripgrep flx-ido cider clojure-mode unicode-fonts yasnippet-classic-snippets js-format magit yasnippet-snippets elpy elpygen nlinum yasnippet indium graphviz-dot-mode ## markdown-mode yaml-mode projectile slime emmet-mode tide json-mode autopair auto-complete)))
  '(safe-local-variable-values
    (quote
     ((eval progn

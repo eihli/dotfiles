@@ -265,5 +265,5 @@
 (helm-mode 1)
 (put 'scroll-left 'disabled nil)
 
-(when (file-exists-p "env.el")
-  (load "env.el"))
+(when (file-exists-p "~/.emacs.d/env.el")
+  (load "~/.emacs.d/env.el"))

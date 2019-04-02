@@ -165,6 +165,9 @@
 
 (add-hook 'typescript-mode-hook #'setup-tide-mode)
 
+;; auto-complete default configuration and enable
+(ac-config-default)
+
 ;; override indent.el so we have autocomplete
 (global-set-key (kbd "M-q") 'company-complete)
 
@@ -243,6 +246,7 @@
 (global-set-key (kbd "C-c h a") 'my-toggle-hideshow-all)
 (global-set-key (kbd "C-c h l") 'hs-hide-level)
 (global-set-key (kbd "C-c h t") 'hs-toggle-hiding)
+(global-set-key (kbd "C-c f") 'projectile-find-file)
 
 ;; Enable projectile mode
 (projectile-mode +1)

@@ -30,7 +30,7 @@
  '(elpy-rpc-backend "rope" t)
  '(package-selected-packages
    (quote
-    (ripgrep flx-ido cider clojure-mode unicode-fonts yasnippet-classic-snippets js-format magit yasnippet-snippets elpy elpygen nlinum yasnippet indium graphviz-dot-mode ## markdown-mode yaml-mode projectile slime emmet-mode tide json-mode autopair auto-complete)))
+    (ac-cider ripgrep flx-ido cider clojure-mode unicode-fonts yasnippet-classic-snippets js-format magit yasnippet-snippets elpy elpygen nlinum yasnippet indium graphviz-dot-mode ## markdown-mode yaml-mode projectile slime emmet-mode tide json-mode autopair auto-complete)))
  '(safe-local-variable-values
    (quote
     ((eval progn
@@ -248,6 +248,8 @@
 (global-set-key (kbd "C-c h t") 'hs-toggle-hiding)
 (global-set-key (kbd "C-c f") 'projectile-find-file)
 
+(global-set-key (kbd "M-i") 'imenu)
+
 ;; Enable projectile mode
 (projectile-mode +1)
 (define-key projectile-mode-map (kbd "C-c p") 'projectile-command-map)
@@ -267,3 +269,9 @@
 
 (when (file-exists-p "~/.emacs.d/env.el")
   (load "~/.emacs.d/env.el"))
+
+(electric-pair-mode 1)
+
+(setq-default tab-width 4)
+(setq-default c-basic-offset tab-width)
+(setq-default cperl-indent-level tab-width)

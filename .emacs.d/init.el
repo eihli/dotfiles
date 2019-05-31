@@ -30,69 +30,69 @@
  '(elpy-rpc-backend "rope" t)
  '(package-selected-packages
    (quote
-    (ac-cider ripgrep flx-ido cider clojure-mode unicode-fonts yasnippet-classic-snippets js-format magit yasnippet-snippets elpy elpygen nlinum yasnippet indium graphviz-dot-mode ## markdown-mode yaml-mode projectile slime emmet-mode tide json-mode autopair auto-complete)))
+	(http-twiddle rainbow-delimiters clj-refactor ac-cider ripgrep flx-ido cider clojure-mode unicode-fonts yasnippet-classic-snippets js-format magit yasnippet-snippets elpy elpygen nlinum yasnippet indium graphviz-dot-mode ## markdown-mode yaml-mode projectile slime emmet-mode tide json-mode autopair auto-complete)))
  '(safe-local-variable-values
    (quote
-    ((eval progn
-	   (require
-	    (quote find-file-in-project))
-	   (setq ffip-prune-patterns
-		 (\`
-		  ("*/node_modules/*"
-		   (\,@ ffip-prune-patterns))))
-	   (setq ffip-prune-patterns
-		 (\`
-		  ("*/env/*"
-		   (\,@ ffip-prune-patterns))))
-	   (setq ffip-prune-patterns
-		 (\`
-		  ("*.csv"
-		   (\,@ ffip-prune-patterns))))
-	   (setq ffip-prune-patterns
-		 (\`
-		  ("*/static/*"
-		   (\,@ ffip-prune-patterns)))))
-     (eval progn
-	   (require
-	    (quote find-file-in-project))
-	   (setq ffip-prune-patterns
-		 (\`
-		  ("*/node_modules/*"
-		   (\,@ ffip-prune-patterns))))
-	   (setq ffip-prune-patterns
-		 (\`
-		  ("*/env/*"
-		   (\,@ ffip-prune-patterns))))
-	   (setq ffip-prune-patterns
-		 (\`
-		  ("*.csv"
-		   (\,@ ffip-prune-patterns)))))
-     (eval progn
-	   (require
-	    (quote find-file-in-project))
-	   (setq ffip-prune-patterns
-		 (\`
-		  ("*/env/*"
-		   (\,@ ffip-prune-patterns))))
-	   (setq ffip-prune-patterns
-		 (\`
-		  ("*.csv"
-		   (\,@ ffip-prune-patterns)))))
-     (eval progn
-	   (require
-	    (quote find-file-in-project))
-	   (setq ffip-prune-patterns
-		 (\`
-		  ("*/python-environments/*"
-		   (\,@ ffip-prune-patterns)))))
-     (eval progn
-	   (require
-	    (quote find-file-in-project))
-	   (seq ffip-prune-patterns
-		(\`
-		 ("*/python-environments/*"
-		  (\,@ ffip-prune-patterns)))))
-     (ffip-find-options . "-not -size +64k -not -iwholename 'db.sqlite'")))))
+	((eval progn
+		   (require
+			(quote find-file-in-project))
+		   (setq ffip-prune-patterns
+				 (\`
+				  ("*/node_modules/*"
+				   (\,@ ffip-prune-patterns))))
+		   (setq ffip-prune-patterns
+				 (\`
+				  ("*/env/*"
+				   (\,@ ffip-prune-patterns))))
+		   (setq ffip-prune-patterns
+				 (\`
+				  ("*.csv"
+				   (\,@ ffip-prune-patterns))))
+		   (setq ffip-prune-patterns
+				 (\`
+				  ("*/static/*"
+				   (\,@ ffip-prune-patterns)))))
+	 (eval progn
+		   (require
+			(quote find-file-in-project))
+		   (setq ffip-prune-patterns
+				 (\`
+				  ("*/node_modules/*"
+				   (\,@ ffip-prune-patterns))))
+		   (setq ffip-prune-patterns
+				 (\`
+				  ("*/env/*"
+				   (\,@ ffip-prune-patterns))))
+		   (setq ffip-prune-patterns
+				 (\`
+				  ("*.csv"
+				   (\,@ ffip-prune-patterns)))))
+	 (eval progn
+		   (require
+			(quote find-file-in-project))
+		   (setq ffip-prune-patterns
+				 (\`
+				  ("*/env/*"
+				   (\,@ ffip-prune-patterns))))
+		   (setq ffip-prune-patterns
+				 (\`
+				  ("*.csv"
+				   (\,@ ffip-prune-patterns)))))
+	 (eval progn
+		   (require
+			(quote find-file-in-project))
+		   (setq ffip-prune-patterns
+				 (\`
+				  ("*/python-environments/*"
+				   (\,@ ffip-prune-patterns)))))
+	 (eval progn
+		   (require
+			(quote find-file-in-project))
+		   (seq ffip-prune-patterns
+				(\`
+				 ("*/python-environments/*"
+				  (\,@ ffip-prune-patterns)))))
+	 (ffip-find-options . "-not -size +64k -not -iwholename 'db.sqlite'")))))
 
 (custom-set-faces
  ;; custom-set-faces was added by Custom.

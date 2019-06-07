@@ -294,3 +294,8 @@
   (pop-to-buffer (make-comint "node-repl" "node" nil "--interactive")))
 
 (exec-path-from-shell-initialize)
+
+(defun save-line-reference-to-clipboard ()
+  (interactive)
+  (kill-new (format "%s:%s" (buffer-file-name) (line-number-at-pos))))
+(global-set-key (kbd "C-c o l") 'save-line-reference-to-clipboard)

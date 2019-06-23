@@ -187,7 +187,9 @@
 ;; Emmet mode for autocompleting html/markup
 (add-hook 'sgml-mode-hook 'emmet-mode) ;; Auto-start on any markup modes
 (add-hook 'css-mode-hook  'emmet-mode) ;; enable Emmet's css abbreviation.
-
+(add-hook 'sgml-mode-hook
+		  (lambda ()
+			(setq indent-tabs-mode nil)))
 ;; Fixes error running python through emacs
 ;; https://github.com/jorgenschaefer/elpy/issues/887
 (setq python-shell-completion-native-enable nil)

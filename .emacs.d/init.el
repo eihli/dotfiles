@@ -288,3 +288,7 @@
 
 (add-hook 'clojure-mode-hook #'my-clojure-mode-hook)
 
+(defun node-repl ()
+  (interactive)
+  (setenv "NODE_NO_READLINE" "1")
+  (pop-to-buffer (make-comint "node-repl" "node" nil "--interactive")))

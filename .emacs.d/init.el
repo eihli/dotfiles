@@ -292,3 +292,5 @@
   (interactive)
   (setenv "NODE_NO_READLINE" "1")
   (pop-to-buffer (make-comint "node-repl" "node" nil "--interactive")))
+
+(exec-path-from-shell-initialize)

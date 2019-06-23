@@ -30,7 +30,7 @@
  '(elpy-rpc-backend "rope" t)
  '(package-selected-packages
    (quote
-	(exec-path-from-shell cljr-helm helm helm-cider helm-projectile paredit http-twiddle rainbow-delimiters clj-refactor ac-cider ripgrep flx-ido cider clojure-mode unicode-fonts yasnippet-classic-snippets js-format magit yasnippet-snippets elpy elpygen nlinum yasnippet indium graphviz-dot-mode ## markdown-mode yaml-mode projectile slime emmet-mode tide json-mode autopair auto-complete)))
+	(helm-gtags exec-path-from-shell cljr-helm helm helm-cider helm-projectile paredit http-twiddle rainbow-delimiters clj-refactor ac-cider ripgrep flx-ido cider clojure-mode unicode-fonts yasnippet-classic-snippets js-format magit yasnippet-snippets elpy elpygen nlinum yasnippet indium graphviz-dot-mode ## markdown-mode yaml-mode projectile slime emmet-mode tide json-mode autopair auto-complete)))
  '(safe-local-variable-values
    (quote
 	((eval progn
@@ -110,12 +110,14 @@
 ;; Use jedi for stuff
 (setq elpy-rpc-backend "rope")
 
+(require 'helm-config)
+(helm-mode 1)
+
 ;; Fuzzy search
 (global-set-key (kbd "C-x f") #'helm-find-files)
 
 ;; Tags searching
-(global-set-key (kbd "s-f") #'helm-etags-select)
-(global-set-key (kbd "C-o-o") #'helm-gtags-find-dwim)
+(global-set-key (kbd "C-c o f t") #'helm-gtags-find-tag)
 
 ;; Allow passing args
 (defun ow-rg (regexp &optional args)
@@ -266,8 +268,6 @@
 
 (set-fontset-font "fontset-default" 'unicode "Noto Emoji" nil 'prepend)
 
-(require 'helm-config)
-(helm-mode 1)
 (put 'scroll-left 'disabled nil)
 
 (when (file-exists-p "~/.emacs.d/env.el")

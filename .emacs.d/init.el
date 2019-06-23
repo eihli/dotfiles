@@ -115,6 +115,7 @@
 
 ;; Tags searching
 (global-set-key (kbd "s-f") #'helm-etags-select)
+(global-set-key (kbd "C-o-o") #'helm-gtags-find-dwim)
 
 ;; Allow passing args
 (defun ow-rg (regexp &optional args)
@@ -299,3 +300,24 @@
   (interactive)
   (kill-new (format "%s:%s" (buffer-file-name) (line-number-at-pos))))
 (global-set-key (kbd "C-c o l") 'save-line-reference-to-clipboard)
+
+(require 'ripgrep)
+(defun ow-rg (regex &optional dir args)
+  (interactive
+   (list (read-from-minibuffer "Regex: " (thing-at-point 'symbol))
+	 (read-directory-name "Directory: " (projectile-project-root))
+	 (read-from-minibuffer "args: ")))
+  (let ((dir (if (string= dir "") (projectile-project-root) dir))
+	(args (if (equal args "")
+		  nil
+		(first (read-from-string args)))))
+    (if args
+	(ripgrep-regexp
+	 regex
+	 dir
+	 args)
+    (ripgrep-regexp
+       regex
+       dir))))
+
+(global-set-key (kbd "C-c o r g") 'ow-rg)

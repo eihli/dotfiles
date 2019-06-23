@@ -66,14 +66,6 @@ source $ZSH/oh-my-zsh.sh
 
 # User configuration
 
-# I think ansible or NVM is goofing with my MANPATH
-# so source it first then reset MANPATH
-[[ -d $HOME/src/ansible/hacking ]] && . $HOME/src/ansible/hacking/env-setup -q
-export NVM_DIR="$HOME/.nvm"
-[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh" # This loads nvm
-
-export MANPATH="/usr/local/man:/usr/share/man:$MANPATH"
-
 # You may need to manually set your language environment
 # export LANG=en_US.UTF-8
 
@@ -109,8 +101,6 @@ alias xcp='xclip -selection clipboard'
 # so maybe I'll just train msyelf to enjoy the keyboard I'm working with.
 # setxkbmap -option ctrl:swapcaps
 
-export EDITOR="emacs"
-
 # The following lines were added by compinstall
 
 zstyle ':completion:*' completer _complete _ignored
@@ -124,16 +114,6 @@ HISTFILE=~/.histfile
 HISTSIZE=50000
 SAVEHIST=100000
 # End of lines configured by zsh-newuser-install
-
-export ANDROID_SDK_ROOT="$HOME/Android/Sdk"
-export ANDROID_HOME="$HOME/Android/Sdk"
-export PATH="$PATH:$HOME/.local/bin:$HOME/bin:$HOME/Android/Sdk/tools/bin:$HOME/Android/Sdk/platform-tools"
-
-export PYENV_ROOT="$HOME/.pyenv"
-export PATH="$PYENV_ROOT/shims:$PATH"
-
-which go &> /dev/null && eval "$(go env)"
-which go &> /dev/null && [[ -d "$GOPATH/bin" ]] && PATH=$PATH:$GOPATH/bin
 
 ###-tns-completion-start-###
 if [ -f /home/eihli/.tnsrc ]; then

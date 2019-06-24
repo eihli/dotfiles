@@ -321,3 +321,20 @@
        dir))))
 
 (global-set-key (kbd "C-c o r g") 'ow-rg)
+
+(defun newline-each-element-in-list ()
+  (interactive
+   (let ((pairs '(("[" "]")
+				  ("(" ")")
+				  ("{" "}"))))
+	 (search-backward-regexp "[\[\(\{]")
+	 (let ((end (cadr (assoc (match-string 0) pairs))))
+	   (forward-char 1)
+	   (newline nil t)
+	   (while (not (equal (char-to-string (char-after (point))) end))
+		 (forward-char 1)
+		 (if (char-equal (char-before (point)) ?,)
+			 (newline nil t)))
+	   (newline nil t)))))
+
+(global-set-key (kbd "C-c o n") 'newline-each-element-in-list)

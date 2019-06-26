@@ -336,7 +336,6 @@
 	   (while (or
 			   (not (equal (char-after (point)) end))
 			   (not (equal stack 0)))
-		 (print stack)
 		 (forward-char 1)
 		 (cond ((char-equal (char-before (point)) start)
 				(setq stack (+ stack 1)))

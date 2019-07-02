@@ -305,18 +305,18 @@
 (defun ow-rg (regex &optional dir args)
   (interactive
    (list (read-from-minibuffer "Regex: " (thing-at-point 'symbol))
-	 (read-directory-name "Directory: " (projectile-project-root))
-	 (read-from-minibuffer "args: ")))
+		 (read-directory-name "Directory: " (projectile-project-root))
+		 (read-from-minibuffer "args: ")))
   (let ((dir (if (string= dir "") (projectile-project-root) dir))
-	(args (if (equal args "")
-		  nil
-		(first (read-from-string args)))))
+		(args (if (equal args "")
+				  nil
+				(first (read-from-string args)))))
     (if args
-	(ripgrep-regexp
-	 regex
-	 dir
-	 args)
-    (ripgrep-regexp
+		(ripgrep-regexp
+		 regex
+		 dir
+		 (mapcar 'shell-quote-argument args))
+	  (ripgrep-regexp
        regex
        dir))))
 

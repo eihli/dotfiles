@@ -18,11 +18,11 @@
 ;; Adds all subdirectories under .emacs.d/extensions
 ;; to the load-path.
 (let* ((subdirs (seq-filter
-		(lambda (f)
-		  (and (file-directory-p (concat "~/.emacs.d/extensions/" f))
-		       (not (or (equal f ".")
-				(equal f "..")))))
-		(directory-files "~/.emacs.d/extensions")))
+		 (lambda (f)
+		   (and (file-directory-p (concat "~/.emacs.d/extensions/" f))
+			(not (or (equal f ".")
+				 (equal f "..")))))
+		 (directory-files "~/.emacs.d/extensions")))
        (subdir-paths (mapcar (lambda (f)
 			       (concat "~/.emacs.d/extensions/" f))
 			     subdirs)))

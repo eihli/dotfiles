@@ -272,17 +272,19 @@
 (when (memq window-system '(mac ns))
   (exec-path-from-shell-initialize))
 
-;; (require 'unicode-fonts)
-;; (unicode-fonts-setup)
+;; Get Symbola http://users.teilar.gr/~g1951d/
+(require 'unicode-fonts)
+(unicode-fonts-setup)
 
-(set-fontset-font "fontset-default" 'unicode "Noto Emoji" nil 'prepend)
-;; (set-face-attribute 'unicode nil :height 2.0)
+;; Not using Noto Emoji because it's Google.
+;; (set-fontset-font "fontset-default" 'unicode "Noto Emoji" nil 'prepend)
 
 (put 'scroll-left 'disabled nil)
 
 (when (file-exists-p "~/.emacs.d/env.el")
   (load "~/.emacs.d/env.el"))
 
+(show-paren-mode)
 (electric-pair-mode 1)
 
 (setq-default tab-width 4)

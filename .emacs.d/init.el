@@ -18,14 +18,14 @@
 ;; Adds all subdirectories under .emacs.d/extensions
 ;; to the load-path.
 (let* ((subdirs (seq-filter
-		 (lambda (f)
-		   (and (file-directory-p (concat "~/.emacs.d/extensions/" f))
-			(not (or (equal f ".")
-				 (equal f "..")))))
-		 (directory-files "~/.emacs.d/extensions")))
+				 (lambda (f)
+				   (and (file-directory-p (concat "~/.emacs.d/extensions/" f))
+						(not (or (equal f ".")
+								 (equal f "..")))))
+				 (directory-files "~/.emacs.d/extensions")))
        (subdir-paths (mapcar (lambda (f)
-			       (concat "~/.emacs.d/extensions/" f))
-			     subdirs)))
+							   (concat "~/.emacs.d/extensions/" f))
+							 subdirs)))
   (let (val)
     (dolist (el subdir-paths val)
       (add-to-list 'load-path el))))
@@ -149,7 +149,7 @@
 
 
 (add-hook 'python-mode-hook
-	  (lambda () (add-to-list 'write-file-functions 'delete-trailing-whitespace)))
+		  (lambda () (add-to-list 'write-file-functions 'delete-trailing-whitespace)))
 
 (setq js-indent-level 2)
 
@@ -255,8 +255,8 @@
        (interactive)
        (setq my-hs-hide (not my-hs-hide))
        (if my-hs-hide
-	   (hs-hide-all)
-	 (hs-show-all)))
+		   (hs-hide-all)
+		 (hs-show-all)))
 (global-set-key (kbd "C-c h a") 'my-toggle-hideshow-all)
 (global-set-key (kbd "C-c h l") 'hs-hide-level)
 (global-set-key (kbd "C-c h t") 'hs-toggle-hiding)
@@ -276,6 +276,7 @@
 ;; (unicode-fonts-setup)
 
 (set-fontset-font "fontset-default" 'unicode "Noto Emoji" nil 'prepend)
+;; (set-face-attribute 'unicode nil :height 2.0)
 
 (put 'scroll-left 'disabled nil)
 
@@ -291,10 +292,10 @@
 (require 'clj-refactor)
 
 (defun my-clojure-mode-hook ()
-    (clj-refactor-mode 1)
-    (yas-minor-mode 1) ; for adding require/use/import statements
-    ;; This choice of keybinding leaves cider-macroexpand-1 unbound
-    (cljr-add-keybindings-with-prefix "C-c C-m"))
+  (clj-refactor-mode 1)
+  (yas-minor-mode 1) ; for adding require/use/import statements
+  ;; This choice of keybinding leaves cider-macroexpand-1 unbound
+  (cljr-add-keybindings-with-prefix "C-c C-m"))
 
 (add-hook 'clojure-mode-hook #'my-clojure-mode-hook)
 
@@ -325,7 +326,7 @@
 		 regex
 		 dir
 		 (mapcar 'shell-quote-argument args))
-	  (ripgrep-regexp
+      (ripgrep-regexp
        regex
        dir))))
 
@@ -336,13 +337,13 @@
    (let ((pairs '(("[" "]")
 				  ("(" ")")
 				  ("{" "}"))))
-	 (search-backward-regexp "[\[\(\{]")
-	 (let ((start (char-after (point)))
+     (search-backward-regexp "[\[\(\{]")
+     (let ((start (char-after (point)))
 		   (end (string-to-char (cadr (assoc (match-string 0) pairs))))
 		   (stack 1))
-	   (forward-char 1)
-	   (newline nil t)
-	   (while (or
+       (forward-char 1)
+       (newline nil t)
+       (while (or
 			   (not (equal (char-after (point)) end))
 			   (not (equal stack 0)))
 		 (forward-char 1)
@@ -353,6 +354,6 @@
 				(newline nil t))
 			   ((char-equal (char-after (point)) end)
 				(setq stack (- stack 1)))))
-	   (newline nil t)))))
+       (newline nil t)))))
 
 (global-set-key (kbd "C-c o n") 'newline-each-element-in-list)

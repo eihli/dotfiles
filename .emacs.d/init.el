@@ -13,13 +13,22 @@
 (setq visible-bell nil)
 (setq ring-bell-function 'ignore)
 
+(require 'seq)
 ;; Custom load path
-(add-to-list
- 'load-path
- "~/.emacs.d/extensions/")
-(add-to-list
- 'load-path
- "~/.emacs.d/extensions/node-ac")
+;; Adds all subdirectories under .emacs.d/extensions
+;; to the load-path.
+(let* ((subdirs (seq-filter
+		(lambda (f)
+		  (and (file-directory-p (concat "~/.emacs.d/extensions/" f))
+		       (not (or (equal f ".")
+				(equal f "..")))))
+		(directory-files "~/.emacs.d/extensions")))
+       (subdir-paths (mapcar (lambda (f)
+			       (concat "~/.emacs.d/extensions/" f))
+			     subdirs)))
+  (let (val)
+    (dolist (el subdir-paths val)
+      (add-to-list 'load-path el))))
 (require 'node-ac-mode)
 
 (custom-set-variables

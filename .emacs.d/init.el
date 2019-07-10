@@ -109,7 +109,8 @@
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(default ((t (:family "DejaVu Sans Mono" :foundry "PfEd" :slant normal :weight normal :height 120 :width normal))))
- '(company-tooltip ((t (:foreground "yellow")))))
+ '(company-tooltip ((t (:foreground "yellow"))))
+ '(region ((t (:background "dim gray" :distant-foreground "dark gray")))))
 
 (elpy-enable)
 (require 'elpy)

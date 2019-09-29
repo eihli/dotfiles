@@ -47,7 +47,7 @@
  '(elpy-rpc-backend "rope" t)
  '(package-selected-packages
    (quote
-	(helm-gtags exec-path-from-shell cljr-helm helm helm-cider helm-projectile paredit http-twiddle rainbow-delimiters clj-refactor ac-cider ripgrep flx-ido cider clojure-mode unicode-fonts yasnippet-classic-snippets js-format magit yasnippet-snippets elpy elpygen nlinum yasnippet indium graphviz-dot-mode ## markdown-mode yaml-mode projectile slime emmet-mode tide json-mode autopair auto-complete)))
+	(inf-clojure helm-gtags exec-path-from-shell cljr-helm helm helm-cider helm-projectile paredit http-twiddle rainbow-delimiters clj-refactor ac-cider ripgrep flx-ido cider clojure-mode unicode-fonts yasnippet-classic-snippets js-format magit yasnippet-snippets elpy elpygen nlinum yasnippet indium graphviz-dot-mode ## markdown-mode yaml-mode projectile slime emmet-mode tide json-mode autopair auto-complete)))
  '(safe-local-variable-values
    (quote
 	((eval progn

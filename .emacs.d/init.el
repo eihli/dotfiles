@@ -363,3 +363,9 @@
        (newline nil t)))))
 
 (global-set-key (kbd "C-c o n") 'newline-each-element-in-list)
+
+(add-hook 'clojure-mode-hook #'enable-paredit-mode)
+(add-hook 'lisp-mode-hook #'enable-paredit-mode)
+(add-hook 'emacs-lisp-mode-hook #'enable-paredit-mode)
+
+(setq inf-clojure-generic-cmd "plk -d")

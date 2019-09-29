@@ -50,7 +50,10 @@
 	(inf-clojure helm-gtags exec-path-from-shell cljr-helm helm helm-cider helm-projectile paredit http-twiddle rainbow-delimiters clj-refactor ac-cider ripgrep flx-ido cider clojure-mode unicode-fonts yasnippet-classic-snippets js-format magit yasnippet-snippets elpy elpygen nlinum yasnippet indium graphviz-dot-mode ## markdown-mode yaml-mode projectile slime emmet-mode tide json-mode autopair auto-complete)))
  '(safe-local-variable-values
    (quote
-	((eval progn
+	((cider-default-cljs-repl . "(do (user/go) (user/cljs-repl))")
+	 (cider-ns-refresh-after-fn . "reloaded.repl/resume")
+	 (cider-ns-refresh-before-fn . "reloaded.repl/suspend")
+	 (eval progn
 		   (require
 			(quote find-file-in-project))
 		   (setq ffip-prune-patterns

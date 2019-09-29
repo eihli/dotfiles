@@ -9,6 +9,14 @@
  t)
 (package-initialize)
 
+
+;; Something to consider since you're keeping
+;; these in a git repo.
+;; (unless (package-installed-p 'inf-clojure)
+;;   (package-refresh-contents)
+;;   (package-install 'inf-clojure))
+
+
 ;; Turn off that annoying beep in window mode
 (setq visible-bell nil)
 (setq ring-bell-function 'ignore)

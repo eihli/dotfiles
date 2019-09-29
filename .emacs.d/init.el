@@ -144,14 +144,6 @@
 (defun ow-rg (regexp &optional args)
   (ripgrep-regexp regexp (projectile-project-root) args))
 
-;; Interactive-do-things
-(require 'flx-ido)
-(ido-mode t)
-(flx-ido-mode 1)
-(setq ido-enable-flex-matching t)
-;; disable ido faces to see flx highlights.
-(setq ido-use-faces nil)
-
 ;; Comment/uncomment line
 (global-set-key (kbd "C-x ;") 'comment-line)
 

@@ -9,12 +9,9 @@
  t)
 (package-initialize)
 
-
-;; Something to consider since you're keeping
-;; these in a git repo.
-;; (unless (package-installed-p 'inf-clojure)
-;;   (package-refresh-contents)
-;;   (package-install 'inf-clojure))
+(unless (package-installed-p 'inf-clojure)
+  (package-refresh-contents)
+  (package-install 'inf-clojure))
 
 
 ;; Turn off that annoying beep in window mode
@@ -37,7 +34,6 @@
   (let (val)
     (dolist (el subdir-paths val)
       (add-to-list 'load-path el))))
-(require 'node-ac-mode)
 
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
@@ -101,13 +97,6 @@
 	 (eval progn
 		   (require
 			(quote find-file-in-project))
-		   (setq ffip-prune-patterns
-				 (\`
-				  ("*/python-environments/*"
-				   (\,@ ffip-prune-patterns)))))
-	 (eval progn
-		   (require
-			(quote find-file-in-project))
 		   (seq ffip-prune-patterns
 				(\`
 				 ("*/python-environments/*"
@@ -123,41 +112,26 @@
  '(company-tooltip ((t (:foreground "yellow"))))
  '(region ((t (:background "dim gray" :distant-foreground "dark gray")))))
 
-(elpy-enable)
 (require 'elpy)
-(define-key elpy-mode-map (kbd "M-n") 'elpy-nav-forward-block)
-(define-key elpy-mode-map (kbd "M-p") 'elpy-nav-backward-block)
-
-;; Use jedi for stuff
-(setq elpy-rpc-backend "rope")
-
+(require 'clj-refactor)
+(require 'ripgrep)
+(require 'node-ac-mode)
+(require 'unicode-fonts) ;; Get Symbola http://users.teilar.gr/~g1951d/
 (require 'helm-config)
+(require 'sr-speedbar)
+
+(unicode-fonts-setup)
+(elpy-enable)
 (helm-mode 1)
-
-;; Fuzzy search
-(global-set-key (kbd "C-x f") #'helm-find-files)
-
-;; Tags searching
-(global-set-key (kbd "C-c o f t") #'helm-gtags-find-tag)
+(global-nlinum-mode t)  ;; nlinum way better perf than linum
+(ac-config-default)
+(show-paren-mode)
+(electric-pair-mode 1)
+(projectile-mode +1)
 
 ;; Allow passing args
 (defun ow-rg (regexp &optional args)
   (ripgrep-regexp regexp (projectile-project-root) args))
-
-;; Comment/uncomment line
-(global-set-key (kbd "C-x ;") 'comment-line)
-
-;; Buffer switching
-(global-set-key (kbd "M-N") 'next-buffer)
-(global-set-key (kbd "M-P") 'previous-buffer)
-
-
-(add-hook 'python-mode-hook
-		  (lambda () (add-to-list 'write-file-functions 'delete-trailing-whitespace)))
-
-(setq js-indent-level 2)
-
-(global-nlinum-mode t)  ;; nlinum way better perf than linum
 
 ;; TypeScript Stuff/Tide
 (defun setup-tide-mode ()
@@ -176,36 +150,6 @@
 ;; aligns annotation to the right hand side
 (setq company-tooltip-align-annotations t)
 
-;; formats the buffer before saving
-(add-hook 'before-save-hook 'tide-format-before-save)
-
-(add-hook 'typescript-mode-hook #'setup-tide-mode)
-
-;; auto-complete default configuration and enable
-(ac-config-default)
-
-;; override indent.el so we have autocomplete
-(global-set-key (kbd "M-q") 'company-complete)
-
-;; Delete trailing whitespace before save
-(add-hook 'before-save-hook 'delete-trailing-whitespace)
-
-;; Magit
-(global-set-key (kbd "C-x g") 'magit-status)
-(setq-default magit-save-repository-buffers 'dontask)
-
-;; sr-speedbar
-(require 'sr-speedbar)
-(setq speedbar-show-unknown-files t
-      sr-speedbar-width 40)
-(global-set-key (kbd "C-t") 'sr-speedbar-toggle)
-
-;; Emmet mode for autocompleting html/markup
-(add-hook 'sgml-mode-hook 'emmet-mode) ;; Auto-start on any markup modes
-(add-hook 'css-mode-hook  'emmet-mode) ;; enable Emmet's css abbreviation.
-(add-hook 'sgml-mode-hook
-		  (lambda ()
-			(setq indent-tabs-mode nil)))
 ;; Fixes error running python through emacs
 ;; https://github.com/jorgenschaefer/elpy/issues/887
 (setq python-shell-completion-native-enable nil)
@@ -238,7 +182,6 @@
 (eval-after-load "org"
   '(require 'ox-md nil t))
 
-
 ;; Enable python evaluation in code blocks in org mode
 (with-eval-after-load 'org
   (org-babel-do-load-languages
@@ -250,74 +193,36 @@
  'org-babel-load-languages
  '((dot . t)))
 
-
 ;; hs-minor-mode and shortcuts
 (add-hook 'prog-mode-hook 'hs-minor-mode)
 (defvar my-hs-hide nil "Current state of hideshow for toggling all.")
-;;;###autoload
+
 (defun my-toggle-hideshow-all () "Toggle hideshow all."
        (interactive)
        (setq my-hs-hide (not my-hs-hide))
        (if my-hs-hide
 		   (hs-hide-all)
 		 (hs-show-all)))
-(global-set-key (kbd "C-c h a") 'my-toggle-hideshow-all)
-(global-set-key (kbd "C-c h l") 'hs-hide-level)
-(global-set-key (kbd "C-c h t") 'hs-toggle-hiding)
-(global-set-key (kbd "C-c f") 'projectile-find-file)
-
-(global-set-key (kbd "M-i") 'imenu)
-
-;; Enable projectile mode
-(projectile-mode +1)
-(define-key projectile-mode-map (kbd "C-c p") 'projectile-command-map)
 
 ;; Fix shell path on Mac
 (when (memq window-system '(mac ns))
   (exec-path-from-shell-initialize))
-
-;; Get Symbola http://users.teilar.gr/~g1951d/
-(require 'unicode-fonts)
-(unicode-fonts-setup)
-
-;; Not using Noto Emoji because it's Google.
-;; (set-fontset-font "fontset-default" 'unicode "Noto Emoji" nil 'prepend)
 
 (put 'scroll-left 'disabled nil)
 
 (when (file-exists-p "~/.emacs.d/env.el")
   (load "~/.emacs.d/env.el"))
 
-(show-paren-mode)
-(electric-pair-mode 1)
-
-(setq-default tab-width 4)
-(setq-default c-basic-offset tab-width)
-(setq-default cperl-indent-level tab-width)
-
-(require 'clj-refactor)
-
-(defun my-clojure-mode-hook ()
-  (clj-refactor-mode 1)
-  (yas-minor-mode 1) ; for adding require/use/import statements
-  ;; This choice of keybinding leaves cider-macroexpand-1 unbound
-  (cljr-add-keybindings-with-prefix "C-c C-m"))
-
-(add-hook 'clojure-mode-hook #'my-clojure-mode-hook)
-
 (defun node-repl ()
   (interactive)
   (setenv "NODE_NO_READLINE" "1")
   (pop-to-buffer (make-comint "node-repl" "node" nil "--interactive")))
-
-(exec-path-from-shell-initialize)
 
 (defun save-line-reference-to-clipboard ()
   (interactive)
   (kill-new (format "%s:%s" (buffer-file-name) (line-number-at-pos))))
 (global-set-key (kbd "C-c o l") 'save-line-reference-to-clipboard)
 
-(require 'ripgrep)
 (defun ow-rg (regex &optional dir args)
   (interactive
    (list (read-from-minibuffer "Regex: " (thing-at-point 'symbol))
@@ -335,8 +240,6 @@
       (ripgrep-regexp
        regex
        dir))))
-
-(global-set-key (kbd "C-c o r g") 'ow-rg)
 
 (defun newline-each-element-in-list ()
   (interactive
@@ -362,10 +265,56 @@
 				(setq stack (- stack 1)))))
        (newline nil t)))))
 
-(global-set-key (kbd "C-c o n") 'newline-each-element-in-list)
+(defun my-clojure-mode-hook ()
+  (clj-refactor-mode 1)
+  (yas-minor-mode 1) ; for adding require/use/import statements
+  ;; This choice of keybinding leaves cider-macroexpand-1 unbound
+  (cljr-add-keybindings-with-prefix "C-c C-m"))
 
+(add-hook 'before-save-hook 'delete-trailing-whitespace)
+(add-hook 'python-mode-hook
+		  (lambda () (add-to-list 'write-file-functions 'delete-trailing-whitespace)))
+(add-hook 'clojure-mode-hook #'my-clojure-mode-hook)
 (add-hook 'clojure-mode-hook #'enable-paredit-mode)
+(add-hook 'clojure-mode-hook #'inf-clojure-minor-mode)
 (add-hook 'lisp-mode-hook #'enable-paredit-mode)
 (add-hook 'emacs-lisp-mode-hook #'enable-paredit-mode)
+(add-hook 'sgml-mode-hook 'emmet-mode) ;; Auto-start on any markup modes
+(add-hook 'css-mode-hook  'emmet-mode) ;; enable Emmet's css abbreviation.
+(add-hook 'sgml-mode-hook
+		  (lambda ()
+			(setq indent-tabs-mode nil)))
+(add-hook 'before-save-hook 'tide-format-before-save)
+(add-hook 'typescript-mode-hook #'setup-tide-mode)
 
-(setq inf-clojure-generic-cmd "plk -d")
+(setq js-indent-level 2)
+(setq elpy-rpc-backend "rope")
+;; (setq inf-clojure-generic-cmd "plk -d")
+
+(setq-default inf-clojure-repl-type 'clojure)
+(setq-default tab-width 4)
+(setq-default c-basic-offset tab-width)
+(setq-default cperl-indent-level tab-width)
+(setq-default magit-save-repository-buffers 'dontask)
+(setq speedbar-show-unknown-files t
+      sr-speedbar-width 40)
+
+(define-key projectile-mode-map (kbd "C-c p")
+  'projectile-command-map)
+(global-set-key (kbd "M-q") 'company-complete)
+(global-set-key (kbd "C-x g") 'magit-status)
+(global-set-key (kbd "C-c o r g") 'ow-rg)
+(global-set-key (kbd "C-c o n") 'newline-each-element-in-list)
+(global-set-key (kbd "C-c h a") 'my-toggle-hideshow-all)
+(global-set-key (kbd "C-c h l") 'hs-hide-level)
+(global-set-key (kbd "C-c h t") 'hs-toggle-hiding)
+(global-set-key (kbd "C-c f") 'projectile-find-file)
+(global-set-key (kbd "M-i") 'imenu)
+(global-set-key (kbd "C-x f") #'helm-find-files)
+(global-set-key (kbd "C-c o f t") #'helm-gtags-find-tag)
+(define-key elpy-mode-map (kbd "M-n") 'elpy-nav-forward-block)
+(define-key elpy-mode-map (kbd "M-p") 'elpy-nav-backward-block)
+(global-set-key (kbd "C-x ;") 'comment-line)
+(global-set-key (kbd "M-N") 'next-buffer)
+(global-set-key (kbd "M-P") 'previous-buffer)
+(global-set-key (kbd "C-t") 'sr-speedbar-toggle)

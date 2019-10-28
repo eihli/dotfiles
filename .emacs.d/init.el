@@ -301,7 +301,8 @@
 
 (define-key projectile-mode-map (kbd "C-c p")
   'projectile-command-map)
-(global-set-key (kbd "M-q") 'company-complete)
+(global-set-key (kbd "M-p") 'company-complete)
+(global-set-key (kbd "M-n") 'completion-at-point)
 (global-set-key (kbd "C-x g") 'magit-status)
 (global-set-key (kbd "C-c o r g") 'ow-rg)
 (global-set-key (kbd "C-c o n") 'newline-each-element-in-list)

@@ -91,8 +91,11 @@ source $ZSH/oh-my-zsh.sh
 # alias zshconfig="mate ~/.zshrc"
 # alias ohmyzsh="mate ~/.oh-my-zsh"
 alias ap='ansible-playbook'
-
 alias xcp='xclip -selection clipboard'
+function saud () {
+    # Set audio to $1
+    pactl set-sink-volume 0 $1
+}
 
 [[ -f ~/.secrets ]] && . ~/.secrets
 
@@ -123,3 +126,4 @@ fi
 
 autoload -U +X bashcompinit && bashcompinit
 complete -o nospace -C /home/eihli/.local/bin/vault vault
+

@@ -44,73 +44,15 @@
  '(package-selected-packages
    (quote
 	(inf-clojure helm-gtags exec-path-from-shell cljr-helm helm helm-cider helm-projectile paredit http-twiddle rainbow-delimiters clj-refactor ac-cider ripgrep flx-ido cider clojure-mode unicode-fonts yasnippet-classic-snippets js-format magit yasnippet-snippets elpy elpygen nlinum yasnippet indium graphviz-dot-mode ## markdown-mode yaml-mode projectile slime emmet-mode tide json-mode autopair auto-complete)))
- '(safe-local-variable-values
-   (quote
-	((cider-default-cljs-repl . "(do (user/go) (user/cljs-repl))")
-	 (cider-ns-refresh-after-fn . "reloaded.repl/resume")
-	 (cider-ns-refresh-before-fn . "reloaded.repl/suspend")
-	 (eval progn
-		   (require
-			(quote find-file-in-project))
-		   (setq ffip-prune-patterns
-				 (\`
-				  ("*/node_modules/*"
-				   (\,@ ffip-prune-patterns))))
-		   (setq ffip-prune-patterns
-				 (\`
-				  ("*/env/*"
-				   (\,@ ffip-prune-patterns))))
-		   (setq ffip-prune-patterns
-				 (\`
-				  ("*.csv"
-				   (\,@ ffip-prune-patterns))))
-		   (setq ffip-prune-patterns
-				 (\`
-				  ("*/static/*"
-				   (\,@ ffip-prune-patterns)))))
-	 (eval progn
-		   (require
-			(quote find-file-in-project))
-		   (setq ffip-prune-patterns
-				 (\`
-				  ("*/node_modules/*"
-				   (\,@ ffip-prune-patterns))))
-		   (setq ffip-prune-patterns
-				 (\`
-				  ("*/env/*"
-				   (\,@ ffip-prune-patterns))))
-		   (setq ffip-prune-patterns
-				 (\`
-				  ("*.csv"
-				   (\,@ ffip-prune-patterns)))))
-	 (eval progn
-		   (require
-			(quote find-file-in-project))
-		   (setq ffip-prune-patterns
-				 (\`
-				  ("*/env/*"
-				   (\,@ ffip-prune-patterns))))
-		   (setq ffip-prune-patterns
-				 (\`
-				  ("*.csv"
-				   (\,@ ffip-prune-patterns)))))
-	 (eval progn
-		   (require
-			(quote find-file-in-project))
-		   (seq ffip-prune-patterns
-				(\`
-				 ("*/python-environments/*"
-				  (\,@ ffip-prune-patterns)))))
-	 (ffip-find-options . "-not -size +64k -not -iwholename 'db.sqlite'")))))
+ '(safe-local-variable-values nil))
 
-(custom-set-faces
- ;; custom-set-faces was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- '(default ((t (:family "DejaVu Sans Mono" :foundry "PfEd" :slant normal :weight normal :height 120 :width normal))))
- '(company-tooltip ((t (:foreground "yellow"))))
- '(region ((t (:background "dim gray" :distant-foreground "dark gray")))))
+
+;; Custom might set some personal settings, like file paths and dev
+;; tool options, that we don't want committed to get. Defining
+;; custom-file here will make Custom write to that file rather than
+;; our init.el
+(setq custom-file \"~/.emacs-custom.el\")
+(load custom-file)
 
 (require 'elpy)
 (require 'clj-refactor)

@@ -5,15 +5,22 @@ export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh" # This loads nvm
 
 export MANPATH="/usr/local/man:/usr/share/man:$MANPATH"
-
-export ANDROID_SDK_ROOT="$HOME/Android/Sdk"
-export ANDROID_HOME="$HOME/Android/Sdk"
-export PATH="$PATH:$HOME/.local/bin:$HOME/bin:$HOME/Android/Sdk/tools/bin:$HOME/Android/Sdk/platform-tools"
-
+export ANDROID_SDK_ROOT="/opt/android-sdk"
+export ANDROID_HOME="/opt/android-sdk"
 export PYENV_ROOT="$HOME/.pyenv"
-export PATH="$PYENV_ROOT/shims:$PATH"
 
-which go &> /dev/null && eval "$(go env)"
-which go &> /dev/null && [[ -d "$GOPATH/bin" ]] && PATH=$PATH:$GOPATH/bin
+# Only set these if we're not in tmux. If we're in tmux,
+# they've already been set.
+if [[ -z $TMUX ]]; then
+	export PATH="$PYENV_ROOT/shims:$PATH"
+	export PATH=$PATH:$ANDROID_HOME/emulator
+	export PATH=$PATH:$ANDROID_HOME/tools
+	export PATH=$PATH:$ANDROID_HOME/tools/bin
+	export PATH=$PATH:$ANDROID_HOME/platform-tools
+
+	which go &> /dev/null && eval "$(go env)"
+	which go &> /dev/null && [[ -d "$GOPATH/bin" ]] && PATH=$PATH:$GOPATH/bin
+	export PATH="$PATH:$HOME/.local/bin:$HOME/bin"
+fi
 
 export EDITOR="emacs"

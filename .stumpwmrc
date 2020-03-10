@@ -1,0 +1,76 @@
+(ql:quickload :swank)
+(load-module "battery-portable")
+
+
+(defmacro delay (expr)
+  `(lambda () ,expr))
+
+(defun force (thunk) (funcall thunk))
+
+(defmacro cons-stream (head tail)
+  `(cons ,head (delay ,tail)))
+
+(defun head (lazy-stream)
+  (car lazy-stream))
+
+(defun tail (lazy-stream)
+  (force (cdr lazy-stream)))
+
+(defun cycle (xs &optional cur)
+  (cond ((eql cur nil) (cycle xs xs))
+        (t (cons-stream (car cur) (cycle xs (cdr cur))))))
+
+(defun split-string (str &optional (chr #\Space))
+  (map 'list
+       (lambda (x) (coerce x 'string))
+       (split (or (coerce str 'list) '(#\Space)) (lambda (x) (eql x chr)))))
+
+(defun split (xs p &optional (inner-accum '()) (outer-accum '()))
+  (cond ((null xs) (if inner-accum
+                       (cons (coerce (reverse inner-accum) 'string) outer-accum)
+                       outer-accum))
+        (t (let* ((x (car xs))
+                  (is-split (funcall p x)))
+             (if is-split
+                 (cons (reverse inner-accum) (split (cdr xs) p '() outer-accum))
+                 (split (cdr xs) p (cons x inner-accum) outer-accum))))))
+
+(defvar ow-keyboard-layout-toggle (cycle '("norman" ",us")))
+(defvar *ow-keyboard-layout* ",us")
+
+(defun ow-toggle-keyboard-layout ()
+  (setf *ow-keyboard-layout* (head ow-keyboard-layout-toggle))
+  (setf ow-keyboard-layout-toggle (tail ow-keyboard-layout-toggle)))
+
+(defcommand ow-toggle-keyboard
+    ()
+    ()
+  (ow-toggle-keyboard-layout)
+  (run-shell-command (format nil "setxkbmap -variant ~a" *ow-keyboard-layout*)))
+
+(let ((server-running nil))
+  (defcommand swank () ()
+    "Toggle the swank server on/off"
+    (if server-running
+	(progn
+	  (swank:stop-server 4050)
+	  (echo-string
+	   (current-screen)
+	   "Stopping swank.")
+	  (setf server-running nil))
+	(progn
+	  (swank:create-server :port 4050
+			       :style swank:*communication-style*
+			       :dont-close t)
+	  (echo-string
+	   (current-screen)n
+	   "Starting swank. M-x slime-connect RET RET, then (in-package stumpwm).")
+	  (setf server-running t)))))
+
+(define-key *root-map* (kbd "C-z") "ow-toggle-keyboard")
+
+(defcommand battery () ()
+  (message 
+   (run-shell-command "acpi -b -a -t" t)))
+
+(define-key *root-map* (kbd "C-v") "battery")

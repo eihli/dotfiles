@@ -45,19 +45,23 @@
 (require 'elpy)
 (require 'clj-refactor)
 (require 'ripgrep)
-(require 'node-ac-mode)
 (require 'unicode-fonts) ;; Get Symbola http://users.teilar.gr/~g1951d/
 (require 'helm-config)
 (require 'sr-speedbar)
+(require 'helm-projectile)
 
+(helm-projectile-on)
 (unicode-fonts-setup)
 (elpy-enable)
 (helm-mode 1)
 (global-nlinum-mode t)  ;; nlinum way better perf than linum
-(ac-config-default)
 (show-paren-mode)
 (electric-pair-mode 1)
 (projectile-mode +1)
+
+(setq-default helm-completion-style 'helm-fuzzy)
+(setq-default helm-mode-fuzzy-match t)
+(setq-default helm-completion-in-region-fuzzy-match t)
 
 ;; Allow passing args
 (defun ow-rg (regexp &optional args)
@@ -135,7 +139,7 @@
 		 (hs-show-all)))
 
 ;; Fix shell path on Mac
-(when (memq window-system '(mac ns))
+(when (memq window-system '(mac ns x))
   (exec-path-from-shell-initialize))
 
 (put 'scroll-left 'disabled nil)
@@ -206,7 +210,7 @@
 		  (lambda () (add-to-list 'write-file-functions 'delete-trailing-whitespace)))
 (add-hook 'clojure-mode-hook #'my-clojure-mode-hook)
 (add-hook 'clojure-mode-hook #'enable-paredit-mode)
-(add-hook 'clojure-mode-hook #'inf-clojure-minor-mode)
+(add-hook 'clojure-mode-hook #'cider-mode)
 (add-hook 'lisp-mode-hook #'enable-paredit-mode)
 (add-hook 'emacs-lisp-mode-hook #'enable-paredit-mode)
 (add-hook 'sgml-mode-hook 'emmet-mode) ;; Auto-start on any markup modes
@@ -216,18 +220,26 @@
 			(setq indent-tabs-mode nil)))
 (add-hook 'before-save-hook 'tide-format-before-save)
 (add-hook 'typescript-mode-hook #'setup-tide-mode)
+(add-hook 'after-init-hook 'global-company-mode)
 
 (setq js-indent-level 2)
 (setq elpy-rpc-backend "rope")
 ;; (setq inf-clojure-generic-cmd "plk -d")
 
 (setq-default inf-clojure-repl-type 'clojure)
+(setq-default indent-tabs-mode nil)
 (setq-default tab-width 4)
 (setq-default c-basic-offset tab-width)
+(setq-default css-indent-offset 2)
 (setq-default cperl-indent-level tab-width)
 (setq-default magit-save-repository-buffers 'dontask)
+(setq-default truncate-lines nil)
 (setq speedbar-show-unknown-files t
       sr-speedbar-width 40)
+(setq org-edit-src-content-indentation 0
+      org-src-tab-acts-natively t
+      org-src-preserve-indentation t)
+
 
 (define-key projectile-mode-map (kbd "C-c p")
   'projectile-command-map)
@@ -236,6 +248,7 @@
 (global-set-key (kbd "C-x g") 'magit-status)
 (global-set-key (kbd "C-c o r g") 'ow-rg)
 (global-set-key (kbd "C-c o n") 'newline-each-element-in-list)
+(global-set-key (kbd "C-c o b") 'python-shell-send-buffer)
 (global-set-key (kbd "C-c h a") 'my-toggle-hideshow-all)
 (global-set-key (kbd "C-c h l") 'hs-hide-level)
 (global-set-key (kbd "C-c h t") 'hs-toggle-hiding)
@@ -249,3 +262,12 @@
 (global-set-key (kbd "M-N") 'next-buffer)
 (global-set-key (kbd "M-P") 'previous-buffer)
 (global-set-key (kbd "C-t") 'sr-speedbar-toggle)
+
+
+(require 'flx-ido)
+(ido-mode 1)
+;; (ido-everywhere 1) ;; Unable to use while helm-mode is enabled
+(flx-ido-mode 1)
+;; disable ido faces to see flx highlights.
+(setq ido-enable-flex-matching t)
+(setq ido-use-faces nil)

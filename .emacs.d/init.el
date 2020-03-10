@@ -35,23 +35,11 @@
     (dolist (el subdir-paths val)
       (add-to-list 'load-path el))))
 
-(custom-set-variables
- ;; custom-set-variables was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- '(elpy-rpc-backend "rope" t)
- '(package-selected-packages
-   (quote
-	(inf-clojure helm-gtags exec-path-from-shell cljr-helm helm helm-cider helm-projectile paredit http-twiddle rainbow-delimiters clj-refactor ac-cider ripgrep flx-ido cider clojure-mode unicode-fonts yasnippet-classic-snippets js-format magit yasnippet-snippets elpy elpygen nlinum yasnippet indium graphviz-dot-mode ## markdown-mode yaml-mode projectile slime emmet-mode tide json-mode autopair auto-complete)))
- '(safe-local-variable-values nil))
-
-
 ;; Custom might set some personal settings, like file paths and dev
 ;; tool options, that we don't want committed to get. Defining
 ;; custom-file here will make Custom write to that file rather than
 ;; our init.el
-(setq custom-file \"~/.emacs-custom.el\")
+(setq custom-file "~/.emacs-custom.el")
 (load custom-file)
 
 (require 'elpy)

@@ -1,5 +1,15 @@
+(in-package :stumpwm)
 (ql:quickload :swank)
 (load-module "battery-portable")
+(mode-line)
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;
+;; Helpers
+;;
+;; Lazy streams.
+;; Interesting and maybe worth a blog post later.
+;; Pulled from SICP.
 
 (defmacro delay (expr)
   `(lambda () ,expr))
@@ -18,19 +28,25 @@
 (defun cycle (xs &optional cur)
   (cond ((eql cur nil) (cycle xs xs))
         (t (cons-stream (car cur) (cycle xs (cdr cur))))))
+;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(defvar ow-keyboard-layout-toggle (cycle '("norman" ",us")))
-(defvar *ow-keyboard-layout* ",us")
+;; These are the things using "cycle".
+;; Not necessary; it's a simple 2-value toggle.
+;; But cycle seemed more generic and useful and fun
+;; to write.
 
-(defun ow-toggle-keyboard-layout ()
-  (setf *ow-keyboard-layout* (head ow-keyboard-layout-toggle))
-  (setf ow-keyboard-layout-toggle (tail ow-keyboard-layout-toggle)))
+(let ((ow-keyboard-layout-toggle (cycle '("norman" ",us")))
+      (ow-keyboard-layout ",us"))
+    (defun ow-toggle-keyboard-layout ()
+      (setf ow-keyboard-layout (head ow-keyboard-layout-toggle))
+      (setf ow-keyboard-layout-toggle (tail ow-keyboard-layout-toggle))))
 
 (defcommand ow-toggle-keyboard
     ()
     ()
   (ow-toggle-keyboard-layout)
-  (run-shell-command (format nil "setxkbmap -variant ~a" *ow-keyboard-layout*)))
+  (run-shell-command (format nil "setxkbmap -variant ~a" ow-keyboard-layout)))
 
 (let ((server-running nil))
   (defcommand swank () ()

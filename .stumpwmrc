@@ -14,7 +14,10 @@
 (defmacro delay (expr)
   `(lambda () ,expr))
 
-(defun force (thunk) (funcall thunk))
+(defun force (thunk)
+  (if (functionp thunk)
+      (funcall thunk)
+      thunk))
 
 (defmacro cons-stream (head tail)
   `(cons ,head (delay ,tail)))
@@ -28,6 +31,11 @@
 (defun cycle (xs &optional cur)
   (cond ((eql cur nil) (cycle xs xs))
         (t (cons-stream (car cur) (cycle xs (cdr cur))))))
+
+(defun range (&optional (start 0) end)
+  (cond ((>= start (1- end)) (cons-stream start nil))
+        (t (cons-stream start (range (1+ start) end)))))
+
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 

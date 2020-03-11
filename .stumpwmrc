@@ -1,7 +1,6 @@
 (ql:quickload :swank)
 (load-module "battery-portable")
 
-
 (defmacro delay (expr)
   `(lambda () ,expr))
 
@@ -19,21 +18,6 @@
 (defun cycle (xs &optional cur)
   (cond ((eql cur nil) (cycle xs xs))
         (t (cons-stream (car cur) (cycle xs (cdr cur))))))
-
-(defun split-string (str &optional (chr #\Space))
-  (map 'list
-       (lambda (x) (coerce x 'string))
-       (split (or (coerce str 'list) '(#\Space)) (lambda (x) (eql x chr)))))
-
-(defun split (xs p &optional (inner-accum '()) (outer-accum '()))
-  (cond ((null xs) (if inner-accum
-                       (cons (coerce (reverse inner-accum) 'string) outer-accum)
-                       outer-accum))
-        (t (let* ((x (car xs))
-                  (is-split (funcall p x)))
-             (if is-split
-                 (cons (reverse inner-accum) (split (cdr xs) p '() outer-accum))
-                 (split (cdr xs) p (cons x inner-accum) outer-accum))))))
 
 (defvar ow-keyboard-layout-toggle (cycle '("norman" ",us")))
 (defvar *ow-keyboard-layout* ",us")
@@ -63,7 +47,7 @@
 			       :style swank:*communication-style*
 			       :dont-close t)
 	  (echo-string
-	   (current-screen)n
+	   (current-screen)
 	   "Starting swank. M-x slime-connect RET RET, then (in-package stumpwm).")
 	  (setf server-running t)))))
 
@@ -74,3 +58,5 @@
    (run-shell-command "acpi -b -a -t" t)))
 
 (define-key *root-map* (kbd "C-v") "battery")
+
+(setf *window-format* "%m%n%s%10c|%25t")

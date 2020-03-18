@@ -1,6 +1,5 @@
-(in-package :stumpwm)
-(ql:quickload :swank)
 (load-module "battery-portable")
+(ql:quickload :slynk)
 (mode-line)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -46,41 +45,65 @@
 
 (let ((ow-keyboard-layout-toggle (cycle '("norman" ",us")))
       (ow-keyboard-layout ",us"))
-    (defun ow-toggle-keyboard-layout ()
-      (setf ow-keyboard-layout (head ow-keyboard-layout-toggle))
-      (setf ow-keyboard-layout-toggle (tail ow-keyboard-layout-toggle))))
-
-(defcommand ow-toggle-keyboard
-    ()
-    ()
-  (ow-toggle-keyboard-layout)
-  (run-shell-command (format nil "setxkbmap -variant ~a" ow-keyboard-layout)))
+  (defun ow-toggle-keyboard-layout ()
+    (setf ow-keyboard-layout (head ow-keyboard-layout-toggle))
+    (setf ow-keyboard-layout-toggle (tail ow-keyboard-layout-toggle)))
+  (defcommand ow-toggle-keyboard () ()
+              (ow-toggle-keyboard-layout)
+              (run-shell-command (format nil "setxkbmap -variant ~a" ow-keyboard-layout))))
 
 (let ((server-running nil))
-  (defcommand swank () ()
-    "Toggle the swank server on/off"
+  (defcommand slynk () ()
+    "Toggle the slynk  server on/off"
     (if server-running
-	(progn
-	  (swank:stop-server 4050)
-	  (echo-string
-	   (current-screen)
-	   "Stopping swank.")
-	  (setf server-running nil))
-	(progn
-	  (swank:create-server :port 4050
-			       :style swank:*communication-style*
-			       :dont-close t)
-	  (echo-string
-	   (current-screen)
-	   "Starting swank. M-x slime-connect RET RET, then (in-package stumpwm).")
-	  (setf server-running t)))))
+        (progn
+          (slynk :stop-server 4006)
+          (echo-string
+           (current-screen)
+           "Stopping slynk .")
+          (setf server-running nil))
+        (progn
+          (slynk :create-server :port 4006
+                               :style slynk :*communication-style*
+                               :dont-close t)
+          (echo-string
+           (current-screen)
+           "Starting slynk . M-x slime-connect RET RET, then (in-package stumpwm).")
+          (setf server-running t)))))
 
 (define-key *root-map* (kbd "C-z") "ow-toggle-keyboard")
 
 (defcommand battery () ()
-  (message 
+  (message
    (run-shell-command "acpi -b -a -t" t)))
 
 (define-key *root-map* (kbd "C-v") "battery")
 
 (setf *window-format* "%m%n%s%10c|%25t")
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;
+;; Application helpers
+
+(defcommand rr-firefox () ()
+            (run-or-raise "firefox" '(:class "firefox")))
+
+(define-key *root-map* (kbd "C-f") "rr-firefox")
+(define-key *root-map* (kbd "C-Tab") "fullscreen")
+(define-key *top-map* (kbd "s-Tab") "fnext")
+(define-key *top-map* (kbd "s-ISO_Left_Tab") "fprev")
+
+(load-module "swm-gaps")
+
+;; Head gaps run along the 4 borders of the monitor(s)
+(setf swm-gaps:*head-gaps-size* 6)
+
+;; Inner gaps run along all the 4 borders of a window
+(setf swm-gaps:*inner-gaps-size* 4)
+
+;; Outer gaps add more padding to the outermost borders of a window (touching
+;; the screen border)
+(setf swm-gaps:*outer-gaps-size* 8)
+
+;; Call command
+;; toggle-gaps

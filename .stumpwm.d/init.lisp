@@ -1,5 +1,6 @@
-(load-module "battery-portable")
-(ql:quickload :slynk)
+(in-package :stumpwm)
+(add-to-load-path #p"~/common-lisp/sly/slynk/")
+(require :slynk)
 (mode-line)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -53,18 +54,18 @@
               (run-shell-command (format nil "setxkbmap -variant ~a" ow-keyboard-layout))))
 
 (let ((server-running nil))
-  (defcommand slynk () ()
+  (defcommand ow-slynk () ()
     "Toggle the slynk  server on/off"
     (if server-running
         (progn
-          (slynk :stop-server 4006)
+          (slynk:stop-server 4006)
           (echo-string
            (current-screen)
            "Stopping slynk .")
           (setf server-running nil))
         (progn
-          (slynk :create-server :port 4006
-                               :style slynk :*communication-style*
+          (slynk:create-server :port 4006
+                               :style slynk:*communication-style*
                                :dont-close t)
           (echo-string
            (current-screen)
@@ -73,11 +74,11 @@
 
 (define-key *root-map* (kbd "C-z") "ow-toggle-keyboard")
 
-(defcommand battery () ()
+(defcommand ow-battery () ()
   (message
    (run-shell-command "acpi -b -a -t" t)))
 
-(define-key *root-map* (kbd "C-v") "battery")
+(define-key *root-map* (kbd "C-v") "ow-battery")
 
 (setf *window-format* "%m%n%s%10c|%25t")
 
@@ -88,22 +89,66 @@
 (defcommand rr-firefox () ()
             (run-or-raise "firefox" '(:class "firefox")))
 
+(defcommand rr-xterm () ()
+  (run-or-raise "xterm" '(:class "XTerm")))
+
+(set-prefix-key (kbd "C-t"))
+
+(set-prefix-key (kbd "C-t"))
+(define-key *root-map* (kbd "C-x") "rr-xterm")
 (define-key *root-map* (kbd "C-f") "rr-firefox")
 (define-key *root-map* (kbd "C-Tab") "fullscreen")
-(define-key *top-map* (kbd "s-Tab") "fnext")
-(define-key *top-map* (kbd "s-ISO_Left_Tab") "fprev")
+;; (define-key *top-map* (kbd "s-Tab") "fnext")
+;; (define-key *top-map* (kbd "s-ISO_Left_Tab") "fprev")
+
+(undefine-key *top-map* (kbd "s-Tab"))
+(undefine-key *top-map* (kbd "s-ISO_Left_Tab"))
 
 (load-module "swm-gaps")
+(load-module "wallpapers")
+(wallpapers::a-random-wallpaper)
+;; (wallpapers::multiple-wallpapers 0 (* 5 60))
 
 ;; Head gaps run along the 4 borders of the monitor(s)
-(setf swm-gaps:*head-gaps-size* 6)
+(setf swm-gaps:*head-gaps-size* 0)
 
 ;; Inner gaps run along all the 4 borders of a window
-(setf swm-gaps:*inner-gaps-size* 4)
+(setf swm-gaps:*inner-gaps-size* 10)
 
 ;; Outer gaps add more padding to the outermost borders of a window (touching
 ;; the screen border)
-(setf swm-gaps:*outer-gaps-size* 8)
+(setf swm-gaps:*outer-gaps-size* 10)
 
 ;; Call command
-;; toggle-gaps
+(swm-gaps:toggle-gaps)
+
+(defcommand xrandr-auto () ()
+  (let* ((output (run-shell-command "xrandr" t))
+        (screen (car *screen-list*))
+        (heads (screen-heads screen)))
+    (cond
+      ((search "HDMI1 connected" output) (run-shell-command "xrandr --output eDP1 --mode 1600x900 --right-of HDMI1 --output HDMI1 --auto" t))
+      (t (run-shell-command "xrandr --auto" t)))
+    (loop for head in heads
+          do (enable-mode-line screen head t))))
+
+(define-key *root-map* (kbd "V") "xrandr-auto")
+
+(setf *mouse-focus-policy* :click)
+
+(define-keysym #x1008ff11 "XF86AudioLowerVolume")
+(define-keysym #x1008ff12 "XF86AudioMute")
+(define-keysym #x1008ff13 "XF86AudioRaiseVolume")
+
+(defcommand |amixer set Master toggle| () ()
+  (run-shell-command "amixer set Master toggle"))
+
+(defcommand |amixer set Master 5%+| () ()
+  (run-shell-command "amixer set Master 5%+"))
+
+(defcommand |amixer set Master 5%-| () ()
+  (run-shell-command "amixer set Master 5%-"))
+
+(define-key *top-map* (kbd "XF86AudioMute") "|amixer set Master toggle|")
+(define-key *top-map* (kbd "XF86AudioLowerVolume") "|amixer set Master 5%-|")
+(define-key *top-map* (kbd "XF86AudioRaiseVolume") "|amixer set Master 5%+|")

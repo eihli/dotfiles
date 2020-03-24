@@ -1,6 +1,7 @@
 (in-package :stumpwm)
 (add-to-load-path #p"~/common-lisp/sly/slynk/")
 (require :slynk)
+(require :cl-utilities)
 (mode-line)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -152,3 +153,23 @@
 (define-key *top-map* (kbd "XF86AudioMute") "amixer-set-Master-toggle")
 (define-key *top-map* (kbd "XF86AudioLowerVolume") "amixer-set-Master-5%-")
 (define-key *top-map* (kbd "XF86AudioRaiseVolume") "amixer-set-Master-5%+")
+
+(defun pace-conversion (pace factor)
+  (multiple-value-bind (minutes seconds)
+      (apply #'values
+             (mapcar
+              #'parse-integer
+              (values (cl-utilities:split-sequence #\: pace))))
+    (let* ((total-seconds (+ (* minutes 60) seconds))
+           (mi-pace (/ total-seconds factor)))
+      (multiple-value-bind (conv-minutes conv-seconds)
+          (floor mi-pace 60)
+        (apply #'format nil "~A:~A" (mapcar #'round (list conv-minutes conv-seconds)))))))
+
+(defun pace-km->mi (pace)
+  (pace-conversion pace (/ 1 1.609344)))
+
+(defun pace-mi->km (pace)
+  (pace-conversion pace 1.609344))
+
+(pace-mi->km "9:00")

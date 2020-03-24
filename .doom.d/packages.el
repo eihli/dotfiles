@@ -53,3 +53,6 @@
 (package! stumpwm-mode)
 (package! smart-tabs-mode)
 (package! paredit)
+(package! elpy
+  :recipe (:local-repo "/home/eihli/src/eihli-elpy"
+           :files ("*.el")))

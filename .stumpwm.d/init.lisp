@@ -120,7 +120,7 @@
 (setf swm-gaps:*outer-gaps-size* 10)
 
 ;; Call command
-(swm-gaps:toggle-gaps)
+;; (swm-gaps:toggle-gaps)
 
 (defcommand xrandr-auto () ()
   (let* ((output (run-shell-command "xrandr" t))
@@ -140,15 +140,15 @@
 (define-keysym #x1008ff12 "XF86AudioMute")
 (define-keysym #x1008ff13 "XF86AudioRaiseVolume")
 
-(defcommand |amixer set Master toggle| () ()
-  (run-shell-command "amixer set Master toggle"))
+(defcommand |amixer-set-Master-toggle| () ()
+  (run-shell-command "amixer set Master toggle -q"))
 
-(defcommand |amixer set Master 5%+| () ()
-  (run-shell-command "amixer set Master 5%+"))
+(defcommand |amixer-set-Master-5%+| () ()
+  (run-shell-command "amixer set Master 5%+ -q"))
 
-(defcommand |amixer set Master 5%-| () ()
-  (run-shell-command "amixer set Master 5%-"))
+(defcommand |amixer-set-Master-5%-| () ()
+  (run-shell-command "amixer set Master 5%- -q"))
 
-(define-key *top-map* (kbd "XF86AudioMute") "|amixer set Master toggle|")
-(define-key *top-map* (kbd "XF86AudioLowerVolume") "|amixer set Master 5%-|")
-(define-key *top-map* (kbd "XF86AudioRaiseVolume") "|amixer set Master 5%+|")
+(define-key *top-map* (kbd "XF86AudioMute") "amixer-set-Master-toggle")
+(define-key *top-map* (kbd "XF86AudioLowerVolume") "amixer-set-Master-5%-")
+(define-key *top-map* (kbd "XF86AudioRaiseVolume") "amixer-set-Master-5%+")

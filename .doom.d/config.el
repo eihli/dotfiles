@@ -72,5 +72,7 @@
 
 (smart-tabs-insinuate 'lisp)
 
+(setq-default truncate-lines nil)
+
 (load! "functions")
 (load! "bindings")

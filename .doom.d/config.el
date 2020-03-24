@@ -52,9 +52,11 @@
 ;; You can also try 'gd' (or 'C-c g d') to jump to their definition and see how
 ;; they are implemented.
 
-(def-package! stumpwm-mode)
-(def-package! smart-tabs-mode)
-(def-package! paredit)
+(use-package! stumpwm-mode)
+(use-package! smart-tabs-mode)
+(use-package! paredit)
+(use-package! elpy
+  :init (advice-add 'python-mode :before #'elpy-enable))
 (add-hook 'lisp-mode-hook 'paredit-mode)
 (add-hook 'emacs-lisp-mode-hook 'paredit-mode)
 

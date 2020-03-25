@@ -164,12 +164,18 @@
            (mi-pace (/ total-seconds factor)))
       (multiple-value-bind (conv-minutes conv-seconds)
           (floor mi-pace 60)
-        (apply #'format nil "~A:~A" (mapcar #'round (list conv-minutes conv-seconds)))))))
+        (apply #'format nil "~A:~2,,,'0@A" (mapcar #'round (list conv-minutes conv-seconds)))))))
 
 (defun pace-km->mi (pace)
   (pace-conversion pace (/ 1 1.609344)))
 
 (defun pace-mi->km (pace)
   (pace-conversion pace 1.609344))
+
+(defcommand km->mi-pace (pace) ((:string "Pace (km): "))
+  (pace-km->mi pace))
+
+(defcommand mi->km-pace (pace) ((:string "Pace (mi): "))
+  (pace-mi->km pace))
 
 (pace-mi->km "9:00")

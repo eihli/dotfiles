@@ -180,4 +180,25 @@
 (defcommand mi->km-pace (pace) ((:string "Pace (mi): "))
   (pace-mi->km pace))
 
-(pace-mi->km "9:00")
+(defun ow--tmux-dev ()
+  (flet ((send-keys (cmd)
+           (format nil "send-keys \"~A\" Enter" cmd)))
+    (let ((commands (list "new-window"
+                          "selectp -t 0"
+                          (send-keys "cd ~/code/lottery/")
+                          (send-keys "docker-compose run -p 6379:6379 lotto_cache")
+                          "splitw -p 50"
+                          (send-keys "cd ~/code/lottery/lotto_odds_api/")
+                          (send-keys "./run.sh")
+                          "splitw -h -p 50"
+                          (send-keys "cd ~/code/lottery/scratchoff_odds/")
+                          (send-keys "./run.sh")
+                          "selectp -t 0"
+                          "splitw -h -p 50"
+                          (send-keys "cd ~/code/lotto_frontend/")
+                          (send-keys "ng serve -c dev --proxy-config proxy.conf.json"))))
+      (loop for command in commands
+            do (run-shell-command (format nil "tmux ~A" command))))))
+
+(defcommand ow-tmux-dev () ()
+  (ow--tmux-dev))

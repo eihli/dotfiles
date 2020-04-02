@@ -51,8 +51,10 @@
     (setf ow-keyboard-layout (head ow-keyboard-layout-toggle))
     (setf ow-keyboard-layout-toggle (tail ow-keyboard-layout-toggle)))
   (defcommand ow-toggle-keyboard () ()
-              (ow-toggle-keyboard-layout)
-              (run-shell-command (format nil "setxkbmap -variant ~a" ow-keyboard-layout))))
+    (ow-toggle-keyboard-layout)
+    ;; Norman sets ralt_switch, which is annoying. -option resets that so I'm back to having
+    ;; an alt on both sides of the keyboard.
+    (run-shell-command (format nil "setxkbmap -variant ~a -option" ow-keyboard-layout))))
 
 (let ((server-running nil))
   (defcommand ow-slynk () ()

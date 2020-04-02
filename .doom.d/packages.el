@@ -56,3 +56,4 @@
 (package! elpy
   :recipe (:local-repo "/home/eihli/src/eihli-elpy"
            :files ("*.el")))
+(package! tide)

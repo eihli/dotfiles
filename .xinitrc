@@ -45,7 +45,7 @@ fi
 eval $(/usr/bin/gnome-keyring-daemon --start --components=gpg,pkcs11,secrets,ssh)
 export SSH_AUTH_SOCK
 
-exec $(dbus-launch --exit-with-session --sh-syntax stumpwm)
+exec $(dbus-launch --exit-with-x11 --sh-syntax stumpwm)
 
 # get_session(){
 # 	local dbus_args=(--sh-syntax --exit-with-session)

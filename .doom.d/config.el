@@ -56,7 +56,9 @@
 (use-package! smart-tabs-mode)
 (use-package! paredit)
 (use-package! elpy
-  :init (advice-add 'python-mode :before #'elpy-enable))
+  :init
+  (advice-add 'python-mode :before #'elpy-enable)
+  (setq-default elpy-rpc-pythonpath "/home/eihli/src/eihli-elpy"))
 (add-hook 'lisp-mode-hook 'paredit-mode)
 (add-hook 'emacs-lisp-mode-hook 'paredit-mode)
 

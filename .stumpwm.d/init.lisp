@@ -2,8 +2,19 @@
 (add-to-load-path #p"~/common-lisp/sly/slynk/")
 (require :slynk)
 (require :cl-utilities)
+(require :ppath)
 (mode-line)
 
+(defvar ow/init-directory
+  (directory-namestring
+   (truename (merge-pathnames (user-homedir-pathname)
+                              ".stumpwm.d"))))
+
+(defun ow/load (filename)
+  (let ((file (merge-pathnames (concat filename ".lisp")
+                              ow/init-directory)))
+    (load file)))
+(ow/load "ow-cpu-mode-line")
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;
 ;; Helpers
@@ -75,15 +86,17 @@
            "Starting slynk . M-x slime-connect RET RET, then (in-package stumpwm).")
           (setf server-running t)))))
 
-(define-key *root-map* (kbd "C-z") "ow-toggle-keyboard")
 
 (defcommand ow-battery () ()
   (message
    (run-shell-command "acpi -b -a -t" t)))
 
-(define-key *root-map* (kbd "C-v") "ow-battery")
 
-(setf *window-format* "%m%n%s%10c|%25t")
+(setf
+ *window-format* "%m%n%s%10c|%25t"
+ *screen-mode-line-format*
+ '("^[^5*%d^]"
+   " ^[^2*%n^]"))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;
@@ -95,17 +108,6 @@
 (defcommand rr-xterm () ()
   (run-or-raise "xterm" '(:class "XTerm")))
 
-(set-prefix-key (kbd "C-t"))
-
-(set-prefix-key (kbd "C-t"))
-(define-key *root-map* (kbd "C-x") "rr-xterm")
-(define-key *root-map* (kbd "C-f") "rr-firefox")
-(define-key *root-map* (kbd "C-Tab") "fullscreen")
-;; (define-key *top-map* (kbd "s-Tab") "fnext")
-;; (define-key *top-map* (kbd "s-ISO_Left_Tab") "fprev")
-
-(undefine-key *top-map* (kbd "s-Tab"))
-(undefine-key *top-map* (kbd "s-ISO_Left_Tab"))
 
 (load-module "swm-gaps")
 (load-module "wallpapers")
@@ -122,9 +124,6 @@
 ;; the screen border)
 (setf swm-gaps:*outer-gaps-size* 10)
 
-;; Call command
-;; (swm-gaps:toggle-gaps)
-
 (defcommand xrandr-auto () ()
   (let* ((output (run-shell-command "xrandr" t))
         (screen (car *screen-list*))
@@ -135,7 +134,6 @@
     (loop for head in heads
           do (enable-mode-line screen head t))))
 
-(define-key *root-map* (kbd "V") "xrandr-auto")
 
 (setf *mouse-focus-policy* :click)
 
@@ -180,6 +178,9 @@
 (defcommand mi->km-pace (pace) ((:string "Pace (mi): "))
   (pace-mi->km pace))
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Shortcuts for launching lottery-related dev env.
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (defun ow--tmux-dev ()
   (flet ((send-keys (cmd)
            (format nil "send-keys \"~A\" Enter" cmd)))
@@ -202,3 +203,25 @@
 
 (defcommand ow-tmux-dev () ()
   (ow--tmux-dev))
+
+(defun ow--screenshot (filename)
+  (run-shell-command (format nil "import ~A" (ppath:expanduser filename))))
+
+(defcommand ow-screenshot (filename) ((:string "Save screenshot as: "))
+  (ow--screenshot filename))
+
+(set-prefix-key (kbd "C-t"))
+
+(define-key *root-map* (kbd "y") "ow-screenshot")
+(define-key *root-map* (kbd "T") "toggle-gaps")
+(define-key *root-map* (kbd "C-z") "ow-toggle-keyboard")
+(define-key *root-map* (kbd "C-v") "ow-battery")
+(define-key *root-map* (kbd "V") "xrandr-auto")
+
+(define-key *root-map* (kbd "C-x") "rr-xterm")
+(define-key *root-map* (kbd "C-f") "rr-firefox")
+(define-key *root-map* (kbd "C-Tab") "fullscreen")
+;; (define-key *top-map* (kbd "s-Tab") "fnext")
+;; (define-key *top-map* (kbd "s-ISO_Left_Tab") "fprev")
+;; (undefine-key *top-map* (kbd "s-Tab"))
+;; (undefine-key *top-map* (kbd "s-ISO_Left_Tab"))

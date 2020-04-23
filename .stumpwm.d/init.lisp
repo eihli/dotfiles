@@ -3,6 +3,7 @@
 (require :slynk)
 (require :cl-utilities)
 (require :ppath)
+(require :clx-truetype)
 (mode-line)
 
 (defvar ow/init-directory
@@ -14,7 +15,11 @@
   (let ((file (merge-pathnames (concat filename ".lisp")
                               ow/init-directory)))
     (load file)))
+
+(ow/load "utils")
+(ow/load "vpn")
 (ow/load "ow-cpu-mode-line")
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;
 ;; Helpers
@@ -48,9 +53,26 @@
   (cond ((>= start (1- end)) (cons-stream start nil))
         (t (cons-stream start (range (1+ start) end)))))
 
-;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;
+;; Application helpers
 
+(defcommand rr-firefox () ()
+  (run-or-raise "firefox" '(:class "firefox")))
+
+(defcommand rr-xterm () ()
+  (run-or-raise "xterm" '(:class "XTerm")))
+
+
+(load-module "swm-gaps")
+(load-module "wallpapers")
+(load-module "ttf-fonts")
+
+(xft:cache-fonts)
+(set-font (make-instance 'xft:font :family "FiraCode Nerd Font Mono" :subfamily "Regular" :size 11))
+(wallpapers::a-random-wallpaper)
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; These are the things using "cycle".
 ;; Not necessary; it's a simple 2-value toggle.
 ;; But cycle seemed more generic and useful and fun
@@ -92,27 +114,21 @@
    (run-shell-command "acpi -b -a -t" t)))
 
 
+(ow/time-cached
+ 3 ow/ml-cpu ()
+ (concat " | " (ow/stumpwm-cpu:cpu-mode-line-string)))
+
+(ow/time-cached
+ 10 ow/ml-vpn ()
+ (concat " | " (ow/stumpwm-vpn:vpn-mode-line-string)))
+
 (setf
  *window-format* "%m%n%s%10c|%25t"
  *screen-mode-line-format*
  '("^[^5*%d^]"
-   " ^[^2*%n^]"))
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;
-;; Application helpers
-
-(defcommand rr-firefox () ()
-            (run-or-raise "firefox" '(:class "firefox")))
-
-(defcommand rr-xterm () ()
-  (run-or-raise "xterm" '(:class "XTerm")))
-
-
-(load-module "swm-gaps")
-(load-module "wallpapers")
-(wallpapers::a-random-wallpaper)
-;; (wallpapers::multiple-wallpapers 0 (* 5 60))
+   (:eval (ow/ml-cpu))
+   (:eval (ow/ml-vpn))
+   "^>^[^2*%n^]"))
 
 ;; Head gaps run along the 4 borders of the monitor(s)
 (setf swm-gaps:*head-gaps-size* 0)

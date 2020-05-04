@@ -53,12 +53,25 @@
 ;; they are implemented.
 
 (use-package! stumpwm-mode)
-(use-package! smart-tabs-mode)
+(use-package! smart-tabs-mode
+  :config
+  (autoload 'smart-tabs-mode "smart-tabs-mode")
+  (autoload 'smart-tabs-mode-enable "smart-tabs-mode")
+  (autoload 'smart-tabs-advice "smart-tabs-mode")
+  (autoload 'smart-tabs-insinuate "smart-tabs-mode"))
+
 (use-package! paredit)
 (use-package! elpy
   :init
   (advice-add 'python-mode :before #'elpy-enable)
   (setq-default elpy-rpc-pythonpath "/home/eihli/src/eihli-elpy"))
+(use-package! web-mode
+  :mode ("\\.html\\'" . web-mode))
+(add-hook! web-mode
+  (setq indent-tabs-mode t)
+  (web-mode-use-tabs)
+  (emmet-mode))
+
 (add-hook 'lisp-mode-hook 'paredit-mode)
 (add-hook 'emacs-lisp-mode-hook 'paredit-mode)
 
@@ -84,16 +97,6 @@
 (add-hook 'typescript-mode-hook #'setup-tide-mode)
 
 (setq sly-complete-symbol-function 'sly-flex-completions)
-
-(autoload 'smart-tabs-mode "smart-tabs-mode")
-(autoload 'smart-tabs-mode-enable "smart-tabs-mode")
-(autoload 'smart-tabs-advice "smart-tabs-mode")
-(autoload 'smart-tabs-insinuate "smart-tabs-mode")
-
-(smart-tabs-add-language-support lisp lisp-mode-hook
-  ((indent-relative . tab-width)))
-
-(smart-tabs-insinuate 'lisp)
 
 (setq-default truncate-lines nil)
 

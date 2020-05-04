@@ -57,3 +57,7 @@
   :recipe (:local-repo "/home/eihli/src/eihli-elpy"
            :files ("*.el")))
 (package! tide)
+(package! ob-async)
+(package! web-mode)
+(package! clojure-mode)
+(package! emmet-mode)

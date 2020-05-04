@@ -61,18 +61,22 @@
   (autoload 'smart-tabs-insinuate "smart-tabs-mode"))
 
 (use-package! paredit)
+
 (use-package! elpy
   :init
   (advice-add 'python-mode :before #'elpy-enable)
   (setq-default elpy-rpc-pythonpath "/home/eihli/src/eihli-elpy"))
+
 (use-package! web-mode
   :mode ("\\.html\\'" . web-mode))
+
 (add-hook! web-mode
   (setq indent-tabs-mode t)
   (web-mode-use-tabs)
   (emmet-mode))
 
-(add-hook 'lisp-mode-hook 'paredit-mode)
+(add-hook! (clojure-mode lisp-mode)
+           'paredit-mode)
 (add-hook 'emacs-lisp-mode-hook 'paredit-mode)
 
 (use-package! tide)

@@ -52,6 +52,8 @@
 ;; You can also try 'gd' (or 'C-c g d') to jump to their definition and see how
 ;; they are implemented.
 
+(use-package! adoc-mode
+  :mode ("\\.adoc\\'" . adoc-mode))
 (use-package! stumpwm-mode)
 (use-package! smart-tabs-mode
   :config

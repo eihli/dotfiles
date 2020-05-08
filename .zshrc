@@ -126,3 +126,5 @@ fi
 
 autoload -U +X bashcompinit && bashcompinit
 complete -o nospace -C /home/eihli/.local/bin/vault vault
+
+export PATH="$HOME/.yarn/bin:$HOME/.config/yarn/global/node_modules/.bin:$PATH"

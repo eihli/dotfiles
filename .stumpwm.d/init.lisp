@@ -145,7 +145,7 @@
         (screen (car *screen-list*))
         (heads (screen-heads screen)))
     (cond
-      ((search "HDMI1 connected" output) (run-shell-command "xrandr --output eDP1 --mode 1600x900 --right-of HDMI1 --output HDMI1 --auto" t))
+      ((search "HDMI1 connected" output) (run-shell-command "xrandr --output eDP1 --mode 1368x768 --right-of HDMI1 --output HDMI1 --auto" t))
       (t (run-shell-command "xrandr --auto" t)))
     (loop for head in heads
           do (enable-mode-line screen head t))))

@@ -61,3 +61,4 @@
 (package! web-mode)
 (package! clojure-mode)
 (package! emmet-mode)
+(package! adoc-mode)

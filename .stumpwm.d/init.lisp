@@ -60,6 +60,9 @@
 (defcommand rr-firefox () ()
   (run-or-raise "firefox" '(:class "firefox")))
 
+(defcommand rr-chrome () ()
+  (run-or-raise "google-chrome-stable" '(:class "Google-chrome")))
+
 (defcommand rr-xterm () ()
   (run-or-raise "xterm" '(:class "XTerm")))
 
@@ -236,6 +239,7 @@
 
 (define-key *root-map* (kbd "C-x") "rr-xterm")
 (define-key *root-map* (kbd "C-f") "rr-firefox")
+(define-key *root-map* (kbd "C-o") "rr-chrome")
 (define-key *root-map* (kbd "C-Tab") "fullscreen")
 ;; (define-key *top-map* (kbd "s-Tab") "fnext")
 ;; (define-key *top-map* (kbd "s-ISO_Left_Tab") "fprev")

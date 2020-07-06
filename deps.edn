@@ -22,12 +22,10 @@
  {:1.9 {:override-deps {org.clojure/clojure {:mvn/version "1.9.0"}}}
   :1.10 {:override-deps {:org.clojure/clojure {:mvn/version "1.10.0"}}}
   :cider-nrepl {:extra-deps
-                {:nrepl {:mvn/version "RELEASE"}
-                 :refactor-nrepl {:mvn/version "2.5.0-SNAPSHOT"}
-                 :cider/cider-nrepl {:mvn/version "0.23.0"}}
-                :main-opts ["-m" "nrepl.cmdline" "--middleware" "[\"refactor-nrepl.middleware/wrap-refactor\",\"cider.nrepl/cider-middleware\"]"]}}
+                {nrepl {:mvn/version "RELEASE"}
+                 refactor-nrepl {:mvn/version "2.5.0"}
+                 cider/cider-nrepl {:mvn/version "0.23.0"}}}}
 
-;; "/usr/local/bin/clojure -A:dev -Sdeps '{:deps {nrepl {:mvn/version \"0.6.0\"} refactor-nrepl {:mvn/version \"2.5.0-SNAPSHOT\"} cider/cider-nrepl {:mvn/version \"0.23.0\"}}}' -m nrepl.cmdline --middleware '[\"refactor-nrepl.middleware/wrap-refactor\", \"cider.nrepl/cider-middleware\"]'"
 
  ;; Aliases
  ;;   resolve-deps aliases (-R) affect dependency resolution, options:

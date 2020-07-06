@@ -77,6 +77,13 @@
   (web-mode-use-tabs)
   (emmet-mode))
 
+(after! clojure
+  (define-clojure-indent
+    (>defn :defn)
+    (defsc :defn)
+    (action :defn)
+    (defmutation :defn)))
+
 (add-hook! (clojure-mode lisp-mode)
            'paredit-mode)
 (add-hook 'emacs-lisp-mode-hook 'paredit-mode)

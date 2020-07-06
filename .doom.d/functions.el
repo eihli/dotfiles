@@ -9,3 +9,7 @@
                   (skip-chars-forward skip-chars)
                   (point))))
       (delete-region start num))))
+
+(defun lotto-cljs ()
+  (interactive)
+  (cider-connect-cljs '(:host "localhost" :port 9001 :cljs-repl-type shadow)))

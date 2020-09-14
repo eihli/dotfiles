@@ -2,7 +2,8 @@
 
 (map! :leader
       "lh" #'scroll-left
-      "ll" #'scroll-right)
+      "ll" #'scroll-right
+      "ow" #'treemacs-select-window)
 (map!
  :ni "C-S-d" #'delete-surrounding-whitespace
  :nm  "C-S-o" #'better-jumper-jump-forward)

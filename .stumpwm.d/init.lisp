@@ -3,7 +3,6 @@
 (require :slynk)
 (require :cl-utilities)
 (require :ppath)
-(require :clx-truetype)
 (mode-line)
 
 (defvar ow/init-directory
@@ -19,6 +18,7 @@
 (ow/load "utils")
 (ow/load "vpn")
 (ow/load "ow-cpu-mode-line")
+(ow/load "ow-audio-mode-line")
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;
@@ -66,13 +66,13 @@
 (defcommand rr-xterm () ()
   (run-or-raise "xterm" '(:class "XTerm")))
 
-
 (load-module "swm-gaps")
 (load-module "wallpapers")
 (load-module "ttf-fonts")
 
 (xft:cache-fonts)
-(set-font (make-instance 'xft:font :family "FiraCode Nerd Font Mono" :subfamily "Regular" :size 11))
+(set-font (make-instance 'xft:font :family "FiraCodeNerdFontCompleteM Nerd Font" :subfamily "Regular" :size 11))
+
 (wallpapers::a-random-wallpaper)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -125,12 +125,17 @@
  10 ow/ml-vpn ()
  (concat " | " (ow/stumpwm-vpn:vpn-mode-line-string)))
 
+(ow/time-cached
+ 1 ow/ml-audio ()
+ (concat " | " (ow/stumpwm-audio:current-audio-levels)))
+
 (setf
  *window-format* "%m%n%s%10c|%25t"
  *screen-mode-line-format*
  '("^[^5*%d^]"
    (:eval (ow/ml-cpu))
    (:eval (ow/ml-vpn))
+   (:eval (ow/ml-audio))
    "^>^[^2*%n^]"))
 
 ;; Head gaps run along the 4 borders of the monitor(s)
@@ -216,12 +221,28 @@
                           "selectp -t 0"
                           "splitw -h -p 50"
                           (send-keys "cd ~/code/lotto_frontend/")
-                          (send-keys "ng serve -c dev --proxy-config proxy.conf.json"))))
+                          (send-keys "npm run ng -- serve -c dev --proxy-config proxy.conf.json"))))
       (loop for command in commands
             do (run-shell-command (format nil "tmux ~A" command))))))
 
 (defcommand ow-tmux-dev () ()
   (ow--tmux-dev))
+
+(defun ow--wifi ()
+  (message (run-shell-command "nmcli dev wifi list" t)))
+
+(defcommand ow-wifi () ()
+  (ow--wifi))
+
+;; This won't work until you get a way to sudo from stumpwm
+;; https://gist.github.com/valvallow/1379927
+(defun ow--brightness (prct)
+  (let* ((max-brightness (parse-integer (remove #\Newline (run-shell-command "cat /sys/class/backlight/intel_backlight/max_brightness" t))))
+        (val (* max-brightness (/ prct 100))))
+    (run-shell-command (format nil "echo ~A | sudo tee /sys/class/backlight/intel_backlight/brightness" val))))
+
+(defcommand ow-brightness (prct) ((:number "Set brightness to percentage: "))
+  (ow--brightness prct))
 
 (defun ow--screenshot (filename)
   (run-shell-command (format nil "import ~A" (ppath:expanduser filename))))

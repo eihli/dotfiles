@@ -62,6 +62,21 @@
   (autoload 'smart-tabs-advice "smart-tabs-mode")
   (autoload 'smart-tabs-insinuate "smart-tabs-mode"))
 
+(setq doom-unicode-font (font-spec :family "FiraCodeNerdFontCompleteM Nerd Font"
+                                   :subfamily "Regular"
+                                   :size 14))
+(use-package! flycheck-clj-kondo)
+
+(use-package! clojure-mode
+  :config
+  (require 'flycheck-clj-kondo)
+  (require 'ob-clojure)
+  (setq cider-clojure-cli-global-options "-A:cider-nrepl"
+        cider-required-middleware-version "0.24.0"
+        cider-jack-in-auto-inject-clojure nil
+        cider-jack-in-lein-plugins nil
+        org-babel-clojure-backend 'cider))
+
 (use-package! paredit)
 
 (use-package! elpy
@@ -77,6 +92,17 @@
   (web-mode-use-tabs)
   (emmet-mode))
 
+(use-package! seq
+  :ensure t)
+(use-package! clj-refactor
+  :hook (clojure-mode . clj-refactor-mode)
+  :config
+  (set-lookup-handlers! 'clj-refactor-mode
+    :references #'cljr-find-usages)
+  (map! :map clojure-mode-map
+        :localleader
+        :desc "refactor" "R" #'hydra-cljr-help-menu/body))
+
 (after! clojure
   (define-clojure-indent
     (>defn :defn)
@@ -85,7 +111,9 @@
     (defmutation :defn)))
 
 (add-hook! (clojure-mode lisp-mode)
-           'paredit-mode)
+           '(paredit-mode
+             (lambda () (require 'flycheck-clj-kondo))))
+
 (add-hook 'emacs-lisp-mode-hook 'paredit-mode)
 
 (use-package! tide)

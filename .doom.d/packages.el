@@ -50,12 +50,15 @@
 ;; our package manager can't deal with; see raxod502/straight.el#279)
 ;(package! builtin-package :recipe (:branch "develop"))
 
+(package! seq)
+(package! clj-refactor :pin "92d372393a031e5fa73ef926447afe72b574cb45")
 (package! stumpwm-mode)
 (package! smart-tabs-mode)
 (package! paredit)
 (package! elpy
   :recipe (:local-repo "/home/eihli/src/eihli-elpy"
            :files ("*.el")))
+(package! flycheck-clj-kondo)
 (package! tide)
 (package! ob-async)
 (package! web-mode)

@@ -24,7 +24,7 @@
   :cider-nrepl {:extra-deps
                 {nrepl {:mvn/version "RELEASE"}
                  refactor-nrepl {:mvn/version "2.5.0"}
-                 cider/cider-nrepl {:mvn/version "0.23.0"}}}}
+                 cider/cider-nrepl {:mvn/version "0.24.0"}}}}
 
 
  ;; Aliases

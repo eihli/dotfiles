@@ -77,6 +77,10 @@
         cider-jack-in-lein-plugins nil
         org-babel-clojure-backend 'cider))
 
+(use-package! geiser
+  :config
+  (setq geiser-active-implementations '(mit)))
+
 (use-package! paredit)
 
 (use-package! elpy
@@ -85,12 +89,12 @@
   (setq-default elpy-rpc-pythonpath "/home/eihli/src/eihli-elpy"))
 
 (use-package! web-mode
-  :mode ("\\.html\\'" . web-mode))
-
-(add-hook! web-mode
-  (setq indent-tabs-mode t)
+  :mode ("\\.html\\'" . web-mode)
+  :config
+  (setq-default tab-width 2)
   (web-mode-use-tabs)
-  (emmet-mode))
+  (emmet-mode)
+  (setq-default electric-indent-mode nil))
 
 (use-package! seq
   :ensure t)

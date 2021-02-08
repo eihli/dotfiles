@@ -70,3 +70,4 @@
 (package! adoc-mode)
 (package! graphviz-dot-mode)
 (package! geiser)
+(package! sly)

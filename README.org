@@ -1,0 +1,46 @@
+* First things first
+** Keyboard layout
+You won't get very far typing on an unfamiliar keyboard.
+
+#+begin_src sh
+setxkbmap -variant norman -option lv3:ralt_alt # Or `-variant ,us`
+xmodmap -e "keycode 66 = Escape Escape" -e "keycode 9 = Caps_Lock Caps_Lock"
+#+end_src
+
+** Terminal theme
+~ln -s $(pwd)/.Xresources $HOME/~
+
+** Terminal shortcuts
+#+begin_src sh
+ln -s $(pwd)/.tmux $HOME
+ln -s $(pwd)/.tmux.conf $HOME
+#+end_src
+
+* Provisioning
+** Applications
+*** Firefox
+**** Preferences
+- disable MRU tab-switching
+**** Bitwarden
+*** Chrome
+*** Tor
+*** Tmux
+** Utilities
+*** ripgrep
+** OpenVPN
+*** Generate ovpn config
+https://www.privateinternetaccess.com/pages/ovpn-config-generator
+*** Enable openvpn systemd client service
+https://wiki.archlinux.org/index.php/OpenVPN#systemd_service_configuration
+** Doom Emacs
+*** Upgrade/update
+#+begin_src sh
+./.emacs.d/bin/doom [sync|upgrade|env|dockeor|purge|clean]
+#+end_src
+
+** CommonLisp
+** StumpWM
+** LightDM
+** Tmux
+** X11
+*** Xresources

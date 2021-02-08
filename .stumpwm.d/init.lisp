@@ -66,8 +66,8 @@
 (defcommand rr-chrome () ()
   (run-or-raise "google-chrome-stable" '(:class "Google-chrome")))
 
-(defcommand rr-xterm () ()
-  (run-or-raise "xterm" '(:class "XTerm")))
+(defcommand rr-term () ()
+  (run-or-raise "terminal" '(:class "URxvt")))
 
 (load-module "swm-gaps")
 (load-module "wallpapers")
@@ -103,7 +103,7 @@
           (slynk:stop-server 4006)
           (echo-string
            (current-screen)
-           "Stopping slynk .")
+           "Stopping slynk.")
           (setf server-running nil))
         (progn
           (slynk:create-server :port 4006
@@ -111,14 +111,12 @@
                                :dont-close t)
           (echo-string
            (current-screen)
-           "Starting slynk . M-x slime-connect RET RET, then (in-package stumpwm).")
+           "Starting slynk . M-x slime-connect RET RET, then (in-package stumpwm)...")
           (setf server-running t)))))
-
 
 (defcommand ow-battery () ()
   (message
    (run-shell-command "acpi -b -a -t" t)))
-
 
 (ow/time-cached
  3 ow/ml-cpu ()
@@ -156,11 +154,16 @@
         (screen (car *screen-list*))
         (heads (screen-heads screen)))
     (cond
-      ((search "HDMI1 connected" output) (run-shell-command "xrandr --output eDP1 --mode 1600x900 --right-of HDMI1 --output HDMI1 --auto" t))
+      ((search "HDMI1 connected" output)
+       (run-shell-command
+        (concatenate 'string
+         "xrandr --output eDP1"
+         " --auto"
+         " --right-of HDMI1"
+         " --output HDMI1 --auto") t))
       (t (run-shell-command "xrandr --auto" t)))
     (loop for head in heads
           do (enable-mode-line screen head t))))
-
 
 (setf *mouse-focus-policy* :click)
 
@@ -275,7 +278,7 @@
 (define-key *root-map* (kbd "C-v") "ow-battery")
 (define-key *root-map* (kbd "V") "xrandr-auto")
 
-(define-key *root-map* (kbd "C-x") "rr-xterm")
+(define-key *root-map* (kbd "C-x") "rr-term")
 (define-key *root-map* (kbd "C-f") "rr-firefox")
 (define-key *root-map* (kbd "C-o") "rr-chrome")
 (define-key *root-map* (kbd "C-Tab") "fullscreen")

@@ -1,8 +1,11 @@
 (in-package :stumpwm)
 (add-to-load-path #p"~/common-lisp/sly/slynk/")
 (require :slynk)
+(add-to-load-path #p"~/common-lisp/cl-utilities/")
 (require :cl-utilities)
+(add-to-load-path #p"~/common-lisp/ppath/")
 (require :ppath)
+(add-to-load-path #p"~/common-lisp/clx-truetype/")
 (mode-line)
 
 (defvar ow/init-directory

@@ -1,3 +1,9 @@
+* Post boot, pre window manager
+** StumpWM
+** LightDM
+*** xinitrcsession-helper
+~xinitrc.desktop~ goes in ~/usr/share/xsessions/~
+
 * First things first
 ** Keyboard layout
 You won't get very far typing on an unfamiliar keyboard.

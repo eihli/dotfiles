@@ -257,17 +257,16 @@
   (ow--screenshot filename))
 
 (defun select-group-or-create (name cmd)
-  (groups))
-
-;; (sort-groups (current-screen))
-;; (gnew-float "Android Studio")
-;; (let ()
-;;   (gselect "And")
-;;   (run-shell-command "/opt/android-studio/bin/studio.sh"))
+  (groups)
+  (sort-groups (current-screen)
+               (gnew-float "Android Studio")
+               (let ()
+                 (gselect "And")
+                 (run-shell-command "/opt/android-studio/bin/studio.sh"))))
 
 (defcommand android-studio () ()
   "Start Android Studio in its own group"
-  (select-group-or-create ("Android Studio" :float t)
+  (select-group-or-create '("Android Studio" :float t)
                           (run-shell-command "~/.local/bin/studio" nil)))
 
 (set-prefix-key (kbd "C-t"))

@@ -8,6 +8,9 @@
 (add-to-load-path #p"~/common-lisp/clx-truetype/")
 (mode-line)
 
+;; (load-module "stumptray")
+;; (stumptray::stumptray)
+
 (defvar ow/init-directory
   (directory-namestring
    (truename (merge-pathnames (user-homedir-pathname)
@@ -137,7 +140,7 @@
    (:eval (ow/ml-cpu))
    (:eval (ow/ml-vpn))
    (:eval (ow/ml-audio))
-   "^>^[^2*%n^]"))
+   " | ^[^2*%n^]"))
 
 ;; Head gaps run along the 4 borders of the monitor(s)
 (setf swm-gaps:*head-gaps-size* 0)
@@ -151,21 +154,95 @@
 
 (defcommand xrandr-auto () ()
   (let* ((output (run-shell-command "xrandr" t))
-        (screen (car *screen-list*))
-        (heads (screen-heads screen)))
+         (screen (car *screen-list*))
+         (heads (screen-heads screen)))
     (cond
       ((search "HDMI1 connected" output)
        (run-shell-command
         (concatenate 'string
-         "xrandr --output eDP1"
-         " --auto"
-         " --right-of HDMI1"
-         " --output HDMI1 --auto") t))
+                     "xrandr"
+                     " --dpi 101"
+                     " --output eDP1"
+                     " --mode 1600x900"
+                     " --scale-from 1920x1080"
+                     " --right-of HDMI1"
+                     " --output HDMI1"
+                     " --mode 1920x1080") t))
       (t (run-shell-command "xrandr --auto" t)))
     (loop for head in heads
           do (enable-mode-line screen head t))))
 
-(setf *mouse-focus-policy* :click)
+(defun current-heads ()
+  (screen-heads (car *screen-list*)))
+
+(defun optimal-dpi ()
+  (let ((heads (current-heads)))
+    (mapcar #'xlib:screen-height-in-millimeters heads)))
+
+(require :cl-ppcre)
+
+(defun re-match (re text)
+  (let ((scanner (cl-ppcre:create-scanner re)))
+    (multiple-value-bind (start end reg-starts reg-ends)
+        (cl-ppcre:scan scanner text)
+      (let* ((registers (map 'list #'list reg-starts reg-ends))
+             (matches (map
+                       'list
+                       (lambda (r)
+                         (subseq text (car r) (cadr r)))
+                       registers)))
+        (if (null start)
+            nil
+            (values
+             (cons
+              (subseq text start end)
+              matches)
+             (subseq text end)))))))
+
+(defun re-all-matches (re text &optional (result (make-array 0 :fill-pointer t :adjustable t)))
+  (multiple-value-bind (match rest)
+      (re-match re text)
+    (if (null (car match))
+        result
+        (let ()
+          (vector-push-extend match result)
+          (re-all-matches re rest result)))))
+
+(defun resolutions (output)
+  (map
+   'list
+   (lambda (r)
+     (mapcar #'parse-integer (cdr r)))
+   (re-all-matches "(\\d{4})x(\\d{3,4})(?:\\+)" output)))
+
+(defun size->dimensions (size)
+  (cl-ppcre:all-matches-as-strings "\\d{3,3}" size))
+
+(defun mm->in (x)
+  (/ x 25.4))
+
+(defun optimal-dpi ()
+  (let* ((output (run-shell-command "xrandr" t))
+         (sizes (cl-ppcre:all-matches-as-strings "\\d{3,3}mm x \\d{3,3}mm" output))
+         (dimensions (mapcar
+                      (lambda (size)
+                        (let ((dimensions (size->dimensions size)))
+                          (mapcar (compose #'mm->in #'parse-integer) dimensions)))
+                      sizes))
+         (rezs (mapcar (lambda (r) (apply #'* r)) (resolutions output)))
+         (areas (mapcar
+                 (lambda (dim)
+                   (apply #'* dim))
+                 dimensions)))
+    (list
+     sizes
+     (mapcar
+      (lambda (x)
+        (destructuring-bind (area pixels) x
+          (sqrt (/ pixels area))))
+      (mapcar #'list areas rezs)))))
+
+(defvar ow-display (xlib:open-display "" :display 0 :protocol nil))
 
 (define-keysym #x1008ff11 "XF86AudioLowerVolume")
 (define-keysym #x1008ff12 "XF86AudioMute")
@@ -285,3 +362,4 @@
 ;; (define-key *top-map* (kbd "s-ISO_Left_Tab") "fprev")
 ;; (undefine-key *top-map* (kbd "s-Tab"))
 ;; (undefine-key *top-map* (kbd "s-ISO_Left_Tab"))
+

@@ -164,7 +164,7 @@
                      " --dpi 101"
                      " --output eDP1"
                      " --mode 1600x900"
-                     " --scale-from 1920x1080"
+                     " --scale-from 1600x900"
                      " --right-of HDMI1"
                      " --output HDMI1"
                      " --mode 1920x1080") t))
@@ -174,10 +174,6 @@
 
 (defun current-heads ()
   (screen-heads (car *screen-list*)))
-
-(defun optimal-dpi ()
-  (let ((heads (current-heads)))
-    (mapcar #'xlib:screen-height-in-millimeters heads)))
 
 (require :cl-ppcre)
 

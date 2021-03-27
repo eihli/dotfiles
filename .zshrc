@@ -107,6 +107,13 @@ function saud () {
 
 [[ -f ~/.secrets ]] && . ~/.secrets
 
+# Twitch helper
+
+function update-todo-overlay (){
+    convert -alpha on -background white -transparent white -size 800x600 -pointsize 40 caption:"$(cat $1)" /tmp/test.png
+}
+
+
 # Don't use .Xmodmap! https://bugs.launchpad.net/ubuntu/+source/linux/+bug/998310
 # Commenting this out because it gets annoying to switch back and forth
 # so maybe I'll just train msyelf to enjoy the keyboard I'm working with.

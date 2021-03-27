@@ -25,6 +25,7 @@
 (ow/load "vpn")
 (ow/load "ow-cpu-mode-line")
 (ow/load "ow-audio-mode-line")
+(ow/load "wacom")
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;

@@ -88,6 +88,9 @@
   (advice-add 'python-mode :before #'elpy-enable)
   (setq-default elpy-rpc-pythonpath "/home/eihli/src/eihli-elpy"))
 
+(after! js-mode
+  (setq js-indent-level 2))
+
 (use-package! web-mode
   :mode ("\\.html\\'" . web-mode)
   :config

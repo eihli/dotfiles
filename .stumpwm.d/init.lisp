@@ -27,6 +27,8 @@
 (ow/load "ow-audio-mode-line")
 (ow/load "wacom")
 
+(setq *mouse-focus-policy* :click)
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;
 ;; Helpers

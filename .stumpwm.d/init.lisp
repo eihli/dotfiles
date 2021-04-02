@@ -164,14 +164,31 @@
        (run-shell-command
         (concatenate 'string
                      "xrandr"
-                     " --dpi 101"
                      " --output eDP1"
+                     " --dpi 132"
                      " --mode 1600x900"
-                     " --scale-from 1600x900"
                      " --right-of HDMI1"
                      " --output HDMI1"
                      " --mode 1920x1080") t))
       (t (run-shell-command "xrandr --auto" t)))
+    (loop for head in heads
+          do (enable-mode-line screen head t))))
+
+(defcommand xrandr-share-external () ()
+  (let* ((output (run-shell-command "xrandr" t))
+         (screen (car *screen-list*))
+         (heads (screen-heads screen)))
+    (run-shell-command
+     (concatenate 'string
+                  "xrandr"
+                  " --output eDP1"
+                  " --dpi 132"
+                  " --mode 1600x900"
+                  " --right-of HDMI1"
+                  " --output HDMI1"
+                  " --mode 1280x720"
+                  " --dpi 67")
+     t)
     (loop for head in heads
           do (enable-mode-line screen head t))))
 
@@ -240,6 +257,9 @@
         (destructuring-bind (area pixels) x
           (sqrt (/ pixels area))))
       (mapcar #'list areas rezs)))))
+
+; (optimal-dpi)
+; => (("310mm x 170mm" "480mm x 270mm") (132.77296 67.73334))
 
 (defvar ow-display (xlib:open-display "" :display 0 :protocol nil))
 

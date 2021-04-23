@@ -78,6 +78,7 @@
 (load-module "swm-gaps")
 (load-module "wallpapers")
 (load-module "ttf-fonts")
+(load-module "screenshot")
 
 (xft:cache-fonts)
 (set-font (make-instance 'xft:font :family "FiraCodeNerdFontCompleteM Nerd Font" :subfamily "Regular" :size 11))
@@ -97,6 +98,7 @@
     (setf ow-keyboard-layout-toggle (tail ow-keyboard-layout-toggle)))
   (defcommand ow-toggle-keyboard () ()
     (ow-toggle-keyboard-layout)
+    (run-shell-command "xmodmap -e \"clear lock\"")
     ;; Norman sets ralt_switch, which is annoying. -option resets that so I'm back to having
     ;; an alt on both sides of the keyboard.
     (run-shell-command (format nil "setxkbmap -variant ~a -option lv3:ralt_alt; xmodmap -e \"keycode 66 = Escape Escape\" -e \"keycode 9 = Caps_Lock Caps_Lock\"" ow-keyboard-layout))))
@@ -261,7 +263,7 @@
 ; (optimal-dpi)
 ; => (("310mm x 170mm" "480mm x 270mm") (132.77296 67.73334))
 
-(defvar ow-display (xlib:open-display "" :display 0 :protocol nil))
+; (defvar ow-display (xlib:open-display "" :display 0 :protocol nil))
 
 (define-keysym #x1008ff11 "XF86AudioLowerVolume")
 (define-keysym #x1008ff12 "XF86AudioMute")
@@ -336,12 +338,13 @@
 (defcommand ow-wifi () ()
   (ow--wifi))
 
-;; This won't work until you get a way to sudo from stumpwm
-;; https://gist.github.com/valvallow/1379927
 (defun ow--brightness (prct)
-  (let* ((max-brightness (parse-integer (remove #\Newline (run-shell-command "cat /sys/class/backlight/intel_backlight/max_brightness" t))))
-        (val (* max-brightness (/ prct 100))))
-    (run-shell-command (format nil "echo ~A | sudo tee /sys/class/backlight/intel_backlight/brightness" val))))
+  (let* ((prct (/ (max 0 (min prct 100)) 100.0))
+         (output (run-shell-command "xrandr" t)))
+    (multiple-value-bind (_ displays)
+        (cl-ppcre:scan-to-strings "(.*)(?: connected)" output)
+      (dolist (display (map 'list #'identity displays))
+        (run-shell-command (format nil "xrandr --output ~A --brightness ~A" display prct) t)))))
 
 (defcommand ow-brightness (prct) ((:number "Set brightness to percentage: "))
   (ow--brightness prct))

@@ -1,4 +1,11 @@
 * Post boot, pre window manager
+
+#+BEGIN_SRC
+pacman -Syu zsh git emacs ripgrep tmux
+#+END_SRC
+
+https://github.com/ohmyzsh/ohmyzsh/wiki/Installing-ZSH
+
 ** StumpWM
 ** LightDM
 *** xinitrcsession-helper
@@ -44,7 +51,8 @@ https://wiki.archlinux.org/index.php/OpenVPN#systemd_service_configuration
 ** Doom Emacs
 *** Upgrade/update
 #+begin_src sh
-./.emacs.d/bin/doom [sync|upgrade|env|dockeor|purge|clean]
+git clone --depth 1 https://github.com/hlissner/doom-emacs ~/.emacs.d
+~/.emacs.d/bin/doom install
 #+end_src
 
 ** CommonLisp

@@ -1,13 +1,32 @@
 * Post boot, pre window manager
 
+You might need to install linux kernel headers before installing the rtl88 package.
+
+#+begin_src
+uname -r
+sudo pacman -Syu linux510-headers
+#+end_src
+
 #+BEGIN_SRC
-pacman -Syu zsh git emacs ripgrep tmux
+sudo pacman -Syu zsh git emacs ripgrep tmux obs-studio vivaldi yay base-devel dkms xclip
+yay -Syu brave rtl88xxau-aircrack-dkms-git sbcl
 #+END_SRC
 
 https://github.com/ohmyzsh/ohmyzsh/wiki/Installing-ZSH
 
+** Login
+
+*** PAM
+
+https://wiki.gnome.org/Projects/GnomeKeyring/Pam
+
+Update /etc/pamd./login to auto start pam_gnome_keyring.
+
 ** StumpWM
 ** LightDM
+To get a display manager like LightDM to offer a new window manager like StumpWM, add a .desktop
+entry to ~/usr/share/xsessions/~.
+
 *** xinitrcsession-helper
 ~xinitrc.desktop~ goes in ~/usr/share/xsessions/~
 

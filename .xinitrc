@@ -15,7 +15,10 @@ usermodmap=$HOME/.Xmodmap
 sysresources=/etc/X11/xinit/.Xresources
 sysmodmap=/etc/X11/xinit/.Xmodmap
 
-DEFAULT_SESSION='stumpwm'
+SESSION=${1:-xfce4-session}
+
+# urxvt needs access to custom font
+xset +fp /home/eihli/.local/share/fonts
 
 # merge in defaults and keymaps
 

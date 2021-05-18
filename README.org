@@ -1,18 +1,41 @@
 * Post boot, pre window manager
 
-You might need to install linux kernel headers before installing the rtl88 package.
+Easy stuff first. You should have a package manager. Let's get this out of the way.
+
+You might need to install linux kernel headers before installing the rtl88 package. The rtl88 package is for some common Alfa wifi cards. This part might not be necessary.
+But I'm putting it first because life is difficult without internet.
 
 #+begin_src
-uname -r
-sudo pacman -Syu linux510-headers
+uname -r  # See what version of the kernel you're on.
+sudo pacman -Syu linux510-headers yay
+yay -Syu rtl88xxau-aircrack-dkms-git
 #+end_src
 
 #+BEGIN_SRC
-sudo pacman -Syu zsh git emacs ripgrep tmux obs-studio vivaldi yay base-devel dkms xclip
-yay -Syu brave rtl88xxau-aircrack-dkms-git sbcl
+sudo pacman -Syu zsh git emacs ripgrep tmux obs-studio vivaldi yay base-devel dkms xclip rlwrap rxvt-unicode
+yay -Syu brave albert-git slack-desktop
 #+END_SRC
 
 https://github.com/ohmyzsh/ohmyzsh/wiki/Installing-ZSH
+
+You'll probably be doing a lot of terminal work, so symlink the ~.tmux~ stuff and install Oh-My-ZSH.
+
+#+begin_src sh
+ln -s $(pwd)/.tmux $HOME
+ln -s $(pwd)/.tmux.conf $HOME
+#+end_src
+
+And next, you'll be doing a lot of config file editing. Configure Emacs.
+
+Clone Doom to ~.emacs.d~ https://github.com/hlissner/doom-emacs and symlink ~.doom.d~ from this directory. Run the DOOM setup.
+
+If you're frustrated with QWERTY, the steps to switching to Norman are in StumpWM's ~init.lisp~, so if you can hold out long
+enough to get the window manager running, you'll be OK. But otherwise, this is what you need:
+
+#+begin_src sh
+setxkbmap -variant norman -option lv3:ralt_alt # Or `-variant ,us`
+xmodmap -e "keycode 66 = Escape Escape" -e "keycode 9 = Caps_Lock Caps_Lock"
+#+end_src
 
 ** Login
 
@@ -30,23 +53,8 @@ entry to ~/usr/share/xsessions/~.
 *** xinitrcsession-helper
 ~xinitrc.desktop~ goes in ~/usr/share/xsessions/~
 
-* First things first
-** Keyboard layout
-You won't get very far typing on an unfamiliar keyboard.
-
-#+begin_src sh
-setxkbmap -variant norman -option lv3:ralt_alt # Or `-variant ,us`
-xmodmap -e "keycode 66 = Escape Escape" -e "keycode 9 = Caps_Lock Caps_Lock"
-#+end_src
-
 ** Terminal theme
 ~ln -s $(pwd)/.Xresources $HOME/~
-
-** Terminal shortcuts
-#+begin_src sh
-ln -s $(pwd)/.tmux $HOME
-ln -s $(pwd)/.tmux.conf $HOME
-#+end_src
 
 * Provisioning
 ** Applications

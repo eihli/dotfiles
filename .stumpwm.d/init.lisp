@@ -65,6 +65,8 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;
 ;; Application helpers
+(defcommand rr-appfinder () ()
+  (run-or-raise "xfce4-appfinder" '(:class "appfinder")))
 
 (defcommand rr-firefox () ()
   (run-or-raise "firefox" '(:class "firefox")))
@@ -377,6 +379,7 @@
 (define-key *root-map* (kbd "V") "xrandr-auto")
 
 (define-key *root-map* (kbd "C-x") "rr-term")
+(define-key *root-map* (kbd "C-i") "rr-appfinder")
 (define-key *root-map* (kbd "C-f") "rr-firefox")
 (define-key *root-map* (kbd "C-o") "rr-chrome")
 (define-key *root-map* (kbd "C-Tab") "fullscreen")

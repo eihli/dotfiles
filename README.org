@@ -1,3 +1,30 @@
+* Notes on provisioning a new machine
+
+Take the team to scan this first. There's a lot of little things that you'll spend time re-discovering if you don't.
+
+- Get a keyring, like gnome-keyring-daemon.
+  + It may require some modifications to xdg autostart https://wiki.archlinux.org/title/GNOME/Keyring#Start_SSH_and_Secrets_components_of_keyring_daemon
+- Important symlinks:
+  + tmux
+  + .doom.d (don't re-clone from hlissner, just symlink and git pull)
+  + .stumpwm.d
+    - .stumpwm.d/modules
+- Create a directory under home ~common-lisp~
+  + Get requirements for StumpWM
+    - ~cl-utilities~
+    - ~clx-truetype~
+    - ~ppath~
+    - ~sly~
+  + Install dependencies for each with quicklisp. (Maybe asdf is smoother?)
+- Display manager launches .xinitrc
+  + (Display manager starts X server so you don't need to ~xinit~ or ~startx~)
+  + See ~xinitrcsession-helper~ for simple script to launch StumpWM from DM
+  + Update pam.d/login to auto_start gnome keyring
+- Install ~urxvt~ terminal
+  + Symlink .Xresources for config
+- Install Fira fonts
+  + ~fc-list~ ~xset -q~
+
 * Post boot, pre window manager
 
 Easy stuff first. You should have a package manager. Let's get this out of the way.
@@ -61,30 +88,16 @@ entry to ~/usr/share/xsessions/~.
 *** Firefox
 **** Preferences
 - disable MRU tab-switching
-**** Bitwarden
-*** Chrome
-*** Tor
-*** Tmux
 *** Dex
 To auto-start xdg .desktop entries
 https://github.com/jceb/dex
-** Utilities
-*** ripgrep
 ** OpenVPN
 *** Generate ovpn config
 https://www.privateinternetaccess.com/pages/ovpn-config-generator
 *** Enable openvpn systemd client service
 https://wiki.archlinux.org/index.php/OpenVPN#systemd_service_configuration
-** Doom Emacs
-*** Upgrade/update
-#+begin_src sh
-git clone --depth 1 https://github.com/hlissner/doom-emacs ~/.emacs.d
-~/.emacs.d/bin/doom install
-#+end_src
-
 ** CommonLisp
 ** StumpWM
 ** LightDM
-** Tmux
 ** X11
 *** Xresources

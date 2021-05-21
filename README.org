@@ -39,8 +39,10 @@ yay -Syu rtl88xxau-aircrack-dkms-git
 #+end_src
 
 #+BEGIN_SRC
-sudo pacman -Syu zsh git emacs ripgrep tmux obs-studio vivaldi yay base-devel dkms xclip rlwrap rxvt-unicode
-yay -Syu brave albert-git slack-desktop
+sudo pacman -Syu zsh git emacs ripgrep tmux obs-studio vivaldi yay \
+                 base-devel dkms xclip rlwrap rxvt-unicode cmake nmap libreoffice-fresh aspell aspell-en \
+                 pkgfile
+yay -Syu brave albert-git slack-desktop v4l2loopback-dkms
 #+END_SRC
 
 https://github.com/ohmyzsh/ohmyzsh/wiki/Installing-ZSH

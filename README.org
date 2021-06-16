@@ -41,7 +41,7 @@ yay -Syu rtl88xxau-aircrack-dkms-git
 #+BEGIN_SRC
 sudo pacman -Syu zsh git emacs ripgrep tmux obs-studio vivaldi yay \
                  base-devel dkms xclip rlwrap rxvt-unicode cmake nmap libreoffice-fresh aspell aspell-en \
-                 pkgfile git-lfs docker
+                 pkgfile git-lfs docker jre-openjdk
 yay -Syu brave albert-git slack-desktop v4l2loopback-dkms
 #+END_SRC
 
@@ -65,6 +65,36 @@ enough to get the window manager running, you'll be OK. But otherwise, this is w
 setxkbmap -variant norman -option lv3:ralt_alt # Or `-variant ,us`
 xmodmap -e "keycode 66 = Escape Escape" -e "keycode 9 = Caps_Lock Caps_Lock"
 #+end_src
+
+** HiDPI
+
+For Java Swing applications, you need to be using Java 9+ and set ~GDK_SCALE=2~.
+
+** Nvidia and Hybrid Graphics
+
+Don't necessarily use what ~nvidia-xconfig~ gives you.
+
+https://wiki.archlinux.org/title/PRIME
+
+#+begin_example
+Section "Files"
+        ModulePath "/usr/lib/xorg/modules"
+        ModulePath "/usr/lib/nvidia/xorg"
+EndSection
+
+Section "Device"
+        Identifier "Intel UHD"
+        BusID "PCI:00:02:0"
+        Driver "modesetting"
+EndSection
+
+Section "Device"
+    Identifier     "GeForce RTX 2080"
+    Driver         "nvidia"
+    VendorName     "NVIDIA Corporation"
+    BusID          "PCI:01:00:0"
+EndSection
+#+end_example
 
 ** Login
 

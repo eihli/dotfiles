@@ -1,0 +1,24 @@
+#!/bin/sh
+
+# This is not a good way to securely edit files.
+#
+# If ed(1)'s terminal hangs up, it attempts to write the contents
+# of the buffer to ed.hup or $HOME/ed.hup.
+#
+# Really, we should be handling everything in memory
+# (and then writing over the memory when done).
+
+ENV_FILE=$1
+shift
+set -- "$@"
+ENVS=""
+
+TEMP_FILE=$(mktemp)
+
+trap "rm $TEMP_FILE" EXIT SIGINT SIGKILL SIGTERM SIGHUP SIGQUIT
+
+gpg -q -d $ENV_FILE > $TEMP_FILE
+
+rlwrap ed -p '> ' $TEMP_FILE
+
+gpg -o $ENV_FILE "$@" -e $TEMP_FILE

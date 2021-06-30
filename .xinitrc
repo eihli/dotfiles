@@ -5,7 +5,8 @@
 # Executed by startx (run your window manager from here)
 
 # Along with ghis gnome-keyring-daemon --start here,
-# Start the gnome-keyring-daemon from /etc/pam.d/login:
+# Start the gnome-keyring-daemon from /etc/pam.d/login or /etc/pam.d/lighdm. I'm not sure which.
+# I think /login is for unlocking it in terminal-based logins and lightdm for greeter-based login?
 # Add auth optional pam_gnome_keyring.so at the end of the auth section and session optional pam_gnome_keyring.so auto_start at the end of the session section.
 eval $(/usr/bin/gnome-keyring-daemon --start --components=pkcs11,secrets,ssh)
 export SSH_AUTH_SOCK

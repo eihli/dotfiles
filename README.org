@@ -133,3 +133,11 @@ https://wiki.archlinux.org/index.php/OpenVPN#systemd_service_configuration
 ** LightDM
 ** X11
 *** Xresources
+** Gnome-keyring-daemon and org.freedesktop.secrets
+
+Aside from the ~pam.d~ config mentioned earlier, I have this
+in my shell history. I can't remember how I found it. I ran into a problem with a new machine. ~gnome-keyring-daemon~ was starting after login (presumedly thanks to the PAM config), but the secret service wasn't running. And, when you tried running ~gnome-keyring-daemon --start --components=secrets~, the system journal reported that the secret service had already been started. So anyways... you might need to do something like this. And perhaps searching the web for this will give (re-give) you insight into why you need it.
+
+#+begin_example
+systemctl --user add-wants autostart.target gnome-keyring-secrets.service
+#+end_example

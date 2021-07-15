@@ -21,10 +21,14 @@ usermodmap=$HOME/.Xmodmap
 sysresources=/etc/X11/xinit/.Xresources
 sysmodmap=/etc/X11/xinit/.Xmodmap
 
+# Default here to xfce4 since it probably came with the Linux distro
+# and you'll have it before installing StumpWM. But you're greeter will
+# use a .desktop file to launch this with stumpwm as an argument.
 SESSION=${1:-xfce4-session}
 
 # urxvt needs access to custom font
 xset +fp /home/eihli/.local/share/fonts
+xset -b # quiet the terminal beeping
 
 # merge in defaults and keymaps
 

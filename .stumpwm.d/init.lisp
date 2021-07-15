@@ -81,6 +81,7 @@
 (load-module "wallpapers")
 (load-module "ttf-fonts")
 (load-module "screenshot")
+(load-module "stump-backlight")
 
 (xft:cache-fonts)
 (set-font (make-instance 'xft:font :family "FiraCodeNerdFontCompleteM Nerd Font" :subfamily "Regular" :size 11))

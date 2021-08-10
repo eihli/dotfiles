@@ -150,5 +150,14 @@
 
 (setq-default truncate-lines nil)
 
+
+(map!
+ :map rst-mode-map
+ :leader
+ (:prefix "r"
+  :n
+  "t" #'rst-toc
+  "s" #'rst-toc-follow-link))
+
 (load! "functions")
 (load! "bindings")

@@ -389,3 +389,9 @@
 ;; (undefine-key *top-map* (kbd "s-Tab"))
 ;; (undefine-key *top-map* (kbd "s-ISO_Left_Tab"))
 
+
+(defcommand ow-slock () ()
+  "Lock screen"
+  (run-shell-command "slock"))
+
+(define-key *root-map* (kbd "d") "ow-slock")

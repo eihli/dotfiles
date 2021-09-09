@@ -69,6 +69,10 @@
                                    :size 14))
 (use-package! flycheck-clj-kondo)
 
+(use-package! extempore-mode
+  :config
+  (paredit-mode))
+
 (use-package! clojure-mode
   :config
   (require 'flycheck-clj-kondo)

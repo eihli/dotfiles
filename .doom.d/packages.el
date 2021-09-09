@@ -71,3 +71,4 @@
 (package! graphviz-dot-mode)
 (package! geiser)
 (package! sly)
+(package! extempore-mode)

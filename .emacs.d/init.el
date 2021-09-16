@@ -78,8 +78,10 @@
   ;; company is an optional dependency. You have to
   ;; install it separately via package-install
   ;; `M-x package-install [ret] company`
-  (company-mode +1))
-(setq typescript-indent-level 2)
+  (company-mode +1)
+  (setq-default flycheck-disabled-checkers
+                (append flycheck-disabled-checkers
+                        '(json-jsonlist))))
 
 ;; aligns annotation to the right hand side
 (setq company-tooltip-align-annotations t)

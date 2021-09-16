@@ -105,6 +105,10 @@
   (emmet-mode)
   (setq-default electric-indent-mode nil))
 
+(use-package! hcl-mode
+  :mode (("\\.hcl\\.j2\\'" . hcl-mode)
+         ("\\.hcl\\'" . hcl-mode)))
+
 (use-package! seq
   :ensure t)
 (use-package! clj-refactor
@@ -135,6 +139,7 @@
   (tide-setup)
   (flycheck-mode +1)
   (setq flycheck-check-syntax-automatically '(save mode-enabled))
+  (setq flycheck-checker 'javascript-eslint)
   (setq tab-width 4)
   (eldoc-mode +1)
   (tide-hl-identifier-mode +1)
@@ -149,6 +154,8 @@
 ;; formats the buffer before saving
 (add-hook 'before-save-hook 'tide-format-before-save)
 (add-hook 'typescript-mode-hook #'setup-tide-mode)
+
+(use-package! json-mode)
 
 (setq sly-complete-symbol-function 'sly-flex-completions)
 

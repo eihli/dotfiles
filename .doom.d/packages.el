@@ -72,3 +72,4 @@
 (package! geiser)
 (package! sly)
 (package! extempore-mode)
+(package! json-mode)

@@ -55,9 +55,7 @@
 (package! stumpwm-mode)
 (package! smart-tabs-mode)
 (package! paredit)
-(package! elpy
-  :recipe (:local-repo "/home/eihli/src/eihli-elpy"
-           :files ("*.el")))
+(package! elpy)
 (package! flycheck-clj-kondo)
 (package! tide)
 (package! ob-async)

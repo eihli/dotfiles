@@ -68,6 +68,9 @@
 (defcommand rr-appfinder () ()
   (run-or-raise "xfce4-appfinder" '(:class "appfinder")))
 
+(defcommand rr-albert () ()
+  (run-or-raise "albert" '(:class "albert")))
+
 (defcommand rr-firefox () ()
   (run-or-raise "firefox" '(:class "firefox")))
 

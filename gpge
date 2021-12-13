@@ -11,14 +11,15 @@
 ENV_FILE=$1
 shift
 set -- "$@"
-ENVS=""
 
-TEMP_FILE=$(mktemp)
+ENV_FILE_BASENAME=$(basename $ENV_FILE)
+TEMP_FILE="/mnt/ramdisk/$ENV_FILE_BASENAME.tmp"
+cp $ENV_FILE /mnt/ramdisk/
 
 trap "rm $TEMP_FILE" EXIT SIGINT SIGKILL SIGTERM SIGHUP SIGQUIT
 
-gpg -q -d $ENV_FILE > $TEMP_FILE
+gpg -q -d /mnt/ramdisk/$ENV_FILE_BASENAME > $TEMP_FILE
 
 rlwrap ed -p '> ' $TEMP_FILE
 
-gpg -o $ENV_FILE "$@" -e $TEMP_FILE
+gpg --yes -o $ENV_FILE "$@" -e $TEMP_FILE

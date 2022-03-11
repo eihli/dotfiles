@@ -92,7 +92,8 @@
 (use-package! elpy
   :init
   (advice-add 'python-mode :before #'elpy-enable)
-  (setq-default elpy-rpc-pythonpath "/home/eihli/src/eihli-elpy"))
+  (setq-default elpy-rpc-pythonpath "/home/eihli/src/eihli-elpy")
+  (setq-default elpy-rpc-python-command "/home/eihli/.pyenv/versions/3.8.12/bin/python3"))
 
 (after! js-mode
   (setq js-indent-level 2))
@@ -172,3 +173,5 @@
 
 (load! "functions")
 (load! "bindings")
+
+(server-start)

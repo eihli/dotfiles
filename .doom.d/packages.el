@@ -51,7 +51,8 @@
 ;(package! builtin-package :recipe (:branch "develop"))
 
 (package! seq)
-(package! clj-refactor :pin "92d372393a031e5fa73ef926447afe72b574cb45")
+(package! clj-refactor)
+(package! cider)
 (package! stumpwm-mode)
 (package! smart-tabs-mode)
 (package! paredit)

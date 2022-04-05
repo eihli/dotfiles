@@ -85,7 +85,9 @@
 
 (use-package! geiser
   :config
-  (setq geiser-active-implementations '(mit)))
+  (setq geiser-active-implementations '(chez))
+  (setq geiser-chez-binary "chez")
+  (setq geiser-chez--prompt-regexp ".*>.*"))
 
 (use-package! paredit)
 

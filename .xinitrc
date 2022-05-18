@@ -58,8 +58,10 @@
 
 # For scrolling in Nyxt and for HiDPI in Nyxt
 export GDK_CORE_DEVICE_EVENTS=1
-export GDK_SCALE=2
-export GDK_DPI_SCALE=0.5
+#export GDK_SCALE=2
+#export GDK_DPI_SCALE=0.5
+export GDK_SCALE=1
+export GDK_DPI_SCALE=1
 
 userresources=$HOME/.Xresources
 usermodmap=$HOME/.Xmodmap

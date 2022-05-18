@@ -15,6 +15,11 @@
   (directory-namestring
    (truename (merge-pathnames (user-homedir-pathname)
                               ".stumpwm.d"))))
+(defmacro comment (body))
+
+(comment
+ (directory-namestring
+  (truename (merge-pathnames (user-homedir-pathname) ".stumpwm.d"))))
 
 (defun ow/load (filename)
   (let ((file (merge-pathnames (concat filename ".lisp")
@@ -25,7 +30,7 @@
 (ow/load "vpn")
 (ow/load "ow-cpu-mode-line")
 (ow/load "ow-audio-mode-line")
-(ow/load "wacom")
+(ow/load "displays")
 
 (setq *mouse-focus-policy* :click)
 
@@ -82,6 +87,7 @@
 (load-module "ttf-fonts")
 (load-module "screenshot")
 (load-module "stump-backlight")
+(load-module "wacom")
 
 (xft:cache-fonts)
 (set-font (make-instance 'xft:font :family "FiraCodeNerdFontCompleteM Nerd Font" :subfamily "Regular" :size 11))
@@ -371,6 +377,10 @@
   (select-group-or-create '("Android Studio" :float t)
                           (run-shell-command "~/.local/bin/studio" nil)))
 
+(defcommand multi-mon () ()
+  "Run xrandr for multiple monitor config."
+  (ow/displays:multi--mon))
+
 (set-prefix-key (kbd "C-t"))
 
 (define-key *root-map* (kbd "y") "ow-screenshot")
@@ -378,6 +388,7 @@
 (define-key *root-map* (kbd "C-z") "ow-toggle-keyboard")
 (define-key *root-map* (kbd "C-v") "ow-battery")
 (define-key *root-map* (kbd "V") "xrandr-auto")
+(define-key *root-map* (kbd "O") "multi-mon")
 
 (define-key *root-map* (kbd "C-x") "rr-term")
 (define-key *root-map* (kbd "C-i") "rr-appfinder")

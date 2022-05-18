@@ -7,7 +7,8 @@
 ! config can be added there or also here below.
 ! For comments use "!"
 
-Xft.dpi:       192 ! HiDPI: ~283 on a 15" screen. 101 on a 14" 1080.
+!Xft.dpi:       192 ! HiDPI: ~283 on a 15" screen. 101 on a 14" 1080.
+Xft.dpi:       96 !
 Xft.antialias: true
 Xft.hinting:   true
 Xft.rgba:      rgb

@@ -74,3 +74,6 @@
 (package! sly)
 (package! extempore-mode)
 (package! json-mode)
+(unpin! geiser geiser-chez)
+(package! geiser :pin "bc0dde310492de733f9ec528d7aeddd57093d05e")
+(package! geiser-chez :pin "48427d4aecc6fed751d266673f1ce2ad57ddbcfc")

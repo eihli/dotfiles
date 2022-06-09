@@ -82,6 +82,9 @@
 (defcommand rr-term () ()
   (run-or-raise "terminal" '(:class "URxvt")))
 
+(defcommand rr-nyxt () ()
+  (run-or-raise "nyxt" '(:class "Nyxt")))
+
 (load-module "swm-gaps")
 (load-module "wallpapers")
 (load-module "ttf-fonts")
@@ -394,6 +397,7 @@
 (define-key *root-map* (kbd "C-i") "rr-appfinder")
 (define-key *root-map* (kbd "C-f") "rr-firefox")
 (define-key *root-map* (kbd "C-o") "rr-chrome")
+(define-key *root-map* (kbd "C-j") "rr-nyxt")
 (define-key *root-map* (kbd "C-Tab") "fullscreen")
 ;; (define-key *top-map* (kbd "s-Tab") "fnext")
 ;; (define-key *top-map* (kbd "s-ISO_Left_Tab") "fprev")

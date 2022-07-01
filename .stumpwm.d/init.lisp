@@ -168,15 +168,15 @@
          (screen (car *screen-list*))
          (heads (screen-heads screen)))
     (cond
-      ((search "HDMI1 connected" output)
+      ((search "HDMI-1 connected" output)
        (run-shell-command
         (concatenate 'string
                      "xrandr"
-                     " --output eDP1"
+                     " --output eDP-1"
                      " --dpi 132"
                      " --mode 1600x900"
-                     " --right-of HDMI1"
-                     " --output HDMI1"
+                     " --right-of HDMI-1"
+                     " --output HDMI-1"
                      " --mode 1920x1080") t))
       (t (run-shell-command "xrandr --auto" t)))
     (loop for head in heads
@@ -192,13 +192,23 @@
                   " --output eDP1"
                   " --dpi 132"
                   " --mode 1600x900"
-                  " --right-of HDMI1"
-                  " --output HDMI1"
+                  " --right-of HDMI-1"
+                  " --output HDMI-1"
                   " --mode 1280x720"
                   " --dpi 67")
      t)
     (loop for head in heads
           do (enable-mode-line screen head t))))
+
+(defvar ow-x1-curve "xrandr --output eDP-1 --dpi 132 --mode 1600x900 --output HDMI-1 --auto --primary --right-of eDP-1")
+
+(defparameter *monitor-layout* ow-x1-curve)
+
+(defcommand ow-xrandr-x1-curve () ()
+  (run-shell-command ow-x1-curve))
+
+(defcommand xrandr-mirror () ()
+  (run-shell-command ow-x1-curve t))
 
 (defun current-heads ()
   (screen-heads (car *screen-list*)))
@@ -381,6 +391,7 @@
 (define-key *root-map* (kbd "C-z") "ow-toggle-keyboard")
 (define-key *root-map* (kbd "C-v") "ow-battery")
 (define-key *root-map* (kbd "V") "xrandr-auto")
+(define-key *root-map* (kbd "C-V") "ow-xrandr-x1-curve")
 
 (define-key *root-map* (kbd "C-x") "rr-term")
 (define-key *root-map* (kbd "C-i") "rr-appfinder")

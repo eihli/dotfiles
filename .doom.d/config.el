@@ -127,11 +127,15 @@
     (action :defn)
     (defmutation :defn)))
 
-(add-hook! (clojure-mode lisp-mode)
+(add-hook! (clojure-mode)
            '(paredit-mode
              (lambda () (require 'flycheck-clj-kondo))))
 
+(add-hook 'lisp-mode 'paredit-mode)
 (add-hook 'emacs-lisp-mode-hook 'paredit-mode)
+
+(after! geiser-mode
+  (setq geiser-active-implementations '(chez)))
 
 (use-package! tide)
 (defun setup-tide-mode ()

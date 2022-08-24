@@ -71,3 +71,5 @@
 (package! sly)
 (package! extempore-mode)
 (package! json-mode)
+(package! gh
+  :recipe (:host github :repo "sigma/gh.el" :files ("*.el")))

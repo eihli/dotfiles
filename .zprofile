@@ -1,3 +1,5 @@
+eval "$(/opt/homebrew/bin/brew shellenv)"
+
 # I think ansible or NVM is goofing with my MANPATH
 # so source it first then reset MANPATH
 [[ -d $HOME/src/ansible/hacking ]] && . $HOME/src/ansible/hacking/env-setup -q
@@ -21,4 +23,4 @@ which go &> /dev/null && [[ -d "$GOPATH/bin" ]] && PATH=$PATH:$GOPATH/bin
 export PATH="$PATH:$HOME/.local/bin:$HOME/bin"
 which pyenv &> /dev/null && eval "$(pyenv init -)"
 
-export EDITOR="emacs"
+export EDITOR="emacsclient"

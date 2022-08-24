@@ -89,10 +89,7 @@
 
 (use-package! paredit)
 
-(use-package! elpy
-  :init
-  (advice-add 'python-mode :before #'elpy-enable)
-  (setq-default elpy-rpc-pythonpath "/home/eihli/src/eihli-elpy"))
+(use-package! elpy)
 
 (after! js-mode
   (setq js-indent-level 2))
@@ -109,8 +106,8 @@
   :mode (("\\.hcl\\.j2\\'" . hcl-mode)
          ("\\.hcl\\'" . hcl-mode)))
 
-(use-package! seq
-  :ensure t)
+(use-package! seq)
+
 (use-package! clj-refactor
   :hook (clojure-mode . clj-refactor-mode)
   :config
@@ -140,7 +137,7 @@
   (flycheck-mode +1)
   (setq flycheck-check-syntax-automatically '(save mode-enabled))
   (setq flycheck-checker 'javascript-eslint)
-  (setq tab-width 4)
+  (setq tab-width 2)
   (eldoc-mode +1)
   (tide-hl-identifier-mode +1)
   ;; company is an optional dependency. You have to
@@ -152,7 +149,7 @@
 (setq company-tooltip-align-annotations t)
 
 ;; formats the buffer before saving
-(add-hook 'before-save-hook 'tide-format-before-save)
+(add-hook 'before-save-hook #'tide-format-before-save)
 (add-hook 'typescript-mode-hook #'setup-tide-mode)
 
 (use-package! json-mode)

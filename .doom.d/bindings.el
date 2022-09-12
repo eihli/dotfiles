@@ -4,7 +4,8 @@
       "lh" #'scroll-left
       "ll" #'scroll-right
       "ow" #'treemacs-select-window
-      "cg" #'clipboard-github-link-from-current-line)
+      "cg" #'clipboard-github-link-from-current-line
+      "cm" #'clipboard-man7)
 
 (map!
  :ni "C-S-d" #'delete-surrounding-whitespace

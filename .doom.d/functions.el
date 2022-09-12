@@ -35,3 +35,8 @@
                              (buffer-file-name)))
          (url-format "%s/blob/%s/%s#L%s"))
     (kill-new (format url-format base-url (magit-get-current-branch) project-file-name (line-number-at-pos)))))
+
+(defun clipboard-man7 (manpage)
+  (interactive "sCopy to clipboard manpage link for: ")
+  (destructuring-bind (manpage word) (split-string manpage)
+    (kill-new (format "https://man7.org/linux/man-pages/man%s/%s.%s.html" manpage word manpage))))

@@ -160,6 +160,11 @@
 
 (use-package! json-mode)
 
+;; (use-package! lsp-grammarly
+;;   :hook (text-mode . (lambda ()
+;;                        (require 'lsp-grammarly)
+;;                        (lsp))))  ; or lsp-deferred
+
 (setq sly-complete-symbol-function 'sly-flex-completions)
 
 (setq-default truncate-lines nil)

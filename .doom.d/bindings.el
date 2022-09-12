@@ -3,7 +3,9 @@
 (map! :leader
       "lh" #'scroll-left
       "ll" #'scroll-right
-      "ow" #'treemacs-select-window)
+      "ow" #'treemacs-select-window
+      "cg" #'clipboard-github-link-from-current-line)
+
 (map!
  :ni "C-S-d" #'delete-surrounding-whitespace
  :nm  "C-S-o" #'better-jumper-jump-forward)

@@ -56,9 +56,6 @@
 (package! stumpwm-mode)
 (package! smart-tabs-mode)
 (package! paredit)
-(package! elpy
-  :recipe (:local-repo "/home/eihli/src/eihli-elpy"
-           :files ("*.el")))
 (package! flycheck-clj-kondo)
 (package! tide)
 (package! ob-async)
@@ -74,7 +71,9 @@
 (package! sly)
 (package! extempore-mode)
 (package! json-mode)
-(unpin! geiser geiser-chez)
-(package! geiser :pin "bc0dde310492de733f9ec528d7aeddd57093d05e")
-(package! geiser-chez :pin "48427d4aecc6fed751d266673f1ce2ad57ddbcfc")
+;; (unpin! geiser geiser-chez)
+;; (package! geiser)
+;; (package! geiser-chez)
 (package! lsp-grammarly)
+(package! jupyter-ascending
+  :recipe (:host github :repo "eihli/jupyter_ascending.el"))

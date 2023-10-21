@@ -65,9 +65,6 @@
   (autoload 'smart-tabs-advice "smart-tabs-mode")
   (autoload 'smart-tabs-insinuate "smart-tabs-mode"))
 
-(setq doom-unicode-font (font-spec :family "FiraCodeNerdFontCompleteM Nerd Font"
-                                   :subfamily "Regular"
-                                   :size 14))
 (use-package! flycheck-clj-kondo)
 
 (use-package! extempore-mode
@@ -84,19 +81,13 @@
         cider-jack-in-lein-plugins nil
         org-babel-clojure-backend 'cider))
 
-(use-package! geiser
-  :config
-  (setq geiser-active-implementations '(chez))
-  (setq geiser-chez-binary "chez")
-  (setq geiser-chez--prompt-regexp ".*>.*"))
+;; (use-package! geiser
+;;   :config
+;;   (setq geiser-active-implementations '(chez))
+;;   (setq geiser-chez-binary "chez")
+;;   (setq geiser-chez--prompt-regexp ".*>.*"))
 
 (use-package! paredit)
-
-(use-package! elpy
-  :init
-  (advice-add 'python-mode :before #'elpy-enable)
-  (setq-default elpy-rpc-pythonpath "/home/eihli/src/eihli-elpy")
-  (setq-default elpy-rpc-python-command "/home/eihli/.pyenv/versions/3.8.12/bin/python3"))
 
 (after! js-mode
   (setq js-indent-level 2))
@@ -131,11 +122,16 @@
     (action :defn)
     (defmutation :defn)))
 
+;; (add-hook! (racket-mode)
+;;            '(paredit-mode))
+
 (add-hook! (clojure-mode lisp-mode)
-           '(paredit-mode
-             (lambda () (require 'flycheck-clj-kondo))))
+           '(paredit-mode (lambda () (require 'flycheck-clj-kondo)))
+           (setq tab-width 8))
 
 (add-hook 'emacs-lisp-mode-hook 'paredit-mode)
+
+(use-package! jupyter-ascending)
 
 (use-package! tide)
 (defun setup-tide-mode ()

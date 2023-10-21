@@ -100,6 +100,10 @@ export EDITOR=vim
 alias ap='ansible-playbook'
 alias xcp='xclip -selection clipboard'
 
+function pyact() {
+    . $HOME/.pyvenv/$1/bin/activate
+}
+
 function saud () {
     # Set audio to $1
     pactl set-sink-volume 0 $1
@@ -151,4 +155,11 @@ export NVM_DIR="$HOME/.nvm"
 
 export PYENV_ROOT="$HOME/.pyenv"
 export PATH="$PYENV_ROOT/bin:$PATH"
-which pyenv &> /dev/null && eval "$(pyenv init -)"
+
+function penvn () {
+    python3 -m venv ~/.virtualenvs/"$@"
+}
+
+function penva() {
+    . ~/.virtualenvs/"$@"/bin/activate
+}

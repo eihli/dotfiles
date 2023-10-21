@@ -38,5 +38,14 @@
 
 (defun clipboard-man7 (manpage)
   (interactive "sCopy to clipboard manpage link for: ")
-  (destructuring-bind (manpage word) (split-string manpage)
+  (cl-destructuring-bind (manpage word) (split-string manpage)
     (kill-new (format "https://man7.org/linux/man-pages/man%s/%s.%s.html" manpage word manpage))))
+
+(defun calculate-dpi ()
+  (let ((width-in-inches (/ (x-display-mm-width) 25.4))
+        (height-in-inches (/ (x-display-mm-height) 25.4))
+        (width-in-pixels (display-pixel-width))
+        (height-in-pixels (display-pixel-height)))
+    (let ((width-dpi (/ width-in-pixels width-in-inches))
+          (height-dpi (/ height-in-pixels height-in-inches)))
+      (list width-dpi height-dpi))))

@@ -75,5 +75,6 @@
 ;; (package! geiser)
 ;; (package! geiser-chez)
 (package! lsp-grammarly)
+(package! lsp-pyright)
 (package! jupyter-ascending
   :recipe (:host github :repo "eihli/jupyter_ascending.el"))

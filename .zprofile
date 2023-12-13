@@ -17,10 +17,11 @@ export PATH=$PATH:$ANDROID_HOME/platform-tools
 
 which go &> /dev/null && eval "$(go env)"
 which go &> /dev/null && [[ -d "$GOPATH/bin" ]] && PATH=$PATH:$GOPATH/bin
-export PATH="$PATH:$HOME/.local/bin:$HOME/bin"
+export PATH="$PATH:$HOME/.local/bin"
 
 export PYENV_ROOT="$HOME/.pyenv"
 export PATH="$PYENV_ROOT/bin:$PATH"
+
 which pyenv &> /dev/null && eval "$(pyenv init -)"
 
 export EDITOR="emacs"

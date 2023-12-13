@@ -57,7 +57,7 @@ ZSH_THEME="robbyrussell"
 # "mm/dd/yyyy"|"dd.mm.yyyy"|"yyyy-mm-dd"
 # or set a custom format using the strftime function format specifications,
 # see 'man strftime' for details.
-# HIST_STAMPS="mm/dd/yyyy"
+HIST_STAMPS="yyyy-mm-dd"
 
 # Would you like to use another custom folder than $ZSH/custom?
 # ZSH_CUSTOM=/path/to/new-custom-folder
@@ -99,10 +99,6 @@ export EDITOR=vim
 
 alias ap='ansible-playbook'
 alias xcp='xclip -selection clipboard'
-
-function pyact() {
-    . $HOME/.pyvenv/$1/bin/activate
-}
 
 function saud () {
     # Set audio to $1
@@ -153,8 +149,15 @@ export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
 [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
 
-export PYENV_ROOT="$HOME/.pyenv"
-export PATH="$PYENV_ROOT/bin:$PATH"
+eval "$(ssh-agent)" > /dev/null
+
+export PATH=$PATH:/usr/local/pgsql/bin
+
+PATH="/home/eihli/perl5/bin${PATH:+:${PATH}}"; export PATH;
+PERL5LIB="/home/eihli/perl5/lib/perl5${PERL5LIB:+:${PERL5LIB}}"; export PERL5LIB;
+PERL_LOCAL_LIB_ROOT="/home/eihli/perl5${PERL_LOCAL_LIB_ROOT:+:${PERL_LOCAL_LIB_ROOT}}"; export PERL_LOCAL_LIB_ROOT;
+PERL_MB_OPT="--install_base \"/home/eihli/perl5\""; export PERL_MB_OPT;
+PERL_MM_OPT="INSTALL_BASE=/home/eihli/perl5"; export PERL_MM_OPT;
 
 function penvn () {
     python3 -m venv ~/.virtualenvs/"$@"

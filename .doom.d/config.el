@@ -57,6 +57,7 @@
 
 (use-package! adoc-mode
   :mode ("\\.adoc\\'" . adoc-mode))
+
 (use-package! stumpwm-mode)
 (use-package! smart-tabs-mode
   :config
@@ -70,6 +71,9 @@
 (use-package! extempore-mode
   :config
   (paredit-mode))
+
+; I think this was causing an issue with C-c '
+(use-package! poly-org)
 
 (use-package! clojure-mode
   :config
@@ -114,6 +118,16 @@
   (map! :map clojure-mode-map
         :localleader
         :desc "refactor" "R" #'hydra-cljr-help-menu/body))
+
+(use-package! chatgpt
+  :defer t
+  :config
+  (unless (boundp 'python-interpreter)
+    (defvaralias 'python-interpreter 'python-shell-interpreter))
+  (setq chatgpt-repo-path (expand-file-name "straight/repos/ChatGPT.el/" doom-local-dir))
+  (set-popup-rule! (regexp-quote "*ChatGPT*")
+    :side 'bottom :size .5 :ttl nil :quit t :modeline nil)
+  :bind ("C-c q" . chatgpt-query))
 
 (after! clojure
   (define-clojure-indent
@@ -177,7 +191,16 @@
 
 (add-to-list 'exec-path "/home/eihli/.local/bin")
 
+(org-babel-do-load-languages
+ 'org-babel-load-languages
+ '((python . t)
+   (emacs-lisp . nil)
+   (sql . t)))
+
+(add-to-list 'flycheck-disabled-checkers 'python-pylint)
+
 (load! "functions")
 (load! "bindings")
 
 (server-start)
+

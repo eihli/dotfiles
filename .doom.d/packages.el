@@ -76,5 +76,9 @@
 ;; (package! geiser-chez)
 (package! lsp-grammarly)
 (package! lsp-pyright)
+(package! poly-org :disable t)
+(package! pylint)
+(package! chatgpt
+  :recipe (:host github :repo "joshcho/ChatGPT.el" :files ("dist" "*.el")))
 (package! jupyter-ascending
   :recipe (:host github :repo "eihli/jupyter_ascending.el"))

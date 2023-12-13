@@ -112,10 +112,10 @@
     (setf ow-keyboard-layout-toggle (tail ow-keyboard-layout-toggle)))
   (defcommand ow-toggle-keyboard () ()
     (ow-toggle-keyboard-layout)
-    (run-shell-command "xmodmap -e \"clear lock\"")
+    ;; (run-shell-command "xmodmap -e \"clear lock\"")
     ;; Norman sets ralt_switch, which is annoying. -option resets that so I'm back to having
     ;; an alt on both sides of the keyboard.
-    (run-shell-command (format nil "setxkbmap -variant ~a -option lv3:ralt_alt; xmodmap -e \"keycode 66 = Escape Escape\" -e \"keycode 9 = Caps_Lock Caps_Lock\"" ow-keyboard-layout))))
+    (run-shell-command (format nil "setxkbmap -variant ~a -option lv3:ralt_alt;" ow-keyboard-layout))))
 
 (let ((server-running nil))
   (defcommand ow-slynk () ()

@@ -9,16 +9,23 @@
   (run-shell-command
    (concatenate 'string
                 "xrandr"
-                " --output HDMI-1-0"
+                " --output DP-3"
+                " --scale-from 1920x1080"
+                " --output HDMI-0"
                 " --primary"
                 " --mode 1920x1080"
                 " --pos 0x840"
-                " --same-as eDP-1"
-                " --output eDP-1"
+                " --output DP-4"
                 " --mode 1920x1080"
-                " --output DP-1-3"
-                " --rotate left"
-                " --left-of HDMI-1-0"
-                " --auto") t)
+                " --rotate normal"
+                " --left-of HDMI-0")
+
+ ; => "xrandr --output DP-3 --scale-from 1920x1080 --output HDMI-0 --primary --mode 1920x1080 --pos 0x840 --output DP-4 --mode 1920x1080 --rotate normal --left-of HDMI-0"
+   ))
+
+(defun single--mon ()
   (run-shell-command
-   "xrandr --output DP-1-3 --pos 0x-840"))
+   (concatenate 'string
+                "xrandr"
+                " --output eDP-1"
+                " --mode 1920x1080")))

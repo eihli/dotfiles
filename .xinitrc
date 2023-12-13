@@ -55,6 +55,8 @@
 
 # eval $(/usr/bin/gnome-keyring-daemon --start --components=pkcs11,secrets,ssh)
 # export SSH_AUTH_SOCK
+# eval "$(/usr/bin/gnome-keyring-daemon -s)"
+# export SSH_AUTH_SOCK
 
 # For scrolling in Nyxt and for HiDPI in Nyxt
 export GDK_CORE_DEVICE_EVENTS=1

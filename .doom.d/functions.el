@@ -49,3 +49,28 @@
     (let ((width-dpi (/ width-in-pixels width-in-inches))
           (height-dpi (/ height-in-pixels height-in-inches)))
       (list width-dpi height-dpi))))
+
+(defun shell-escape-string (str)
+  "Escape shell metacharacters in STR."
+  (replace-regexp-in-string
+   "\\([\\$\"'` \t\n*?#(){};<>|&![]\]\\)" "\\\\\\1" str))
+
+(defun shell-command-on-fileized-region (command)
+  "Creates a temporary file using the text of the selection region.
+Passes that file to the specified shell command, as its first
+argument. Replaces the selected region with the output of the
+shell command."
+  (interactive)
+  (replace-region-contents
+   (region-beginning)
+   (region-end)
+   (lambda ()
+     (let ((file (make-temp-file "black-"))
+           (contents (buffer-substring (point-min) (point-max))))
+       (with-temp-file file
+         (insert contents))
+       (shell-command (format "%s %s" command (cl-coerce file 'string)))
+       (with-temp-buffer
+         (insert-file-contents file)
+         (buffer-string))))))
+

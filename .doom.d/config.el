@@ -175,6 +175,8 @@
   "t" #'rst-toc
   "s" #'rst-toc-follow-link))
 
+(add-to-list 'exec-path "/home/eihli/.local/bin")
+
 (load! "functions")
 (load! "bindings")
 

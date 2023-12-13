@@ -86,16 +86,18 @@
   (run-or-raise "nyxt" '(:class "Nyxt")))
 
 (load-module "swm-gaps")
-(load-module "wallpapers")
+;; (load-module "wallpapers")
+(load-module "wacom")
+
 (load-module "ttf-fonts")
 (load-module "screenshot")
 (load-module "stump-backlight")
 (load-module "wacom")
 
 (xft:cache-fonts)
-(set-font (make-instance 'xft:font :family "FiraCodeNerdFontCompleteM Nerd Font" :subfamily "Regular" :size 11))
+(set-font (make-instance 'xft:font :family "FiraCode Nerd Font" :subfamily "Regular" :size 11))
 
-(wallpapers::a-random-wallpaper)
+;; (wallpapers::a-random-wallpaper)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; These are the things using "cycle".

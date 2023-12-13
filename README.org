@@ -11,15 +11,16 @@ Take the team to scan this first. There's a lot of little things that you'll spe
     - .stumpwm.d/modules
 - Create a directory under home ~common-lisp~
   + Get requirements for StumpWM
+    - When you make StumpWM, set ~SBCL_HOME~ or else you'll get an error about not being able to require sb-cltl2.
     - ~cl-utilities~
-    - ~clx-truetype~
+    - ~clx-truetype~ (clone `https://github.com/LispLima/clx-truetype` to ~/quicklisp/local-projects)
     - ~ppath~
     - ~sly~
-  + Install dependencies for each with quicklisp. (Maybe asdf is smoother?)
 - Display manager launches .xinitrc
   + (Display manager starts X server so you don't need to ~xinit~ or ~startx~)
   + See ~xinitrcsession-helper~ for simple script to launch StumpWM from DM
   + Update pam.d/login to auto_start gnome keyring
+- Add .desktop entry to ~/usr/share/xsessions~ to have multiple window manager options in your desktop manager.
 - Install ~urxvt~ terminal
   + Symlink .Xresources for config
 - Install Fira fonts

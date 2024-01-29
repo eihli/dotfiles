@@ -55,7 +55,6 @@
 (package! stumpwm-mode)
 (package! smart-tabs-mode)
 (package! paredit)
-(package! elpy)
 (package! flycheck-clj-kondo)
 (package! tide)
 (package! ob-async)
@@ -71,5 +70,6 @@
 (package! sly)
 (package! extempore-mode)
 (package! json-mode)
+(package! exec-path-from-shell)
 (package! gh
   :recipe (:host github :repo "sigma/gh.el" :files ("*.el")))

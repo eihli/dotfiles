@@ -64,14 +64,19 @@
   (autoload 'smart-tabs-advice "smart-tabs-mode")
   (autoload 'smart-tabs-insinuate "smart-tabs-mode"))
 
-(setq doom-unicode-font (font-spec :family "FiraCodeNerdFontCompleteM Nerd Font"
-                                   :subfamily "Regular"
-                                   :size 14))
+;; (setq doom-unicode-font (font-spec :family "FiraCodeNerdFontCompleteM Nerd Font"
+;;                                    :subfamily "Regular"
+;;                                    :size 14))
+
 (use-package! flycheck-clj-kondo)
 
-(use-package! extempore-mode
-  :config
-  (paredit-mode))
+;; (use-package! extempore-mode
+;;   :config
+;;   (paredit-mode))
+
+;; Fix shell path on Mac
+(when (memq window-system '(mac ns x))
+  (exec-path-from-shell-initialize))
 
 (use-package! clojure-mode
   :config
@@ -88,8 +93,6 @@
   (setq geiser-active-implementations '(mit)))
 
 (use-package! paredit)
-
-(use-package! elpy)
 
 (after! js-mode
   (setq js-indent-level 2))

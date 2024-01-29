@@ -42,7 +42,6 @@
 (setq custom-file "~/.emacs-custom.el")
 (load custom-file)
 
-(require 'elpy)
 (require 'clj-refactor)
 (require 'ripgrep)
 (require 'unicode-fonts) ;; Get Symbola http://users.teilar.gr/~g1951d/
@@ -52,7 +51,6 @@
 
 (helm-projectile-on)
 (unicode-fonts-setup)
-(elpy-enable)
 (helm-mode 1)
 (global-nlinum-mode t)  ;; nlinum way better perf than linum
 (show-paren-mode)
@@ -85,10 +83,6 @@
 
 ;; aligns annotation to the right hand side
 (setq company-tooltip-align-annotations t)
-
-;; Fixes error running python through emacs
-;; https://github.com/jorgenschaefer/elpy/issues/887
-(setq python-shell-completion-native-enable nil)
 
 ;; Slime/Lisp
 (setq inferior-lisp-program "/usr/local/bin/sbcl")
@@ -225,7 +219,6 @@
 (add-hook 'after-init-hook 'global-company-mode)
 
 (setq js-indent-level 2)
-(setq elpy-rpc-backend "rope")
 ;; (setq inf-clojure-generic-cmd "plk -d")
 
 (setq-default inf-clojure-repl-type 'clojure)
@@ -258,8 +251,6 @@
 (global-set-key (kbd "M-i") 'imenu)
 (global-set-key (kbd "C-x f") #'helm-find-files)
 (global-set-key (kbd "C-c o f t") #'helm-gtags-find-tag)
-(define-key elpy-mode-map (kbd "M-n") 'elpy-nav-forward-block)
-(define-key elpy-mode-map (kbd "M-p") 'elpy-nav-backward-block)
 (global-set-key (kbd "C-x ;") 'comment-line)
 (global-set-key (kbd "M-N") 'next-buffer)
 (global-set-key (kbd "M-P") 'previous-buffer)

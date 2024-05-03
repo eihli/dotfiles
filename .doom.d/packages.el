@@ -78,7 +78,15 @@
 (package! lsp-pyright)
 (package! poly-org :disable t)
 (package! pylint)
-(package! chatgpt
-  :recipe (:host github :repo "joshcho/ChatGPT.el" :files ("dist" "*.el")))
+;; (package! chatgpt
+;;   :recipe (:host github :repo "joshcho/ChatGPT.el" :files ("dist" "*.el")))
+(package! emacs-copilot
+  :recipe (:host github :repo "eihli/emacs-copilot"))
 (package! jupyter-ascending
   :recipe (:host github :repo "eihli/jupyter_ascending.el"))
+;; (package! lit-mode
+;;   :recipe (:local-repo "~/src/lit-mode"
+;;            :files ("*.el")
+;;            :build (:not compile)))
+(package! chatgpt
+  :recipe (:type git :host github :repo "emacs-openai/chatgpt"))

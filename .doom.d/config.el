@@ -146,6 +146,7 @@
 (add-hook 'emacs-lisp-mode-hook 'paredit-mode)
 
 (use-package! jupyter-ascending)
+(use-package! lit-mode)
 
 (use-package! tide)
 (defun setup-tide-mode ()
@@ -198,6 +199,20 @@
    (sql . t)))
 
 (add-to-list 'flycheck-disabled-checkers 'python-pylint)
+(defun ow-fundamental-mode-setup ()
+  (setq tab-always-indent t)
+  (setq indent-tabs-mode t)
+  (setq indent-line-function 'insert-tab)
+  (local-set-key (kbd "TAB") 'tab-to-tab-stop)
+  (local-set-key (kbd "RET") 'newline))
+
+(add-hook 'fundamental-mode-hook 'ow-fundamental-mode-setup)
+
+;; This is specifically because PyTorch has several dozen sub-module git repos and it really slows down lsp.
+(add-hook 'lsp-mode-hook
+          (lambda ()
+            (add-to-list 'lsp-file-watch-ignored-directories "[/\\\\]third_party\\'")
+            (setq lsp-file-watch-threshold 1500)))
 
 (load! "functions")
 (load! "bindings")

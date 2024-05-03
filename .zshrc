@@ -100,6 +100,10 @@ export EDITOR=vim
 alias ap='ansible-playbook'
 alias xcp='xclip -selection clipboard'
 
+function pyact() {
+# . $HOME/.pyvenv/$1/bin/activate  # commented out by conda initialize
+}
+
 function saud () {
     # Set audio to $1
     pactl set-sink-volume 0 $1
@@ -164,5 +168,31 @@ function penvn () {
 }
 
 function penva() {
-    . ~/.virtualenvs/"$@"/bin/activate
+ . ~/.virtualenvs/"$@"/bin/activate
 }
+
+
+# >>> conda initialize >>>
+# !! Contents within this block are managed by 'conda init' !!
+__conda_setup="$('/home/eihli/miniconda3/bin/conda' 'shell.zsh' 'hook' 2> /dev/null)"
+if [ $? -eq 0 ]; then
+    eval "$__conda_setup"
+else
+    if [ -f "/home/eihli/miniconda3/etc/profile.d/conda.sh" ]; then
+        . "/home/eihli/miniconda3/etc/profile.d/conda.sh"
+    else
+        export PATH="/home/eihli/miniconda3/bin:$PATH"
+    fi
+fi
+unset __conda_setup
+# <<< conda initialize <<<
+conda deactivate
+
+
+gclw () {
+	git clone "git@github.com:$1.git" $2
+}
+
+export PATH="$HOME/common-lisp/lem:$PATH"
+export PATH="$HOME/.cargo/bin:$PATH"
+export PATH="$PATH:/usr/local/go/bin"

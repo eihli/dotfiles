@@ -92,11 +92,9 @@
 (load-module "ttf-fonts")
 (load-module "screenshot")
 (load-module "stump-backlight")
-(load-module "wacom")
+;; (load-module "wacom")
 
-(xft:cache-fonts)
-(set-font (make-instance 'xft:font :family "FiraCode Nerd Font" :subfamily "Regular" :size 11))
-
+;; (xft:cache-fonts) ;; (set-font (make-instance 'xft:font :famigy "FiraCode Nerd Font" :subfamily "Regular" :size 11))
 ;; (wallpapers::a-random-wallpaper)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;

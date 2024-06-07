@@ -21,8 +21,8 @@
 ;; font string. You generally only need these two:
 ;; 24 for hidpi
 ;; 12 for lodpi
-(setq doom-font (font-spec :family "FiraCode Nerd Font" :size 12))
-(setq doom-unicode-font (font-spec :family "Noto Color Emoji" :size 12))
+(setq doom-font (font-spec :family "FiraCode Nerd Font Mono" :size 12))
+;;(setq doom-unicode-font (font-spec :family "Noto Color Emoji" :size 12))
 
 ;; There are two ways to load a theme. Both assume the theme is installed and
 ;; available. You can either set `doom-theme' or manually load a theme with the

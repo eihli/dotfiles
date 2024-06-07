@@ -96,6 +96,8 @@
 
 (xft:cache-fonts)
 (set-font (make-instance 'xft:font :family "FiraCodeNerdFontCompleteM Nerd Font" :subfamily "Regular" :size 11))
+
+(load-module "battery-portable")
 ;; (wallpapers::a-random-wallpaper)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;

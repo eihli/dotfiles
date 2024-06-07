@@ -71,7 +71,7 @@
 (package! emmet-mode)
 (package! adoc-mode)
 (package! graphviz-dot-mode)
-(package! geiser)
+;;(package! geiser)
 (package! sly)
 (package! extempore-mode)
 (package! json-mode)
@@ -92,5 +92,5 @@
 ;;   :recipe (:local-repo "~/src/lit-mode"
 ;;            :files ("*.el")
 ;;            :build (:not compile)))
-(package! chatgpt
-  :recipe (:type git :host github :repo "emacs-openai/chatgpt"))
+;; (package! chatgpt
+;;   :recipe (:type git :host github :repo "emacs-openai/chatgpt"))

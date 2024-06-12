@@ -80,7 +80,7 @@
   (run-or-raise "google-chrome-stable" '(:class "Google-chrome")))
 
 (defcommand rr-term () ()
-  (run-or-raise "terminal" '(:class "URxvt")))
+  (run-or-raise "terminal" '(:class "Alacritty")))
 
 (defcommand rr-nyxt () ()
   (run-or-raise "nyxt" '(:class "Nyxt")))

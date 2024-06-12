@@ -146,7 +146,7 @@
 (add-hook 'emacs-lisp-mode-hook 'paredit-mode)
 
 (use-package! jupyter-ascending)
-(use-package! lit-mode)
+;; (use-package! lit-mode)
 
 (use-package! tide)
 (defun setup-tide-mode ()

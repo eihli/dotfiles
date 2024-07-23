@@ -196,3 +196,15 @@ gclw () {
 export PATH="$HOME/common-lisp/lem:$PATH"
 export PATH="$HOME/.cargo/bin:$PATH"
 export PATH="$PATH:/usr/local/go/bin"
+
+#### Github Shortcuts
+
+function gshcl () {
+    dir="${2:-.}"
+    git clone git@github.com:${1}.git $dir
+}
+
+function ghhcl () {
+    dir="${2:-.}"
+    git clone https://github.com/${1}.git $dir
+}

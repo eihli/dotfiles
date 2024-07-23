@@ -21,7 +21,7 @@
 ;; font string. You generally only need these two:
 ;; 24 for hidpi
 ;; 12 for lodpi
-(setq doom-font (font-spec :family "monospace" :size 24))
+(setq doom-font (font-spec :family "Unifont" :size 24))
 
 ;; There are two ways to load a theme. Both assume the theme is installed and
 ;; available. You can either set `doom-theme' or manually load a theme with the
@@ -64,9 +64,10 @@
   (autoload 'smart-tabs-advice "smart-tabs-mode")
   (autoload 'smart-tabs-insinuate "smart-tabs-mode"))
 
-(setq doom-unicode-font (font-spec :family "FiraCodeNerdFontCompleteM Nerd Font"
-                                   :subfamily "Regular"
-                                   :size 14))
+(setq doom-symbol-font (font-spec :family "Unifont"
+                                  :subfamily "Regular"
+                                  :size 14))
+
 (use-package! flycheck-clj-kondo)
 
 (use-package! clojure-mode

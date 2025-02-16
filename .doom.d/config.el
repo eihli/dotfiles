@@ -21,8 +21,8 @@
 ;; font string. You generally only need these two:
 ;; 24 for hidpi
 ;; 12 for lodpi
-(setq doom-font (font-spec :family "FiraCode Nerd Font" :size 12))
-(setq doom-unicode-font (font-spec :family "Noto Color Emoji" :size 12))
+(setq doom-font (font-spec :family "Unifont" :size 18))
+(setq doom-symbol-font (font-spec :family "Symbols Nerd Font Mono" :size 18))
 
 ;; There are two ways to load a theme. Both assume the theme is installed and
 ;; available. You can either set `doom-theme' or manually load a theme with the
@@ -110,6 +110,7 @@
 
 (use-package! seq
   :ensure t)
+
 (use-package! clj-refactor
   :hook (clojure-mode . clj-refactor-mode)
   :config
@@ -119,15 +120,10 @@
         :localleader
         :desc "refactor" "R" #'hydra-cljr-help-menu/body))
 
-(use-package! chatgpt
-  :defer t
-  :config
-  (unless (boundp 'python-interpreter)
-    (defvaralias 'python-interpreter 'python-shell-interpreter))
-  (setq chatgpt-repo-path (expand-file-name "straight/repos/ChatGPT.el/" doom-local-dir))
-  (set-popup-rule! (regexp-quote "*ChatGPT*")
-    :side 'bottom :size .5 :ttl nil :quit t :modeline nil)
-  :bind ("C-c q" . chatgpt-query))
+;; https://github.com/doomemacs/doomemacs/issues/6317
+(after! poetry
+  (remove-hook 'python-mode-hook #'poetry-tracking-mode)
+  (add-hook 'python-mode-hook 'poetry-track-virtualenv))
 
 (after! clojure
   (define-clojure-indent
@@ -145,7 +141,6 @@
 
 (add-hook 'emacs-lisp-mode-hook 'paredit-mode)
 
-(use-package! jupyter-ascending)
 (use-package! lit-mode)
 
 (use-package! tide)
@@ -171,11 +166,7 @@
 (add-hook 'typescript-mode-hook #'setup-tide-mode)
 
 (use-package! json-mode)
-
-;; (use-package! lsp-grammarly
-;;   :hook (text-mode . (lambda ()
-;;                        (require 'lsp-grammarly)
-;;                        (lsp))))  ; or lsp-deferred
+(use-package! gptel)
 
 (setq sly-complete-symbol-function 'sly-flex-completions)
 

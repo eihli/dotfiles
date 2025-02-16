@@ -66,7 +66,7 @@ HIST_STAMPS="yyyy-mm-dd"
 # Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
-plugins=(git tmux pyenv)
+plugins=(git tmux pyenv poetry)
 
 source $ZSH/oh-my-zsh.sh
 
@@ -153,7 +153,9 @@ export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
 [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
 
-eval "$(ssh-agent)" > /dev/null
+if [ -z "$SSH_AUTH_SOCK" ]; then
+    eval "$(ssh-agent)" > /dev/null
+fi
 
 export PATH=$PATH:/usr/local/pgsql/bin
 
@@ -172,23 +174,6 @@ function penva() {
 }
 
 
-# >>> conda initialize >>>
-# !! Contents within this block are managed by 'conda init' !!
-__conda_setup="$('/home/eihli/miniconda3/bin/conda' 'shell.zsh' 'hook' 2> /dev/null)"
-if [ $? -eq 0 ]; then
-    eval "$__conda_setup"
-else
-    if [ -f "/home/eihli/miniconda3/etc/profile.d/conda.sh" ]; then
-        . "/home/eihli/miniconda3/etc/profile.d/conda.sh"
-    else
-        export PATH="/home/eihli/miniconda3/bin:$PATH"
-    fi
-fi
-unset __conda_setup
-# <<< conda initialize <<<
-conda deactivate
-
-
 gclw () {
 	git clone "git@github.com:$1.git" $2
 }
@@ -200,11 +185,17 @@ export PATH="$PATH:/usr/local/go/bin"
 #### Github Shortcuts
 
 function gshcl () {
-    dir="${2:-.}"
+    dir="${2:-${1##*/}}"
     git clone git@github.com:${1}.git $dir
 }
 
 function ghhcl () {
-    dir="${2:-.}"
+    dir="${2:-${1##*/}}"
     git clone https://github.com/${1}.git $dir
+}
+
+function dowacom () {
+    id=$(xsetwacom --list devices | head -n1 | sed -n -e 's/.*id: \([0-9]\+\).*/\1/p')
+    xsetwacom --set ${id} Area 0 0 15200 8590
+    xsetwacom --set ${id} MapToOutput HEAD-0
 }

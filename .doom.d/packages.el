@@ -56,13 +56,8 @@
 (package! stumpwm-mode)
 (package! smart-tabs-mode)
 (package! paredit)
-(package! elpy
-  :disable t
-  :recipe (:local-repo "/home/eihli/src/eihli-elpy"
-           :files ("*.el")))
 (package! flycheck-clj-kondo)
 (package! tide)
-(package! ob-async)
 (package! web-mode)
 (package! hcl-mode)
 (package! terraform-mode)
@@ -71,26 +66,11 @@
 (package! emmet-mode)
 (package! adoc-mode)
 (package! graphviz-dot-mode)
-(package! geiser)
-(package! sly)
 (package! extempore-mode)
 (package! json-mode)
-;; (unpin! geiser geiser-chez)
-;; (package! geiser)
-;; (package! geiser-chez)
-(package! lsp-grammarly)
-(package! lsp-pyright)
 (package! poly-org :disable t)
-(package! pylint)
-;; (package! chatgpt
-;;   :recipe (:host github :repo "joshcho/ChatGPT.el" :files ("dist" "*.el")))
-(package! emacs-copilot
-  :recipe (:host github :repo "eihli/emacs-copilot"))
-(package! jupyter-ascending
-  :recipe (:host github :repo "eihli/jupyter_ascending.el"))
-;; (package! lit-mode
-;;   :recipe (:local-repo "~/src/lit-mode"
-;;            :files ("*.el")
-;;            :build (:not compile)))
-(package! chatgpt
-  :recipe (:type git :host github :repo "emacs-openai/chatgpt"))
+(package! lit-mode
+  :recipe (:local-repo "~/src/lit-mode"
+           :files ("*.el")
+           :build (:not compile)))
+(package! gptel)

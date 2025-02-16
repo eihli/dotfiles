@@ -142,8 +142,8 @@
 		 (hs-show-all)))
 
 ;; Fix shell path on Mac
-(when (memq window-system '(mac ns x))
-  (exec-path-from-shell-initialize))
+;; (when (memq window-system '(mac ns x))
+;;   (exec-path-from-shell-initialize))
 
 (put 'scroll-left 'disabled nil)
 

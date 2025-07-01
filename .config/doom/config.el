@@ -79,8 +79,8 @@
   :config
   (require 'flycheck-clj-kondo)
   (require 'ob-clojure)
-  (setq cider-clojure-cli-global-options "-A:cider-nrepl"
-        cider-required-middleware-version "0.24.0"
+  (setq cider-clojure-cli-parameters "-A:cider-nrepl"
+        cider-required-middleware-version "0.52.0"
         cider-jack-in-auto-inject-clojure nil
         cider-jack-in-lein-plugins nil
         org-babel-clojure-backend 'cider))
@@ -204,6 +204,31 @@
           (lambda ()
             (add-to-list 'lsp-file-watch-ignored-directories "[/\\\\]third_party\\'")
             (setq lsp-file-watch-threshold 1500)))
+
+(setq lsp-file-watch-ignored
+      '("/logs" ;; SWE-Bench
+        "/.git"
+        "/.venv"
+        "/retrieval_results" ;; SWE-Bench
+        "/test_splade_output" ;; SWE-Bench
+        ))
+
+(setq lsp-enable-file-watchers nil)
+
+;; From https://arunmozhi.in/2023/09/12/dev-note-getting-pyenv-and-pyright-to-work-in-doom-emacs
+(require 'pyenv-mode)
+(defun projectile-pyenv-mode-set ()
+  "Set pyenv version matching project name."
+  (let ((project (projectile-project-name)))
+    (if (member project (pyenv-mode-versions))
+        (pyenv-mode-set project)
+      (pyenv-mode-unset))))
+
+(add-hook 'projectile-after-switch-project-hook 'projectile-pyenv-mode-set)
+(after! projectile
+  (add-to-list 'projectile-globally-ignored-directories "target/")
+  (add-to-list 'projectile-globally-ignored-directories ".exercism/"))
+
 
 (load! "functions")
 (load! "bindings")

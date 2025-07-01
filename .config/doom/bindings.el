@@ -14,3 +14,7 @@
 (map! (:map clojure-mode-map
        :localleader
        :n "s" #'lotto-cljs))
+
+(map! (:map racket-mode-map
+       :localleader
+       :n "c" #'racket-eval-last-sexp-and-comment))

@@ -74,3 +74,21 @@ shell command."
          (insert-file-contents file)
          (buffer-string))))))
 
+(defun racket-eval-last-sexp-and-comment ()
+  "Eval the expression before point asynchronously.
+The result is inserted as a comment on the next line.
+The expression may be either an at-expression or an s-expression."
+  (interactive)
+  (racket--assert-sexp-edit-mode)
+  (unless (racket--repl-session-id)
+    (user-error "No REPL session available; run the file first"))
+  (let ((beg (racket--start-of-previous-expression))
+        (end (point)))
+    (racket--cmd/async
+     (racket--repl-session-id)
+     `(eval ,(buffer-substring-no-properties beg end))
+     (lambda (v)
+       (save-excursion
+         (end-of-line)
+         (newline-and-indent)
+         (insert (format ";; => %s" v)))))))

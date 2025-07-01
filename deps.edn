@@ -24,7 +24,7 @@
   :cider-nrepl {:extra-deps
                 {nrepl/nrepl {:mvn/version "RELEASE"}
                  refactor-nrepl/refactor-nrepl {:mvn/version "3.2.2"} ;; Match clj-refactor version
-                 cider/cider-nrepl {:mvn/version "0.27.4"}}}
+                 cider/cider-nrepl {:mvn/version "0.52.0"}}}
   :new {:extra-deps {com.github.seancorfield/clj-new
                      {:mvn/version "1.1.297"}}
         :exec-fn clj-new/create

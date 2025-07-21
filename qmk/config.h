@@ -6,4 +6,23 @@
 #define ENCODERS_B_PINS { F5, F4 }
 #define ENCODER_RESOLUTION 2
 
+// Home row mods https://precondition.github.io/home-row-mods#what-are-home-row-mods
+//
+// Configure the global tapping term (default: 200ms)
+#define TAPPING_TERM 175
+// Enable rapid switch from tap to hold, disables double tap hold auto-repeat.
+#define QUICK_TAP_TERM 120
+
+// Left-hand home row mods (Norman layout)
+#define HOME_F LCTL_T(KC_F)
+#define HOME_D LALT_T(KC_D)
+#define HOME_S LSFT_T(KC_S)
+#define HOME_B LGUI_T(KC_B)
+
+// Right-hand home row mods
+#define HOME_J RCTL_T(KC_J)
+#define HOME_K LALT_T(KC_K)
+#define HOME_L RSFT_T(KC_L)
+#define HOME_N LGUI_T(KC_N)
+
 #endif // CONFIG_H_

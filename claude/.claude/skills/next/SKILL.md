@@ -9,10 +9,6 @@ description: |
 
 # Next: Project Resume Workflow
 
-## 0. Compact Context
-
-Use the `/compact` Claude Code slash command to summarize and free context window before starting fresh work.
-
 ## 1. Gather Context
 
 Read project planning files (if they exist):

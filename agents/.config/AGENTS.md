@@ -96,6 +96,7 @@ Never pollute $HOME with dotfiles/dotdirs.
 
 - Before handoff: run full gate (lint, types, tests, docs)
 - Use `/review` skill for critical review before complete
+- **Handoff summary**: findings, choices made, results (what changed and why)
 
 ## Git
 

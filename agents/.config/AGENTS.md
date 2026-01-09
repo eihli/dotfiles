@@ -63,6 +63,16 @@ Comments should add value beyond what code says:
 - Use log levels appropriately
 - Use logs to debug
 
+### XDG Directories
+
+Follow XDG Base Directory spec:
+- `$XDG_CONFIG_HOME` (~/.config) - config files
+- `$XDG_DATA_HOME` (~/.local/share) - persistent data
+- `$XDG_CACHE_HOME` (~/.cache) - non-essential cached data
+- `$XDG_STATE_HOME` (~/.local/state) - logs, history, recent files
+
+Never pollute $HOME with dotfiles/dotdirs.
+
 ## Testing
 
 - Testing pyramid: mostly unit, some integration, few e2e

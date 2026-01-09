@@ -3,3 +3,6 @@
 *#*#
 .emacs.d/eln-cache/
 .emacs.d/elpa/
+
+# Track local claude settings in dotfiles (negates global gitignore)
+!claude/.claude/settings.local.json

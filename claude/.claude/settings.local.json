@@ -23,6 +23,7 @@
       "Bash(tree:*)",
       "Bash(ls:*)",
       "Bash(find:*)",
+      "Bash(fzf:*)",
       "Bash(wc:*)",
       "Bash(file:*)",
       "Bash(stat:*)",

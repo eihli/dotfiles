@@ -24,9 +24,9 @@ if status is-interactive
     # Commands to run in interactive sessions can go here
 end
 
-if not set -q SSH_AUTH_SOCK
+if not set -q SSH_AUTH_SOCK; and test -z "$SSH_CONNECTION"
     eval (ssh-agent -c)
     ssh-add -K
 end
 
-pyenv init - fish | source
+# pyenv init - fish | source

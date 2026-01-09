@@ -1,144 +1,127 @@
-* Notes on provisioning a new machine
+* Dotfiles
 
-Take the team to scan this first. There's a lot of little things that you'll spend time re-discovering if you don't.
+Managed with [[https://www.gnu.org/software/stow/][GNU Stow]]. Each directory is a stow package that gets symlinked to ~$HOME~.
 
-- Get a keyring, like gnome-keyring-daemon.
-  + It may require some modifications to xdg autostart https://wiki.archlinux.org/title/GNOME/Keyring#Start_SSH_and_Secrets_components_of_keyring_daemon
-- Important symlinks:
-  + tmux
-  + .doom.d (don't re-clone from hlissner, just symlink and git pull)
-  + .stumpwm.d
-    - .stumpwm.d/modules
-- Create a directory under home ~common-lisp~
-  + Get requirements for StumpWM
-    - When you make StumpWM, set ~SBCL_HOME~ or else you'll get an error about not being able to require sb-cltl2.
-    - ~cl-utilities~
-    - ~clx-truetype~ (clone `https://github.com/LispLima/clx-truetype` to ~/quicklisp/local-projects)
-    - ~ppath~
-    - ~sly~
-- Display manager launches .xinitrc
-  + (Display manager starts X server so you don't need to ~xinit~ or ~startx~)
-  + See ~xinitrcsession-helper~ for simple script to launch StumpWM from DM
-  + Update pam.d/login to auto_start gnome keyring
-- Add .desktop entry to ~/usr/share/xsessions~ to have multiple window manager options in your desktop manager.
-- Install ~urxvt~ terminal
-  + Symlink .Xresources for config
-- Install Fira fonts
-  + ~fc-list~ ~xset -q~
-
-* Post boot, pre window manager
-
-Easy stuff first. You should have a package manager. Let's get this out of the way.
-
-You might need to install linux kernel headers before installing the rtl88 package. The rtl88 package is for some common Alfa wifi cards. This part might not be necessary.
-But I'm putting it first because life is difficult without internet.
-
-#+begin_src
-uname -r  # See what version of the kernel you're on.
-sudo pacman -Syu linux510-headers yay
-yay -Syu rtl88xxau-aircrack-dkms-git
-#+end_src
-
-#+BEGIN_SRC
-sudo pacman -Syu zsh git emacs ripgrep tmux obs-studio vivaldi yay \
-                 base-devel dkms xclip rlwrap rxvt-unicode cmake nmap libreoffice-fresh aspell aspell-en \
-                 pkgfile git-lfs docker jre-openjdk
-yay -Syu brave albert-git slack-desktop v4l2loopback-dkms
-#+END_SRC
-
-https://github.com/ohmyzsh/ohmyzsh/wiki/Installing-ZSH
-
-You'll probably be doing a lot of terminal work, so symlink the ~.tmux~ stuff and install Oh-My-ZSH.
+** Quick Start
 
 #+begin_src sh
-ln -s $(pwd)/.tmux $HOME
-ln -s $(pwd)/.tmux.conf $HOME
+# Clone
+git clone git@github.com:eihli/dotfiles.git ~/src/dotfiles
+cd ~/src/dotfiles
+
+# Install (Debian/Ubuntu)
+./install.sh
+
+# Or manually stow individual packages
+stow -t ~ fish tmux zellij starship git bash claude agents
 #+end_src
 
-And next, you'll be doing a lot of config file editing. Configure Emacs.
+** Required Tools
 
-Clone Doom to ~.emacs.d~ https://github.com/hlissner/doom-emacs and symlink ~.doom.d~ from this directory. Run the DOOM setup.
+*** Core (install first)
 
-If you're frustrated with QWERTY, the steps to switching to Norman are in StumpWM's ~init.lisp~, so if you can hold out long
-enough to get the window manager running, you'll be OK. But otherwise, this is what you need:
+| Tool     | Purpose                    | Install                          |
+|----------+----------------------------+----------------------------------|
+| fish     | Primary shell              | ~apt install fish~ / ~brew install fish~ |
+| starship | Cross-shell prompt         | ~curl -sS https://starship.rs/install.sh \vert sh~ |
+| fzf      | Fuzzy finder (Ctrl-R, Ctrl-T) | ~apt install fzf~ / ~brew install fzf~ |
+| fd       | Fast find (used by fzf)    | ~apt install fd-find~ / ~brew install fd~ |
+| mise     | Version manager (replaces pyenv/nvm) | ~curl https://mise.run \vert sh~ |
+
+*** Terminal Multiplexer (pick one)
+
+- ~tmux~ - prefix: ~C-]~ (to avoid Emacs conflict)
+- ~zellij~ - modal, session persistence
+
+** Stow Packages
+
+| Package  | Contents                              |
+|----------+---------------------------------------|
+| fish     | ~.config/fish/config.fish~            |
+| bash     | ~.bashrc~ (fallback for non-fish systems) |
+| tmux     | ~.tmux.conf~, ~.tmux/~                |
+| zellij   | ~.config/zellij/config.kdl~           |
+| starship | ~.config/starship.toml~               |
+| git      | ~.gitconfig~                          |
+| claude   | ~.claude/~ (agents, skills)           |
+| agents   | ~.config/AGENTS.md~                   |
+
+** Machine-Specific Notes
+
+*** Gnome Keyring
+
+Get a keyring for credential storage:
 
 #+begin_src sh
-setxkbmap -variant norman -option lv3:ralt_alt # Or `-variant ,us`
+# May need xdg autostart modifications
+# https://wiki.archlinux.org/title/GNOME/Keyring#Start_SSH_and_Secrets_components_of_keyring_daemon
+
+# PAM config for auto-unlock
+# https://wiki.gnome.org/Projects/GnomeKeyring/Pam
+# Update /etc/pam.d/login
+
+# If secrets service not starting:
+systemctl --user add-wants autostart.target gnome-keyring-secrets.service
+#+end_src
+
+*** StumpWM (Common Lisp window manager)
+
+#+begin_src sh
+# Create ~/common-lisp directory
+# Requirements:
+#   - Set SBCL_HOME when building (avoids sb-cltl2 error)
+#   - cl-utilities, ppath, sly
+#   - clx-truetype: clone https://github.com/LispLima/clx-truetype to ~/quicklisp/local-projects
+
+# Add .desktop to /usr/share/xsessions/ for display manager
+#+end_src
+
+*** Keyboard (Norman layout + Caps→Esc)
+
+#+begin_src sh
+setxkbmap -variant norman -option lv3:ralt_alt
 xmodmap -e "keycode 66 = Escape Escape" -e "keycode 9 = Caps_Lock Caps_Lock"
 #+end_src
 
-** HiDPI
+*** HiDPI
 
-For Java Swing applications, you need to be using Java 9+ and set ~GDK_SCALE=2~.
+For Java Swing: use Java 9+ and set ~GDK_SCALE=2~.
 
-** Nvidia and Hybrid Graphics
+*** Nvidia Hybrid Graphics
 
-Don't necessarily use what ~nvidia-xconfig~ gives you.
-
-https://wiki.archlinux.org/title/PRIME
+Don't trust ~nvidia-xconfig~ output. See [[https://wiki.archlinux.org/title/PRIME][Arch Wiki PRIME]].
 
 #+begin_example
 Section "Files"
-        ModulePath "/usr/lib/xorg/modules"
-        ModulePath "/usr/lib/nvidia/xorg"
+    ModulePath "/usr/lib/xorg/modules"
+    ModulePath "/usr/lib/nvidia/xorg"
 EndSection
 
 Section "Device"
-        Identifier "Intel UHD"
-        BusID "PCI:00:02:0"
-        Driver "modesetting"
+    Identifier "Intel UHD"
+    BusID "PCI:00:02:0"
+    Driver "modesetting"
 EndSection
 
 Section "Device"
-    Identifier     "GeForce RTX 2080"
-    Driver         "nvidia"
-    VendorName     "NVIDIA Corporation"
-    BusID          "PCI:01:00:0"
+    Identifier "GeForce RTX 2080"
+    Driver "nvidia"
+    VendorName "NVIDIA Corporation"
+    BusID "PCI:01:00:0"
 EndSection
 #+end_example
 
-** Login
+*** Arch Linux Base Packages
 
-*** PAM
+#+begin_src sh
+sudo pacman -Syu fish git emacs ripgrep tmux \
+    base-devel xclip cmake git-lfs docker
 
-https://wiki.gnome.org/Projects/GnomeKeyring/Pam
+# AUR
+yay -Syu starship-bin
+#+end_src
 
-Update /etc/pamd./login to auto start pam_gnome_keyring.
+*** Useful Apps
 
-** StumpWM
-** LightDM
-To get a display manager like LightDM to offer a new window manager like StumpWM, add a .desktop
-entry to ~/usr/share/xsessions/~.
-
-*** xinitrcsession-helper
-~xinitrc.desktop~ goes in ~/usr/share/xsessions/~
-
-** Terminal theme
-~ln -s $(pwd)/.Xresources $HOME/~
-
-* Provisioning
-** Applications
-*** Firefox
-**** Preferences
-- disable MRU tab-switching
-*** Dex
-To auto-start xdg .desktop entries
-https://github.com/jceb/dex
-** OpenVPN
-*** Generate ovpn config
-https://www.privateinternetaccess.com/pages/ovpn-config-generator
-*** Enable openvpn systemd client service
-https://wiki.archlinux.org/index.php/OpenVPN#systemd_service_configuration
-** CommonLisp
-** StumpWM
-** LightDM
-** X11
-*** Xresources
-** Gnome-keyring-daemon and org.freedesktop.secrets
-
-Aside from the ~pam.d~ config mentioned earlier, I have this
-in my shell history. I can't remember how I found it. I ran into a problem with a new machine. ~gnome-keyring-daemon~ was starting after login (presumedly thanks to the PAM config), but the secret service wasn't running. And, when you tried running ~gnome-keyring-daemon --start --components=secrets~, the system journal reported that the secret service had already been started. So anyways... you might need to do something like this. And perhaps searching the web for this will give (re-give) you insight into why you need it.
-
-#+begin_example
-systemctl --user add-wants autostart.target gnome-keyring-secrets.service
-#+end_example
+- [[https://github.com/jceb/dex][dex]] - auto-start XDG .desktop entries
+- Fira fonts (~fc-list~, ~xset -q~ to verify)

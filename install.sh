@@ -11,7 +11,7 @@ if ! command -v stow &> /dev/null; then
 fi
 
 # Stow all packages
-for pkg in claude tmux agents zellij; do
+for pkg in claude tmux agents zellij fish; do
     echo "Stowing $pkg..."
     stow -t ~ "$pkg"
 done

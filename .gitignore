@@ -1,6 +1,8 @@
 .secrets
 *~
 *#*#
+__pycache__/
+*.pyc
 .emacs.d/eln-cache/
 .emacs.d/elpa/
 

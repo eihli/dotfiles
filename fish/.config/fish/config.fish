@@ -49,6 +49,23 @@ if type -q mise
     mise activate fish | source
 end
 
+# === Starship prompt ===
+if type -q starship
+    starship init fish | source
+end
+
+# === fzf ===
+if type -q fzf
+    # Use fd if available (faster than find, respects .gitignore)
+    if type -q fd
+        set -gx FZF_DEFAULT_COMMAND 'fd --type f --hidden --follow --exclude .git'
+        set -gx FZF_CTRL_T_COMMAND "$FZF_DEFAULT_COMMAND"
+        set -gx FZF_ALT_C_COMMAND 'fd --type d --hidden --follow --exclude .git'
+    end
+    set -gx FZF_DEFAULT_OPTS '--height 40% --layout=reverse --border'
+    fzf --fish | source
+end
+
 # === SSH agent ===
 if status is-interactive
     if not set -q SSH_AUTH_SOCK; and test -z "$SSH_CONNECTION"

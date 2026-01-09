@@ -11,7 +11,7 @@ description: |
 
 ## 0. Compact Context
 
-Run `/compact` to summarize and free context window before starting fresh work.
+Use the `/compact` Claude Code slash command (not a shell command) to summarize and free context window before starting fresh work. Tell the user to run it manually if you cannot invoke it directly.
 
 ## 1. Gather Context
 

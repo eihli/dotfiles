@@ -55,7 +55,7 @@ Comments should add value beyond what code says:
 ### Secrets
 
 - .env.enc encrypted age/sops (decrypted to .gitignored .env)
-- Only secrets in .env (config in config files)
+- Only *secrets* in .env; config in config files (.toml, .py, .json, .yaml, whatever...)!
 
 ### Logging
 

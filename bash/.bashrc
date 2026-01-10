@@ -66,6 +66,9 @@ if command -v fd &>/dev/null; then
 fi
 export FZF_DEFAULT_OPTS='--height 40% --layout=reverse --border'
 
+# === Rust/Cargo ===
+[ -f "$HOME/.cargo/env" ] && . "$HOME/.cargo/env"
+
 # === zoxide (smart cd) ===
 command -v zoxide &>/dev/null && eval "$(zoxide init bash)"
 

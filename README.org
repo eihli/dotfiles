@@ -27,6 +27,7 @@ stow -t ~ fish tmux zellij starship git bash claude agents
 | fzf      | Fuzzy finder (Ctrl-R, Ctrl-T) | ~apt install fzf~ / ~brew install fzf~ |
 | fd       | Fast find (used by fzf)    | ~apt install fd-find~ / ~brew install fd~ |
 | mise     | Version manager (replaces pyenv/nvm) | ~curl https://mise.run \vert sh~ |
+| delta    | Git pager (diff syntax highlighting) | ~cargo install git-delta --locked~ |
 
 *** Terminal Multiplexer (pick one)
 

@@ -104,6 +104,7 @@ Never pollute $HOME with dotfiles/dotdirs.
 - No repo-wide search & replace; keep edits small
 - Avoid manual `git stash`
 - Check `git status` and `git diff`; keep commits small
+- Prefer `--ff-only` merges (linear history); project-local CLAUDE.md can override
 
 ### Commit messages
 

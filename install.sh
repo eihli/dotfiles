@@ -31,4 +31,10 @@ if [ -f ~/.config/AGENTS.md ] && [ ! -e ~/.claude/CLAUDE.md ]; then
     echo "Symlinked AGENTS.md to ~/.claude/CLAUDE.md"
 fi
 
+# Set fish as default shell if not already
+if [ "$SHELL" != "/usr/bin/fish" ] && grep -q /usr/bin/fish /etc/shells; then
+    echo "Setting fish as default shell..."
+    chsh -s /usr/bin/fish
+fi
+
 echo "Done! Symlinks created."

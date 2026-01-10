@@ -98,6 +98,14 @@ Never pollute $HOME with dotfiles/dotdirs.
 - Use `/review` skill for critical review before complete
 - **Handoff summary**: findings, choices made, results (what changed and why)
 
+## Long-Running Sessions
+
+For multi-session/overnight autonomous work:
+- **One feature at a time** - complete, test, commit before next
+- **Session startup**: `pwd` → read git log/progress → verify baseline → then work
+- **Use `/long-session`** to set up progress tracking artifacts
+- Update `claude-progress.txt` before session ends
+
 ## Git
 
 - Destructive ops forbidden unless explicit

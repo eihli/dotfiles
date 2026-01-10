@@ -6,5 +6,5 @@ __pycache__/
 .emacs.d/eln-cache/
 .emacs.d/elpa/
 
-# Track local claude settings in dotfiles (negates global gitignore)
-!claude/.claude/settings.local.json
+# Local overrides for claude settings (not tracked)
+settings.local.json

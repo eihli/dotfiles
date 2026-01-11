@@ -35,7 +35,7 @@ else
 fi
 
 # Send notification via FIFO (cross-user) or direct (same-user fallback)
-NOTIFY_PIPE="/home/eihli/.local/state/claude-notify/pipe"
+NOTIFY_PIPE="/tmp/claude-notify-pipe"
 
 if [ -p "$NOTIFY_PIPE" ]; then
     echo "$MSG" > "$NOTIFY_PIPE" 2>/dev/null || true

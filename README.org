@@ -47,6 +47,21 @@ stow -t ~ fish tmux zellij starship git bash claude agents
 | claude   | ~.claude/~ (agents, skills)           |
 | agents   | ~.config/AGENTS.md~                   |
 
+** Claude Skills
+
+Custom skills for Claude Code CLI (~/.claude/skills/~):
+
+| Skill          | Trigger              | Purpose                                      |
+|----------------+----------------------+----------------------------------------------|
+| /next          | "what's next?"       | Resume work: check state, run gates, suggest tasks |
+| /finalize      | "wrap up", "done?"   | Pre-commit checklist: gates, review, commit  |
+| /long-session  | "overnight", "autonomous" | Prep for unattended agent loops (TDD-first) |
+| /signoff       | "end of day"         | Save session notes for tomorrow              |
+| /title         | "set title"          | Set terminal title (2-word summary)          |
+| /clear-title   | "reset title"        | Clear manual title, use auto-summary         |
+| /skill-creator | -                    | Guide for creating new skills                |
+| /mcp-builder   | -                    | Guide for building MCP servers               |
+
 ** Machine-Specific Notes
 
 *** Gnome Keyring

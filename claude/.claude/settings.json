@@ -2,8 +2,13 @@
   "model": "opus",
   "permissions": {
     "allow": [
+      "Skill(clear-title:*)",
       "Skill(finalize:*)",
+      "Skill(long-session:*)",
+      "Skill(mcp-builder:*)",
       "Skill(next:*)",
+      "Skill(skill-creator:*)",
+      "Skill(title:*)",
       "Skill(commit:*)",
       "Skill(code-review:*)",
 
@@ -39,6 +44,7 @@
       "Bash(diff:*)",
       "Bash(sort:*)",
       "Bash(uniq:*)",
+      "Bash(curl:*)",
       "Bash(jq:*)",
       "Bash(yq:*)",
 

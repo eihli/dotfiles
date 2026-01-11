@@ -27,7 +27,7 @@ elif [ -n "$PROJECT" ]; then
 fi
 
 # Send notification via FIFO (cross-user) or direct (same-user fallback)
-NOTIFY_PIPE="/tmp/claude-notify-pipe"
+NOTIFY_PIPE="/run/claude-notify/pipe"
 FULL_MSG="$CTX$MSG"
 
 if [ -p "$NOTIFY_PIPE" ]; then

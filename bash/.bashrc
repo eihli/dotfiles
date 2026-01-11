@@ -19,6 +19,12 @@ export XDG_CACHE_HOME="$HOME/.cache"
 # === Environment ===
 export EDITOR=vim
 
+# === Terminal colors ===
+# Enable true color support for modern terminals (Claude Code, bat, delta, etc.)
+if [[ -z "$COLORTERM" && "$TERM" =~ (256color|alacritty|kitty|tmux|screen) ]]; then
+    export COLORTERM=truecolor
+fi
+
 # === PATH (platform-aware) ===
 export PATH="$HOME/.local/bin:$HOME/bin:$HOME/.cargo/bin:$PATH"
 case "$(uname)" in

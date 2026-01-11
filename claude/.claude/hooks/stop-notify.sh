@@ -1,6 +1,6 @@
 #!/bin/bash
 # Notification hook for Claude Stop event
-# Extracts project, Zellij title, and first user message (the task)
+# Extracts project, title (from /title skill), and first user message (the task)
 
 set -e
 
@@ -11,11 +11,11 @@ TRANSCRIPT=$(echo "$INPUT" | jq -r '.transcript_path // empty')
 # Project name from cwd
 PROJECT=$(basename "$CWD" 2>/dev/null || echo "unknown")
 
-# Zellij tab title (if in Zellij)
+# Title from /title skill (keyed by TTY)
 TITLE=""
-if [ -n "$ZELLIJ" ]; then
-    # Query current tab name via zellij action
-    TITLE=$(zellij action query-tab-names 2>/dev/null | head -1 || true)
+TTY_KEY=$(tty 2>/dev/null | tr '/' '_' || true)
+if [ -n "$TTY_KEY" ] && [ -f "$HOME/.cache/claude-code/titles/$TTY_KEY" ]; then
+    TITLE=$(cat "$HOME/.cache/claude-code/titles/$TTY_KEY" 2>/dev/null || true)
 fi
 
 # First user message = the task (efficient: head + first match)
@@ -24,11 +24,15 @@ if [ -n "$TRANSCRIPT" ] && [ -f "$TRANSCRIPT" ]; then
     TASK=$(head -100 "$TRANSCRIPT" | jq -r 'select(.type == "user") | .message.content[0].text // empty' 2>/dev/null | head -1 | cut -c1-80)
 fi
 
-# Build message
+# Build message: TITLE overrides TASK
 MSG="$PROJECT"
-[ -n "$TITLE" ] && MSG="$TITLE | $MSG"
-[ -n "$TASK" ] && MSG="$MSG: $TASK"
-[ -z "$TASK" ] && MSG="$MSG: Ready"
+if [ -n "$TITLE" ]; then
+    MSG="$TITLE | $MSG"
+elif [ -n "$TASK" ]; then
+    MSG="$MSG: $TASK"
+else
+    MSG="$MSG: Ready"
+fi
 
 # Send notification
 case $(uname) in

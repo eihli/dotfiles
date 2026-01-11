@@ -1,7 +1,7 @@
 ---
 name: title
 description: |
-  Set terminal/Zellij pane title to 2-word summary of current conversation.
+  Set terminal title to 2-word summary of current conversation.
   Triggers: "/title", "update title", "set title"
 ---
 
@@ -13,7 +13,7 @@ Set terminal title via escape sequence.
 
 1. Reflect on conversation: What's the main topic or current task?
 2. Generate exactly 2 words (Title Case) summarizing it
-3. Run: `zellij action rename-tab "Two Words"`
+3. Run: `mkdir -p ~/.cache/claude-code/titles && TITLE="Two Words" && printf '\033]0;%s\007' "$TITLE" && echo "$TITLE" > ~/.cache/claude-code/titles/$(tty | tr '/' '_')`
 
 ## Examples
 

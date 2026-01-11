@@ -7,6 +7,7 @@
       "Skill(long-session:*)",
       "Skill(mcp-builder:*)",
       "Skill(next:*)",
+      "Skill(signoff:*)",
       "Skill(skill-creator:*)",
       "Skill(title:*)",
       "Skill(commit:*)",

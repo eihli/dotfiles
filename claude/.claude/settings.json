@@ -101,7 +101,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "msg=$(jq -r '.message // \"Claude needs attention\"'); case $(uname) in Darwin) terminal-notifier -title 'Claude Code' -message \"$msg\" -sound Glass ;; *) [ -n \"$DISPLAY\" ] && notify-send 'Claude Code' \"$msg\" 2>/dev/null || true ;; esac"
+            "command": "~/.claude/hooks/notify.sh"
           }
         ]
       }

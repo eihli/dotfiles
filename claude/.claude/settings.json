@@ -77,6 +77,8 @@
       "Bash(ps:*)",
       "Bash(jobs:*)",
 
+      "Bash(claude-set-title:*)",
+
       "WebSearch"
     ]
   },

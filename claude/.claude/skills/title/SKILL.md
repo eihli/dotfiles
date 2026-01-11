@@ -13,7 +13,7 @@ Set terminal title via escape sequence.
 
 1. Reflect on conversation: What's the main topic or current task?
 2. Generate exactly 2 words (Title Case) summarizing it
-3. Run: `mkdir -p ~/.cache/claude-code/titles && TITLE="Two Words" && printf '\033]0;%s\007' "$TITLE" && echo "$TITLE" > ~/.cache/claude-code/titles/$(pwd | tr '/' '_')`
+3. Run: `claude-set-title "Two Words"`
 
 ## Examples
 

@@ -1,0 +1,12 @@
+[Unit]
+Description=Claude cross-user notification watcher
+After=graphical-session.target
+
+[Service]
+ExecStartPre=/bin/bash -c 'mkdir -p "${XDG_STATE_HOME:-$HOME/.local/state}/claude-notify" && [[ -p "${XDG_STATE_HOME:-$HOME/.local/state}/claude-notify/pipe" ]] || mkfifo "${XDG_STATE_HOME:-$HOME/.local/state}/claude-notify/pipe" && chmod 622 "${XDG_STATE_HOME:-$HOME/.local/state}/claude-notify/pipe"'
+ExecStart=%h/.local/bin/claude-notify-watch
+Restart=always
+RestartSec=5
+
+[Install]
+WantedBy=default.target

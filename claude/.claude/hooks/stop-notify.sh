@@ -34,8 +34,14 @@ else
     MSG="$MSG: Ready"
 fi
 
-# Send notification
-case $(uname) in
-    Darwin) terminal-notifier -title 'Claude Code' -message "$MSG" -sound Glass ;;
-    *) [ -n "$DISPLAY" ] && notify-send 'Claude Code' "$MSG" 2>/dev/null || true ;;
-esac
+# Send notification via FIFO (cross-user) or direct (same-user fallback)
+NOTIFY_PIPE="/home/eihli/.local/state/claude-notify/pipe"
+
+if [ -p "$NOTIFY_PIPE" ]; then
+    echo "$MSG" > "$NOTIFY_PIPE" 2>/dev/null || true
+else
+    case $(uname) in
+        Darwin) terminal-notifier -title 'Claude Code' -message "$MSG" -sound Glass ;;
+        *) [ -n "$DISPLAY" ] && notify-send 'Claude Code' "$MSG" 2>/dev/null || true ;;
+    esac
+fi

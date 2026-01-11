@@ -5,7 +5,6 @@ format = """
 $directory\
 $git_branch\
 $git_status\
-$python\
 $nodejs\
 $rust\
 $character"""
@@ -24,10 +23,6 @@ style = "purple"
 [git_status]
 format = '([$all_status$ahead_behind]($style) )'
 style = "red"
-
-[python]
-format = '[${pyenv_prefix}(${version} )(\($virtualenv\) )]($style)'
-style = "yellow"
 
 [nodejs]
 format = "[$version]($style) "

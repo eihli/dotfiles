@@ -39,6 +39,12 @@ set -gx XDG_DATA_HOME $HOME/.local/share
 set -gx VIRTUALENV_DIR $XDG_STATE_HOME
 set -gx EDITOR vim
 
+# === Terminal colors ===
+# Enable true color support for modern terminals (Claude Code, bat, delta, etc.)
+if test -z "$COLORTERM"; and string match -qr '(256color|alacritty|kitty|tmux|screen)' $TERM
+    set -gx COLORTERM truecolor
+end
+
 # === PATH (fish_add_path only adds if dir exists) ===
 fish_add_path $HOME/.local/bin
 fish_add_path $HOME/bin

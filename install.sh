@@ -38,3 +38,12 @@ if [ "$SHELL" != "/usr/bin/fish" ] && grep -q /usr/bin/fish /etc/shells; then
 fi
 
 echo "Done! Symlinks created."
+echo ""
+echo "=== Manual steps ==="
+echo ""
+echo "# Claude cross-user notifications (if running claude as another user):"
+echo "systemctl --user daemon-reload"
+echo "systemctl --user enable --now claude-notify"
+echo ""
+echo "# Verify service running:"
+echo "systemctl --user status claude-notify"

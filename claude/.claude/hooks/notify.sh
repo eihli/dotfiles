@@ -26,8 +26,15 @@ elif [ -n "$PROJECT" ]; then
     CTX="[$PROJECT] "
 fi
 
-# Send notification
-case $(uname) in
-    Darwin) terminal-notifier -title 'Claude Code' -message "$CTX$MSG" -sound Glass ;;
-    *) [ -n "$DISPLAY" ] && notify-send 'Claude Code' "$CTX$MSG" 2>/dev/null || true ;;
-esac
+# Send notification via FIFO (cross-user) or direct (same-user fallback)
+NOTIFY_PIPE="/home/eihli/.local/state/claude-notify/pipe"
+FULL_MSG="$CTX$MSG"
+
+if [ -p "$NOTIFY_PIPE" ]; then
+    echo "$FULL_MSG" > "$NOTIFY_PIPE" 2>/dev/null || true
+else
+    case $(uname) in
+        Darwin) terminal-notifier -title 'Claude Code' -message "$FULL_MSG" -sound Glass ;;
+        *) [ -n "$DISPLAY" ] && notify-send 'Claude Code' "$FULL_MSG" 2>/dev/null || true ;;
+    esac
+fi

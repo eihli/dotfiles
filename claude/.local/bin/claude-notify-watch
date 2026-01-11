@@ -1,0 +1,17 @@
+#!/bin/bash
+# Watch for notifications from claude agent running as another user
+# Reads from FIFO, sends desktop notifications
+
+PIPE="${XDG_STATE_HOME:-$HOME/.local/state}/claude-notify/pipe"
+
+if [[ ! -p "$PIPE" ]]; then
+    echo "FIFO not found: $PIPE" >&2
+    echo "Create with: mkfifo '$PIPE' && chmod 622 '$PIPE'" >&2
+    exit 1
+fi
+
+while true; do
+    if read -r msg < "$PIPE"; then
+        notify-send "Claude Code" "$msg"
+    fi
+done

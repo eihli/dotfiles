@@ -10,7 +10,14 @@ if [[ ! -p "$PIPE" ]]; then
 fi
 
 while true; do
-    if read -r msg < "$PIPE"; then
-        notify-send "Claude Code" "$msg"
+    if read -r line < "$PIPE"; then
+        if [[ "$line" == *"|"* ]]; then
+            TITLE="${line%%|*}"
+            BODY="${line#*|}"
+        else
+            TITLE="Claude Code"
+            BODY="$line"
+        fi
+        notify-send "$TITLE" "$BODY"
     fi
 done

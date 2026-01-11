@@ -11,11 +11,11 @@ TRANSCRIPT=$(echo "$INPUT" | jq -r '.transcript_path // empty')
 # Project name from cwd
 PROJECT=$(basename "$CWD" 2>/dev/null || echo "unknown")
 
-# Title from /title skill (keyed by TTY)
+# Title from /title skill (keyed by CWD)
 TITLE=""
-TTY_KEY=$(tty 2>/dev/null | tr '/' '_' || true)
-if [ -n "$TTY_KEY" ] && [ -f "$HOME/.cache/claude-code/titles/$TTY_KEY" ]; then
-    TITLE=$(cat "$HOME/.cache/claude-code/titles/$TTY_KEY" 2>/dev/null || true)
+CWD_KEY=$(echo "$CWD" | tr '/' '_')
+if [ -n "$CWD_KEY" ] && [ -f "$HOME/.cache/claude-code/titles/$CWD_KEY" ]; then
+    TITLE=$(cat "$HOME/.cache/claude-code/titles/$CWD_KEY" 2>/dev/null || true)
 fi
 
 # First user message = the task (efficient: head + first match)
@@ -37,8 +37,11 @@ fi
 # Send notification via FIFO (cross-user) or direct (same-user fallback)
 NOTIFY_PIPE="/run/claude-notify/pipe"
 
+# Format: TITLE|BODY for watcher to parse
+NOTIFY_TITLE="${TITLE:-Claude Code}"
+
 if [ -p "$NOTIFY_PIPE" ]; then
-    echo "$MSG" > "$NOTIFY_PIPE" 2>/dev/null || true
+    echo "${NOTIFY_TITLE}|${MSG}" > "$NOTIFY_PIPE" 2>/dev/null || true
 else
     case $(uname) in
         Darwin) terminal-notifier -title 'Claude Code' -message "$MSG" -sound Glass ;;

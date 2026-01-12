@@ -36,6 +36,9 @@ case "$(uname)" in
         ;;
 esac
 
+# Go binaries
+[ -d "$HOME/go/bin" ] && export PATH="$HOME/go/bin:$PATH"
+
 # === Git aliases ===
 alias gc='git commit'
 alias gp='git push'

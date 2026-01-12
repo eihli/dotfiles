@@ -1,2 +1,2 @@
-[shell]
-program = "zellij"
+[terminal.shell]
+program = "/opt/local/bin/zellij"

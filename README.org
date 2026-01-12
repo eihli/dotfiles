@@ -18,21 +18,50 @@ stow -t ~ fish tmux zellij starship git bash claude agents
 
 ** Required Tools
 
-*** Core (install first)
+- *fish* - Primary shell
+- *starship* - Cross-shell prompt
+- *fzf* - Fuzzy finder (Ctrl-R, Ctrl-T)
+- *fd* - Fast find (used by fzf)
+- *mise* - Version manager (replaces pyenv/nvm)
+- *delta* - Git pager (diff highlighting)
+- *zellij* - Terminal multiplexer (default)
+- *tmux* - Terminal multiplexer (fallback, prefix: ~C-]~)
 
-| Tool     | Purpose                    | Install                          |
-|----------+----------------------------+----------------------------------|
-| fish     | Primary shell              | ~apt install fish~ / ~brew install fish~ |
-| starship | Cross-shell prompt         | ~curl -sS https://starship.rs/install.sh \vert sh~ |
-| fzf      | Fuzzy finder (Ctrl-R, Ctrl-T) | ~apt install fzf~ / ~brew install fzf~ |
-| fd       | Fast find (used by fzf)    | ~apt install fd-find~ / ~brew install fd~ |
-| mise     | Version manager (replaces pyenv/nvm) | ~curl https://mise.run \vert sh~ |
-| delta    | Git pager (diff syntax highlighting) | ~cargo install git-delta --locked~ |
+*** macOS (MacPorts)
 
-*** Terminal Multiplexer (pick one)
+#+begin_src sh
+sudo port install fish starship fzf fd mise git-delta zellij tmux
+#+end_src
 
-- ~tmux~ - prefix: ~C-]~ (to avoid Emacs conflict)
-- ~zellij~ - modal, session persistence
+*** Ubuntu/Debian
+
+#+begin_src sh
+# apt packages
+sudo apt install -y fish fzf tmux
+
+# fd (package name differs)
+sudo apt install -y fd-find
+ln -s $(which fdfind) ~/.local/bin/fd  # alias to 'fd'
+
+# starship
+curl -sS https://starship.rs/install.sh | sh
+
+# mise
+curl https://mise.run | sh
+
+# delta (from GitHub releases)
+DELTA_VERSION=0.18.2
+curl -sLO "https://github.com/dandavison/delta/releases/download/${DELTA_VERSION}/git-delta_${DELTA_VERSION}_amd64.deb"
+sudo dpkg -i "git-delta_${DELTA_VERSION}_amd64.deb"
+rm "git-delta_${DELTA_VERSION}_amd64.deb"
+
+# zellij (from GitHub releases)
+ZELLIJ_VERSION=0.41.2
+curl -sLO "https://github.com/zellij-org/zellij/releases/download/v${ZELLIJ_VERSION}/zellij-x86_64-unknown-linux-musl.tar.gz"
+tar xzf zellij-x86_64-unknown-linux-musl.tar.gz
+sudo mv zellij /usr/local/bin/
+rm zellij-x86_64-unknown-linux-musl.tar.gz
+#+end_src
 
 ** Stow Packages
 

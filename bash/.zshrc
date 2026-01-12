@@ -12,12 +12,7 @@ path=(
 )
 typeset -U path  # dedupe
 
-# If fish is available and we're interactive, switch to fish
-if [[ -o interactive ]] && command -v fish &>/dev/null; then
-    exec fish
-fi
-
-# Fallback: stay in zsh with mise + starship
+# mise + starship if running zsh interactively
 if command -v mise &>/dev/null; then
     eval "$(mise activate zsh)"
 fi

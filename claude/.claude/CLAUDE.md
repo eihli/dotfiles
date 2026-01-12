@@ -1,1 +1,1 @@
-/home/eihli/src/dotfiles/agents/.config/AGENTS.md
+../../agents/.config/AGENTS.md

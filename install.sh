@@ -31,6 +31,25 @@ if [ -f ~/.config/AGENTS.md ] && [ ! -e ~/.claude/CLAUDE.md ]; then
     echo "Symlinked AGENTS.md to ~/.claude/CLAUDE.md"
 fi
 
+# Register lisa plugin if not already registered
+PLUGINS_FILE=~/.claude/plugins/installed_plugins.json
+if [ -f "$PLUGINS_FILE" ]; then
+    if ! grep -q '"lisa@local"' "$PLUGINS_FILE"; then
+        echo "Registering lisa plugin..."
+        # Add lisa entry to installed_plugins.json
+        jq '.plugins["lisa@local"] = [{
+            "scope": "user",
+            "installPath": "'"$HOME"'/.claude/plugins/cache/local/lisa/1.0.0",
+            "version": "1.0.0",
+            "installedAt": "'"$(date -u +%Y-%m-%dT%H:%M:%SZ)"'",
+            "lastUpdated": "'"$(date -u +%Y-%m-%dT%H:%M:%SZ)"'"
+        }]' "$PLUGINS_FILE" > "$PLUGINS_FILE.tmp" && mv "$PLUGINS_FILE.tmp" "$PLUGINS_FILE"
+        echo "Lisa plugin registered"
+    fi
+else
+    echo "Warning: $PLUGINS_FILE not found. Run 'claude' once first to initialize."
+fi
+
 # Set fish as default shell if not already
 if [ "$SHELL" != "/usr/bin/fish" ] && grep -q /usr/bin/fish /etc/shells; then
     echo "Setting fish as default shell..."

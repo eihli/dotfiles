@@ -10,6 +10,8 @@ if ! command -v stow &> /dev/null; then
     echo "Installing stow..."
     if command -v apt &> /dev/null; then
         sudo apt install -y stow
+    elif command -v port &> /dev/null; then
+        sudo port install stow
     elif command -v brew &> /dev/null; then
         brew install stow
     else
@@ -19,7 +21,7 @@ if ! command -v stow &> /dev/null; then
 fi
 
 # Stow all packages
-for pkg in claude agents bash fish git starship tmux zellij; do
+for pkg in alacritty claude agents bash fish git starship tmux zellij; do
     echo "Stowing $pkg..."
     stow -t ~ "$pkg"
 done
@@ -49,13 +51,6 @@ if [ -f "$PLUGINS_FILE" ]; then
 else
     echo "Warning: $PLUGINS_FILE not found. Run 'claude' once first to initialize."
 fi
-
-# Set fish as default shell if not already
-if [ "$SHELL" != "/usr/bin/fish" ] && grep -q /usr/bin/fish /etc/shells; then
-    echo "Setting fish as default shell..."
-    chsh -s /usr/bin/fish
-fi
-
 echo "Done! Symlinks created."
 echo ""
 echo "=== Manual steps ==="

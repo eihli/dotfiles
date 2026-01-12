@@ -68,7 +68,7 @@ rm zellij-x86_64-unknown-linux-musl.tar.gz
 | Package  | Contents                              |
 |----------+---------------------------------------|
 | fish     | ~.config/fish/config.fish~            |
-| bash     | ~.bashrc~ (fallback for non-fish systems) |
+| bash     | ~.bashrc~, ~.zshrc~ (fallback shells) |
 | tmux     | ~.tmux.conf~, ~.tmux/~                |
 | zellij   | ~.config/zellij/config.kdl~           |
 | starship | ~.config/starship.toml~               |
@@ -90,6 +90,15 @@ Custom skills for Claude Code CLI (~/.claude/skills/~):
 | /clear-title   | "reset title"        | Clear manual title, use auto-summary         |
 | /skill-creator | -                    | Guide for creating new skills                |
 | /mcp-builder   | -                    | Guide for building MCP servers               |
+
+** Cross-Platform Design
+
+*IMPORTANT*: Configs must work on both macOS and Linux without hardcoded paths.
+
+- Shell configs bootstrap PATH to find tools (Homebrew, MacPorts, etc.)
+- Use ~command -v~ / ~type -q~ to check tool availability, not absolute paths
+- ~.zshrc~ sets up PATH then ~exec fish~ (handles Spotlight launch on macOS)
+- Fish is the primary shell; bash/zsh are fallbacks
 
 ** Machine-Specific Notes
 

@@ -13,7 +13,7 @@ cd ~/src/dotfiles
 ./install.sh
 
 # Or manually stow individual packages
-stow -t ~ fish tmux zellij starship git bash claude agents
+stow -t ~ alacritty fish tmux zellij starship git bash claude agents
 #+end_src
 
 ** Required Tools
@@ -65,16 +65,17 @@ rm zellij-x86_64-unknown-linux-musl.tar.gz
 
 ** Stow Packages
 
-| Package  | Contents                              |
-|----------+---------------------------------------|
-| fish     | ~.config/fish/config.fish~            |
-| bash     | ~.bashrc~, ~.zshrc~ (fallback shells) |
-| tmux     | ~.tmux.conf~, ~.tmux/~                |
-| zellij   | ~.config/zellij/config.kdl~           |
-| starship | ~.config/starship.toml~               |
-| git      | ~.gitconfig~                          |
-| claude   | ~.claude/~ (agents, skills)           |
-| agents   | ~.config/AGENTS.md~                   |
+| Package   | Contents                              |
+|-----------+---------------------------------------|
+| alacritty | ~.config/alacritty/alacritty.toml~    |
+| agents    | ~.config/AGENTS.md~                   |
+| bash      | ~.bashrc~, ~.zshrc~ (fallback shells) |
+| claude    | ~.claude/~ (agents, skills)           |
+| fish      | ~.config/fish/config.fish~            |
+| git       | ~.gitconfig~                          |
+| starship  | ~.config/starship.toml~               |
+| tmux      | ~.tmux.conf~, ~.tmux/~                |
+| zellij    | ~.config/zellij/config.kdl~           |
 
 ** Claude Skills
 

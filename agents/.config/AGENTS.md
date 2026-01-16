@@ -91,6 +91,7 @@ Never pollute $HOME with dotfiles/dotdirs.
 - Follow links until domain makes sense
 - **Proactively fix stale docs** after significant work
 - **README.md maintenance**: update verification commands, document new modules
+- **Diagrams**: use graphviz, not ascii art
 
 ## Build / Test
 

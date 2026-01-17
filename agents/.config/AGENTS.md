@@ -62,6 +62,7 @@ Comments should add value beyond what code says:
 - Output useful to AI agents: clean, structured, min tokens, max info
 - Use log levels appropriately
 - Use logs to debug
+- Maintain a `latest` symlink to most recent log file
 
 ### XDG Directories
 

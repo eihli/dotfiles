@@ -9,6 +9,7 @@
       "Skill(signoff:*)",
       "Skill(skill-creator:*)",
       "Skill(title:*)",
+      "Skill(multi-mind:*)",
       "Skill(commit:*)",
       "Skill(code-review:*)",
       "Bash(git:*)",
@@ -72,40 +73,6 @@
     ]
   },
   "model": "opus",
-  "hooks": {
-    "PostToolUse": [
-      {
-        "matcher": "Edit|Write",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "jq -r '.tool_input.file_path' | while read f; do case \"$f\" in *.py) ruff format --quiet \"$f\" 2>/dev/null || black --quiet \"$f\" 2>/dev/null ;; *.ts|*.tsx|*.js|*.jsx) prettier --write \"$f\" 2>/dev/null ;; esac; done; exit 0"
-          }
-        ]
-      }
-    ],
-    "Stop": [
-      {
-        "hooks": [
-          {
-            "type": "command",
-            "command": "~/.claude/hooks/stop-notify.sh"
-          }
-        ]
-      }
-    ],
-    "Notification": [
-      {
-        "matcher": "*",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "~/.claude/hooks/notify.sh"
-          }
-        ]
-      }
-    ]
-  },
   "enabledPlugins": {
     "code-review@claude-plugins-official": true,
     "ralph-loop@claude-plugins-official": true

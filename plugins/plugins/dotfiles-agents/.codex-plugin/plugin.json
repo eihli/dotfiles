@@ -1,0 +1,41 @@
+{
+  "name": "dotfiles-agents",
+  "version": "1.0.0",
+  "description": "Shared specialist agents from this dotfiles setup.",
+  "author": {
+    "name": "Eric Ihli",
+    "url": "https://github.com/eihli"
+  },
+  "homepage": "https://github.com/eihli/dotfiles",
+  "repository": "https://github.com/eihli/dotfiles",
+  "license": "MIT",
+  "keywords": [
+    "agents",
+    "dotfiles",
+    "debugging",
+    "review",
+    "verification"
+  ],
+  "interface": {
+    "displayName": "Dotfiles Agents",
+    "shortDescription": "Specialist debug, review, verification, and simplification agents",
+    "longDescription": "A local Codex plugin that exposes the specialist agents managed in this dotfiles repo, including debugging, code review, log analysis, verification, and simplification prompts.",
+    "developerName": "Eric Ihli",
+    "category": "Coding",
+    "capabilities": [
+      "Interactive",
+      "Read",
+      "Write"
+    ],
+    "websiteURL": "https://github.com/eihli/dotfiles",
+    "privacyPolicyURL": "https://github.com/eihli/dotfiles",
+    "termsOfServiceURL": "https://github.com/eihli/dotfiles",
+    "defaultPrompt": [
+      "Use the debug agent to root-cause this issue",
+      "Use the adversarial reviewer on my changes",
+      "Run the verify-app agent on this repo"
+    ],
+    "brandColor": "#1F2937",
+    "screenshots": []
+  }
+}

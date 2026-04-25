@@ -1,0 +1,13 @@
+#!/usr/bin/env bash
+# Chain into per-repo hook if it exists.
+GIT_DIR="$(git rev-parse --git-dir 2>/dev/null)"
+if [ -n "$GIT_DIR" ] && [ -x "$GIT_DIR/hooks/commit-msg" ]; then
+    "$GIT_DIR/hooks/commit-msg" "$@" || exit $?
+fi
+
+# Strip AI co-author taglines from commit messages.
+# Use temp file for portability (BSD sed -i requires extension arg, GNU doesn't).
+tmp="$(mktemp)"
+sed '/^Co-Authored-By:.*[Cc]laude/d; /^Co-Authored-By:.*[Aa]nthropic/d' "$1" \
+    | sed -e :a -e '/^\n*$/{$d;N;ba' -e '}' > "$tmp"
+mv "$tmp" "$1"

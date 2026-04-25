@@ -1,0 +1,23 @@
+.secrets
+*~
+*#*#
+__pycache__/
+*.pyc
+
+# Local overrides for claude settings (not tracked)
+settings.local.json
+.codex
+
+# Claude Code plugin cache (auto-generated)
+claude/.claude/plugins/cache/
+
+# Private overlay symlink (points to ../dotfiles-private/claude-private)
+claude-private
+git-private
+opencode-private
+
+# Fish auto-generated
+fish_variables
+
+# Local Codex scratch file/dir at repo root
+/.codex

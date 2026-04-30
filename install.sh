@@ -12,11 +12,21 @@ fi
 
 # ---- helper functions ----
 
+ensure_parent_dir() {
+    local dir="$1"
+
+    if [ -L "$dir" ] && [ ! -e "$dir" ]; then
+        rm -f "$dir"
+    fi
+
+    mkdir -p "$dir"
+}
+
 link_shared_doc() {
     local target="$1"
     local source="$2"
 
-    mkdir -p "$(dirname "$target")"
+    ensure_parent_dir "$(dirname "$target")"
 
     if [ -e "$target" ] && [ ! -L "$target" ]; then
         echo "Skipping $target (exists and is not a symlink)"
@@ -35,7 +45,7 @@ link_shared_dir() {
     local target="$1"
     local source="$2"
 
-    mkdir -p "$(dirname "$target")"
+    ensure_parent_dir "$(dirname "$target")"
 
     if [ -L "$target" ]; then
         # If the existing symlink already resolves to the same final target,
@@ -79,7 +89,7 @@ link_compat_file() {
     local legacy_norm
     local source_norm
 
-    mkdir -p "$(dirname "$legacy_target")"
+    ensure_parent_dir "$(dirname "$legacy_target")"
 
     if [ -L "$legacy_target" ] || [ ! -e "$legacy_target" ]; then
         ln -sfn "$source" "$legacy_target"
@@ -298,7 +308,7 @@ collect_shared_skills "${shared_skill_roots[@]}"
 clear_refolded_skill_leaves() {
     local source_root leaf target
 
-    [ -d "$HOME/.agents/skills" ] || return
+    [ -d "$HOME/.agents/skills" ] || return 0
 
     for source_root in "$@"; do
         source_root="$(readlink -f -- "$source_root" 2>/dev/null || true)"
@@ -380,8 +390,8 @@ SHARED_SKILLS_ROOT="$HOME/.agents/skills"
 # cache/state next to SKILL.md.
 refold_public_skills() {
     local source_root="$1"
-    [ -d "$source_root" ] || return
-    [ -d "$SHARED_SKILLS_ROOT" ] || return
+    [ -d "$source_root" ] || return 0
+    [ -d "$SHARED_SKILLS_ROOT" ] || return 0
 
     for src in "$source_root"/*/; do
         [ -d "$src" ] || continue

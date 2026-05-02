@@ -1,0 +1,16 @@
+splitw -h # create a second column
+splitw -h # create a third column
+splitw -h # create a fourth column
+select-layout even-horizontal # make the four columns equal width
+
+splitw -v -p 50 # split fourth column into two rows
+selectp -U
+selectp -L
+splitw -v -p 50 # split third column into two rows
+selectp -U
+selectp -L
+splitw -v -p 50 # split second column into two rows
+selectp -U
+selectp -L
+splitw -v -p 50 # split first column into two rows
+selectp -U # focus top-left

@@ -17,6 +17,7 @@ Prefix: **`C-]`** (Ctrl+])
 | Close pane | `C-] x` |
 | Sync panes toggle | `C-] S` |
 | Dev layout (2x2 grid) | `C-] T` |
+| Dev layout (4x2 grid) | `C-] G` |
 
 ## Windows (tabs)
 

@@ -3,20 +3,21 @@
 Skill Packager - Creates a distributable .skill file of a skill folder
 
 Usage:
-    python utils/package_skill.py <path/to/skill-folder> [output-directory]
+    python utils/package_skill.py <path/to/skill-folder> [output-directory] [--target TARGET]
 
 Example:
     python utils/package_skill.py skills/public/my-skill
     python utils/package_skill.py skills/public/my-skill ./dist
 """
 
+import argparse
 import sys
 import zipfile
 from pathlib import Path
 from quick_validate import validate_skill
 
 
-def package_skill(skill_path, output_dir=None):
+def package_skill(skill_path, output_dir=None, target="all"):
     """
     Package a skill folder into a .skill file.
 
@@ -46,7 +47,7 @@ def package_skill(skill_path, output_dir=None):
 
     # Run validation before packaging
     print("🔍 Validating skill...")
-    valid, message = validate_skill(skill_path)
+    valid, message = validate_skill(skill_path, target=target)
     if not valid:
         print(f"❌ Validation failed: {message}")
         print("   Please fix the validation errors before packaging.")
@@ -82,23 +83,29 @@ def package_skill(skill_path, output_dir=None):
         return None
 
 
+def parse_args():
+    parser = argparse.ArgumentParser(description="Package a skill folder as .skill")
+    parser.add_argument("skill_path")
+    parser.add_argument("output_dir", nargs="?")
+    parser.add_argument(
+        "--target",
+        choices=["all", "common", "claude", "codex", "opencode"],
+        default="all",
+        help="validation target before packaging",
+    )
+    return parser.parse_args()
+
+
 def main():
-    if len(sys.argv) < 2:
-        print("Usage: python utils/package_skill.py <path/to/skill-folder> [output-directory]")
-        print("\nExample:")
-        print("  python utils/package_skill.py skills/public/my-skill")
-        print("  python utils/package_skill.py skills/public/my-skill ./dist")
-        sys.exit(1)
+    args = parse_args()
 
-    skill_path = sys.argv[1]
-    output_dir = sys.argv[2] if len(sys.argv) > 2 else None
-
-    print(f"📦 Packaging skill: {skill_path}")
-    if output_dir:
-        print(f"   Output directory: {output_dir}")
+    print(f"📦 Packaging skill: {args.skill_path}")
+    if args.output_dir:
+        print(f"   Output directory: {args.output_dir}")
+    print(f"   Validation target: {args.target}")
     print()
 
-    result = package_skill(skill_path, output_dir)
+    result = package_skill(args.skill_path, args.output_dir, target=args.target)
 
     if result:
         sys.exit(0)

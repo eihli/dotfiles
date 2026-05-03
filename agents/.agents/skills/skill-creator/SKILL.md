@@ -3,17 +3,18 @@ name: skill-creator
 description: |
   Create, edit, and iterate on skills. Use whenever the user wants to scaffold a new
   skill, improve an existing one, tune a skill's triggering description, or plan bundled
-  resources (scripts, references, assets). Trigger on phrases like "make a skill",
-  "turn this into a skill", "update this skill", "my skill isn't triggering", or any
-  request that produces a reusable workflow another AI agent should follow.
+  resources (scripts, references, assets), target Claude/Codex/OpenCode compatibility,
+  or add evals for a skill. Trigger on phrases like "make a skill", "turn this into a
+  skill", "update this skill", "my skill isn't triggering", "make it cross-tool", or
+  any request that produces a reusable workflow another AI agent should follow.
 ---
 
 # Skill Creator
 
-Guidance for creating skills that any compatible AI agent (Claude Code, Codex, OpenCode,
-Claude.ai, etc.) can load and run. A skill is a self-contained package — a SKILL.md plus
-optional bundled resources — that transforms a general-purpose agent into a specialized
-one by injecting procedural knowledge, domain context, and reusable code.
+Guidance for creating skills that compatible AI agents can load and run. A skill is a
+self-contained package: a common-denominator `SKILL.md` plus optional bundled resources
+and tool-specific metadata. Design the portable core first, then add Claude/Codex/OpenCode
+extras only when they solve a real invocation, permission, UI, or execution problem.
 
 ## When the user asks for a skill
 
@@ -68,18 +69,25 @@ facilitate unauthorized access or data exfiltration.
 ```
 skill-name/
 ├── SKILL.md                    (required)
-│   ├── YAML frontmatter        (name, description — required)
+│   ├── YAML frontmatter        (name, description for portable skills)
 │   └── Markdown body           (instructions)
 └── Optional bundled resources:
     ├── scripts/                executable code (Python, bash, etc.)
     ├── references/             documentation loaded on demand
-    └── assets/                 files used in the agent's output
+    ├── assets/                 files used in the agent's output
+    ├── agents/openai.yaml      Codex UI/policy metadata (Codex-specific)
+    └── evals/evals.json        regression prompts/checks for development
 ```
 
 ### SKILL.md
 
-- **Frontmatter**: `name` and `description` only. These are the *sole* fields the agent
-  sees when deciding whether to trigger the skill.
+- **Portable frontmatter**: use `name` and `description` only by default. This is the
+  safest common denominator across Claude Code, Codex, and OpenCode.
+- **Target-specific frontmatter**: add extra fields only when the user explicitly targets
+  that tool. Claude Code supports fields such as `disable-model-invocation`,
+  `allowed-tools`, `context`, `agent`, `arguments`, and hooks. OpenCode ignores unknown
+  fields and only recognizes `name`, `description`, `license`, `compatibility`, and
+  `metadata`. Codex keeps tool-specific policy/UI in `agents/openai.yaml`.
 - **Body**: markdown. Loaded only *after* the skill triggers — putting "when to use this
   skill" in the body does nothing.
 
@@ -110,6 +118,10 @@ into context, just copied or opened from scripts.
 
 Skip README.md, INSTALLATION_GUIDE.md, CHANGELOG.md, and other auxiliary docs. A skill is
 for an agent to do a job — not for humans to learn how it was built.
+
+Exception: `evals/evals.json` is useful for skill development. Keep raw traces,
+screenshots, generated apps, and large run artifacts outside the packaged skill, such as
+under `evals/artifacts/` ignored by git or in a temp directory.
 
 ## Progressive Disclosure
 
@@ -192,8 +204,19 @@ If starting fresh, use `scripts/init_skill.py`:
 scripts/init_skill.py <skill-name> --path <output-directory>
 ```
 
-This creates the directory, a SKILL.md template, and example `scripts/`, `references/`,
-`assets/` folders. Delete what you don't need — not every skill uses all three.
+By default this creates a common-denominator `SKILL.md` with only `name` and
+`description` frontmatter. Add optional pieces intentionally:
+
+```bash
+scripts/init_skill.py my-skill --path ~/.agents/skills
+scripts/init_skill.py my-skill --path ~/.agents/skills --resources scripts,references
+scripts/init_skill.py my-skill --path ~/.agents/skills --targets codex --evals
+scripts/init_skill.py my-skill --path ~/.agents/skills --targets claude,codex,opencode
+```
+
+Use `--resources` only for resources the skill actually needs. Use `--targets` only when
+the skill should scaffold tool-specific notes or metadata. Use `--evals` for any
+non-trivial workflow or when you are improving an existing skill.
 
 Skip this step if the skill already exists.
 
@@ -206,14 +229,26 @@ details, and gotchas that are non-obvious.
 
 ```yaml
 ---
-name: skill-name                # hyphen-case, matches directory
-description: |                  # primary triggering mechanism
+name: skill-name
+description: |
   What the skill does AND when to use it. Include concrete trigger phrases
   and contexts. Many agents under-trigger skills — lean slightly assertive:
   "Use whenever the user mentions X, Y, or Z, even if they don't explicitly
   ask for a 'skill'."
 ---
 ```
+
+Keep the portable default as `name` + `description`. If a target-specific behavior is
+needed, prefer the least surprising place:
+
+- **Claude Code**: add Claude-only frontmatter (`disable-model-invocation`,
+  `user-invocable`, `allowed-tools`, `context: fork`, `agent`, `paths`, `arguments`,
+  `hooks`) when the skill is meant to be invoked or sandboxed that way.
+- **Codex**: add `agents/openai.yaml` for UI metadata, `policy.allow_implicit_invocation`,
+  and tool dependency declarations. Do not put Codex policy in `SKILL.md`.
+- **OpenCode**: put access policy in `opencode.json` (`permission.skill`) or agent
+  frontmatter. OpenCode only uses a small SKILL.md frontmatter subset and ignores the
+  rest, so do not rely on Claude-only fields for OpenCode behavior.
 
 Keep descriptions specific and context-rich. Bad: `"Format this data"`. Good: `"Clean
 and normalize messy spreadsheet data — column headers with typos, inconsistent date
@@ -227,7 +262,69 @@ file that needs cleanup before analysis."`
 - Test every bundled script by running it.
 - Delete placeholder files from init.
 
-### 5. Package (optional)
+### 5. Validate
+
+Run structural validation after editing:
+
+```bash
+scripts/quick_validate.py <path/to/skill-folder>
+scripts/quick_validate.py <path/to/skill-folder> --target common
+scripts/quick_validate.py <path/to/skill-folder> --target opencode
+```
+
+Use `--target common` to prove the skill is portable (`name` + `description` only).
+Use a tool target when you deliberately added target-specific frontmatter.
+
+### 6. Add Evals
+
+For every non-trivial skill, create evals before calling it done. Evals answer:
+"does this skill still trigger, follow the expected process, and produce the expected
+shape after edits?"
+
+Start with `evals/evals.json`:
+
+```json
+{
+  "version": 1,
+  "skill": "skill-name",
+  "cases": [
+    {
+      "id": "explicit-smoke",
+      "prompt": "Use $skill-name to perform a minimal representative task.",
+      "should_invoke": true,
+      "checks": [
+        "Invokes the skill explicitly",
+        "Completes the task without unrelated files",
+        "Output follows the requested format"
+      ]
+    },
+    {
+      "id": "near-miss",
+      "prompt": "Ask for a related task that should not use this skill.",
+      "should_invoke": false,
+      "checks": ["Does not invoke the skill"]
+    }
+  ]
+}
+```
+
+Good starter coverage:
+
+- 2 explicit invocation cases using the tool's syntax (`$skill`, `/skill`, or `skill()`).
+- 4-8 positive natural-language trigger cases with varied phrasing.
+- 4-8 near-miss negatives that share keywords but should use a different workflow.
+- 2 process/output cases that check required commands, artifacts, or response sections.
+
+For important skills, compare a baseline run without the skill to a run with the skill.
+Score small, concrete checks first: skill invoked, expected commands run, required files
+created, forbidden files absent, output headings present, no secret exposure, no
+unnecessary network/destructive steps. Use an LLM rubric only for subjective quality.
+
+Capture traces/artifacts outside the shipped skill (for example
+`evals/artifacts/<date>-<case>/`) and keep the prompt set under version control. When a
+real task exposes a miss, add the prompt as a new eval before changing the skill.
+
+### 7. Package (optional)
 
 For distribution as a single file:
 
@@ -239,7 +336,7 @@ Produces a `.skill` file (a zip with a `.skill` extension). The script validates
 frontmatter, naming, and structure before packaging. Not every tool consumes `.skill`
 files — many just read directories directly — so this step is optional.
 
-### 6. Iterate
+### 8. Iterate
 
 After real use, notice struggles or inefficiencies. The iteration loop is where skills
 get good:
@@ -332,21 +429,25 @@ well, tune the description:
 3. Make the should-not-trigger queries near-misses — queries sharing keywords but
    needing something else. "Write a fibonacci function" is a bad negative test for a
    PDF skill; it's too easy to reject.
-4. Manually evaluate the current description against the queries, or use a tool-specific
-   loop (e.g., Claude Code's `claude -p` CLI) if available.
+4. Record these queries in `evals/evals.json` and score them against trigger behavior.
 5. Revise the description based on failures. Iterate.
 
 Note: simple one-step queries ("read this file") may not trigger any skill because the
 agent handles them directly. Test queries should be substantive enough that the agent
 would genuinely benefit from the skill's guidance.
 
-## Tool-Specific Notes
+## Tool-Specific Compatibility
 
 This skill ships as a portable directory symlinked into each tool's skill root:
 
-- **Claude Code**: `~/.claude/skills/<name>/` — triggered by description match.
-- **Codex**: `~/.codex/skills/<name>/` — same SKILL.md format.
-- **OpenCode**: `~/.config/opencode/skills/<name>/` — same.
+- **Common locations**: `~/.agents/skills/<name>/SKILL.md` and repo-local
+  `.agents/skills/<name>/SKILL.md`.
+- **Claude Code**: also scans `~/.claude/skills/<name>/` and `.claude/skills/<name>/`.
+  Claude custom commands and skills now share behavior; prefer skills for new work.
+- **Codex**: scans `.agents/skills` from cwd up to repo root, `~/.agents/skills`, admin
+  locations, and system skills. Codex supports symlinked skill folders.
+- **OpenCode**: scans `.opencode/skills`, `.claude/skills`, and `.agents/skills` in
+  project and global locations. Access is controlled by `permission.skill`.
 
 Differences to keep in mind when writing skills:
 
@@ -354,8 +455,10 @@ Differences to keep in mind when writing skills:
   phrase it as "delegate to a subagent if available, otherwise run inline".
 - Display/browser availability varies. Don't assume the agent can `open` HTML in a
   browser; offer a file-based fallback ("write `report.html`, tell the user the path").
-- CLI tools vary. Anything like `claude -p` is Claude-Code-specific. Gate tool-specific
-  instructions behind "if your environment provides X".
+- Skill invocation syntax varies. Codex commonly supports `$skill-name`; Claude Code
+  supports `/skill-name`; OpenCode agents load skills through the `skill` tool.
+- CLI/eval tools vary. Anything like `claude -p`, `codex exec --json`, or an OpenCode
+  command wrapper is tool-specific. Gate these behind the matching target.
 
 When in doubt, write the skill in terms of *capabilities* ("if you can run scripts in
 parallel, do so"), not *specific tools*.

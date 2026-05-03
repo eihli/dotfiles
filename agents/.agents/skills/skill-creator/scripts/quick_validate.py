@@ -1,95 +1,246 @@
 #!/usr/bin/env python3
-"""
-Quick validation script for skills - minimal version
+"""Validate an Agent Skill folder.
+
+Default validation accepts the union of known Claude Code, Codex, and OpenCode
+frontmatter so existing target-specific skills do not fail. Use
+`--target common` to enforce the portable name+description subset.
 """
 
-import sys
-import os
+from __future__ import annotations
+
+import argparse
+import json
 import re
-import yaml
+import sys
 from pathlib import Path
+from typing import Any
 
-def validate_skill(skill_path):
-    """Basic validation of a skill"""
+import yaml
+
+
+COMMON_FIELDS = {"name", "description"}
+CLAUDE_FIELDS = COMMON_FIELDS | {
+    "when_to_use",
+    "argument-hint",
+    "arguments",
+    "disable-model-invocation",
+    "user-invocable",
+    "allowed-tools",
+    "model",
+    "effort",
+    "context",
+    "agent",
+    "hooks",
+    "paths",
+    "shell",
+}
+CODEX_FIELDS = COMMON_FIELDS | {
+    "license",
+    "allowed-tools",
+    "metadata",
+}
+OPENCODE_FIELDS = COMMON_FIELDS | {
+    "license",
+    "compatibility",
+    "metadata",
+}
+TARGET_FIELDS = {
+    "common": COMMON_FIELDS,
+    "claude": CLAUDE_FIELDS,
+    "codex": CODEX_FIELDS,
+    "opencode": OPENCODE_FIELDS,
+    "all": CLAUDE_FIELDS | CODEX_FIELDS | OPENCODE_FIELDS,
+}
+
+NAME_RE = re.compile(r"^[a-z0-9]+(-[a-z0-9]+)*$")
+FRONTMATTER_RE = re.compile(r"^---\n(.*?)\n---", re.DOTALL)
+
+
+def _load_frontmatter(skill_md: Path) -> tuple[dict[str, Any] | None, str]:
+    content = skill_md.read_text()
+    if not content.startswith("---"):
+        return None, "No YAML frontmatter found"
+
+    match = FRONTMATTER_RE.match(content)
+    if not match:
+        return None, "Invalid frontmatter format"
+
+    try:
+        frontmatter = yaml.safe_load(match.group(1))
+    except yaml.YAMLError as exc:
+        return None, f"Invalid YAML in frontmatter: {exc}"
+
+    if not isinstance(frontmatter, dict):
+        return None, "Frontmatter must be a YAML dictionary"
+    return frontmatter, ""
+
+
+def _validate_name(name: Any, skill_path: Path) -> str | None:
+    if not isinstance(name, str):
+        return f"Name must be a string, got {type(name).__name__}"
+
+    name = name.strip()
+    if not name:
+        return "Name cannot be empty"
+    if not NAME_RE.fullmatch(name):
+        return (
+            f"Name '{name}' must be lowercase letters/digits with single hyphen "
+            "separators"
+        )
+    if len(name) > 64:
+        return f"Name is too long ({len(name)} characters). Maximum is 64."
+    if skill_path.name != name:
+        return f"Name '{name}' must match directory name '{skill_path.name}'"
+    return None
+
+
+def _validate_description(description: Any) -> str | None:
+    if not isinstance(description, str):
+        return f"Description must be a string, got {type(description).__name__}"
+
+    description = description.strip()
+    if not description:
+        return "Description cannot be empty"
+    if "<" in description or ">" in description:
+        return "Description cannot contain angle brackets (< or >)"
+    if len(description) > 1024:
+        return (
+            f"Description is too long ({len(description)} characters). "
+            "Maximum is 1024."
+        )
+    return None
+
+
+def _validate_metadata(metadata: Any) -> str | None:
+    if metadata is None:
+        return None
+    if not isinstance(metadata, dict):
+        return "metadata must be a YAML mapping"
+    bad_keys = [key for key in metadata if not isinstance(key, str)]
+    bad_values = [value for value in metadata.values() if not isinstance(value, str)]
+    if bad_keys or bad_values:
+        return "metadata keys and values must be strings"
+    return None
+
+
+def _validate_evals(skill_path: Path, skill_name: str) -> str | None:
+    evals_path = skill_path / "evals" / "evals.json"
+    if not evals_path.exists():
+        return None
+
+    try:
+        payload = json.loads(evals_path.read_text())
+    except json.JSONDecodeError as exc:
+        return f"Invalid evals/evals.json: {exc}"
+
+    if not isinstance(payload, dict):
+        return "evals/evals.json must be a JSON object"
+    if payload.get("version") != 1:
+        return "evals/evals.json version must be 1"
+    if payload.get("skill") != skill_name:
+        return "evals/evals.json skill must match SKILL.md name"
+
+    cases = payload.get("cases")
+    if not isinstance(cases, list) or not cases:
+        return "evals/evals.json cases must be a non-empty list"
+
+    seen_ids: set[str] = set()
+    for index, case in enumerate(cases):
+        prefix = f"eval case {index}"
+        if not isinstance(case, dict):
+            return f"{prefix} must be an object"
+        case_id = case.get("id")
+        if not isinstance(case_id, str) or not case_id.strip():
+            return f"{prefix} id must be a non-empty string"
+        if case_id in seen_ids:
+            return f"Duplicate eval case id: {case_id}"
+        seen_ids.add(case_id)
+
+        prompt = case.get("prompt")
+        if not isinstance(prompt, str) or not prompt.strip():
+            return f"eval case {case_id} prompt must be a non-empty string"
+        if not isinstance(case.get("should_invoke"), bool):
+            return f"eval case {case_id} should_invoke must be boolean"
+
+        checks = case.get("checks")
+        if not isinstance(checks, list) or not checks:
+            return f"eval case {case_id} checks must be a non-empty list"
+        if any(not isinstance(check, str) or not check.strip() for check in checks):
+            return f"eval case {case_id} checks must be non-empty strings"
+
+    return None
+
+
+def validate_skill(skill_path: str | Path, target: str = "all") -> tuple[bool, str]:
+    """Validate a skill folder.
+
+    Args:
+        skill_path: Directory containing SKILL.md.
+        target: `common`, `claude`, `codex`, `opencode`, or `all`.
+    """
     skill_path = Path(skill_path)
+    if target not in TARGET_FIELDS:
+        return False, f"Unknown target '{target}'"
 
-    # Check SKILL.md exists
-    skill_md = skill_path / 'SKILL.md'
+    skill_md = skill_path / "SKILL.md"
     if not skill_md.exists():
         return False, "SKILL.md not found"
 
-    # Read and validate frontmatter
-    content = skill_md.read_text()
-    if not content.startswith('---'):
-        return False, "No YAML frontmatter found"
+    frontmatter, error = _load_frontmatter(skill_md)
+    if error:
+        return False, error
+    assert frontmatter is not None
 
-    # Extract frontmatter
-    match = re.match(r'^---\n(.*?)\n---', content, re.DOTALL)
-    if not match:
-        return False, "Invalid frontmatter format"
-
-    frontmatter_text = match.group(1)
-
-    # Parse YAML frontmatter
-    try:
-        frontmatter = yaml.safe_load(frontmatter_text)
-        if not isinstance(frontmatter, dict):
-            return False, "Frontmatter must be a YAML dictionary"
-    except yaml.YAMLError as e:
-        return False, f"Invalid YAML in frontmatter: {e}"
-
-    # Define allowed properties
-    ALLOWED_PROPERTIES = {'name', 'description', 'license', 'allowed-tools', 'metadata'}
-
-    # Check for unexpected properties (excluding nested keys under metadata)
-    unexpected_keys = set(frontmatter.keys()) - ALLOWED_PROPERTIES
-    if unexpected_keys:
+    allowed = TARGET_FIELDS[target]
+    unexpected = set(frontmatter) - allowed
+    if unexpected:
         return False, (
-            f"Unexpected key(s) in SKILL.md frontmatter: {', '.join(sorted(unexpected_keys))}. "
-            f"Allowed properties are: {', '.join(sorted(ALLOWED_PROPERTIES))}"
+            f"Unexpected key(s) for target '{target}': "
+            f"{', '.join(sorted(unexpected))}. Allowed properties are: "
+            f"{', '.join(sorted(allowed))}"
         )
 
-    # Check required fields
-    if 'name' not in frontmatter:
-        return False, "Missing 'name' in frontmatter"
-    if 'description' not in frontmatter:
-        return False, "Missing 'description' in frontmatter"
+    missing = COMMON_FIELDS - set(frontmatter)
+    if missing:
+        return False, f"Missing required field(s): {', '.join(sorted(missing))}"
 
-    # Extract name for validation
-    name = frontmatter.get('name', '')
-    if not isinstance(name, str):
-        return False, f"Name must be a string, got {type(name).__name__}"
-    name = name.strip()
-    if name:
-        # Check naming convention (hyphen-case: lowercase with hyphens)
-        if not re.match(r'^[a-z0-9-]+$', name):
-            return False, f"Name '{name}' should be hyphen-case (lowercase letters, digits, and hyphens only)"
-        if name.startswith('-') or name.endswith('-') or '--' in name:
-            return False, f"Name '{name}' cannot start/end with hyphen or contain consecutive hyphens"
-        # Check name length (max 64 characters per spec)
-        if len(name) > 64:
-            return False, f"Name is too long ({len(name)} characters). Maximum is 64 characters."
+    name_error = _validate_name(frontmatter["name"], skill_path)
+    if name_error:
+        return False, name_error
 
-    # Extract and validate description
-    description = frontmatter.get('description', '')
-    if not isinstance(description, str):
-        return False, f"Description must be a string, got {type(description).__name__}"
-    description = description.strip()
-    if description:
-        # Check for angle brackets
-        if '<' in description or '>' in description:
-            return False, "Description cannot contain angle brackets (< or >)"
-        # Check description length (max 1024 characters per spec)
-        if len(description) > 1024:
-            return False, f"Description is too long ({len(description)} characters). Maximum is 1024 characters."
+    description_error = _validate_description(frontmatter["description"])
+    if description_error:
+        return False, description_error
+
+    metadata_error = _validate_metadata(frontmatter.get("metadata"))
+    if metadata_error:
+        return False, metadata_error
+
+    evals_error = _validate_evals(skill_path, frontmatter["name"].strip())
+    if evals_error:
+        return False, evals_error
 
     return True, "Skill is valid!"
 
-if __name__ == "__main__":
-    if len(sys.argv) != 2:
-        print("Usage: python quick_validate.py <skill_directory>")
-        sys.exit(1)
-    
-    valid, message = validate_skill(sys.argv[1])
+
+def parse_args() -> argparse.Namespace:
+    parser = argparse.ArgumentParser(description="Validate an Agent Skill folder")
+    parser.add_argument("skill_directory")
+    parser.add_argument(
+        "--target",
+        choices=sorted(TARGET_FIELDS),
+        default="all",
+        help="frontmatter compatibility target (default: all)",
+    )
+    return parser.parse_args()
+
+
+def main() -> None:
+    args = parse_args()
+    valid, message = validate_skill(args.skill_directory, target=args.target)
     print(message)
-    sys.exit(0 if valid else 1)
+    raise SystemExit(0 if valid else 1)
+
+
+if __name__ == "__main__":
+    main()

@@ -76,7 +76,9 @@ skill-name/
     ├── references/             documentation loaded on demand
     ├── assets/                 files used in the agent's output
     ├── agents/openai.yaml      Codex UI/policy metadata (Codex-specific)
-    └── evals/evals.json        regression prompts/checks for development
+    └── evals/
+        ├── evals.json          output-quality test prompts and expectations
+        └── trigger-evals.json  description-triggering queries
 ```
 
 ### SKILL.md
@@ -277,48 +279,100 @@ Use a tool target when you deliberately added target-specific frontmatter.
 
 ### 6. Add Evals
 
-For every non-trivial skill, create evals before calling it done. Evals answer:
-"does this skill still trigger, follow the expected process, and produce the expected
-shape after edits?"
+For every non-trivial skill, create evals before calling it done. Keep two eval
+families separate:
 
-Start with `evals/evals.json`:
+- `evals/evals.json`: task/output evals. These prompts should be run with the skill
+  and compared to a baseline without the skill or with the previous skill version.
+- `evals/trigger-evals.json`: description-triggering evals. These queries test whether
+  the description causes the skill to trigger when it should and stay quiet on near
+  misses.
+
+Ask the user to review the proposed eval prompts before treating them as accepted:
+"Here are a few test cases I'd like to try. Do these look right, or do you want to add
+more?" Bad evals produce misleading confidence.
+
+Use Anthropic-style `evals/evals.json` for output evals:
 
 ```json
 {
-  "version": 1,
-  "skill": "skill-name",
-  "cases": [
+  "skill_name": "skill-name",
+  "evals": [
     {
-      "id": "explicit-smoke",
-      "prompt": "Use $skill-name to perform a minimal representative task.",
-      "should_invoke": true,
-      "checks": [
-        "Invokes the skill explicitly",
-        "Completes the task without unrelated files",
-        "Output follows the requested format"
+      "id": 1,
+      "prompt": "User's realistic task prompt",
+      "expected_output": "Human-readable description of successful output",
+      "files": [],
+      "expectations": [
+        "The output includes X",
+        "The run uses bundled script Y"
       ]
     },
     {
-      "id": "near-miss",
-      "prompt": "Ask for a related task that should not use this skill.",
-      "should_invoke": false,
-      "checks": ["Does not invoke the skill"]
+      "id": 2,
+      "prompt": "Another realistic task prompt",
+      "expected_output": "What success looks like",
+      "files": ["evals/files/example-input.txt"],
+      "expectations": []
     }
   ]
 }
 ```
 
-Good starter coverage:
+Good output-eval coverage:
 
-- 2 explicit invocation cases using the tool's syntax (`$skill`, `/skill`, or `skill()`).
-- 4-8 positive natural-language trigger cases with varied phrasing.
-- 4-8 near-miss negatives that share keywords but should use a different workflow.
-- 2 process/output cases that check required commands, artifacts, or response sections.
+- 2-3 realistic prompts that a user would actually type.
+- For file-transform skills, include small representative input files under
+  `evals/files/`.
+- `expected_output` should describe the artifact, response, or behavior that counts as
+  success.
+- Add `expectations` after or during test execution. Good expectations are objectively
+  verifiable and discriminating — they should fail when the skill merely appears to work
+  but misses the important outcome.
+
+Anthropic-style run loop:
+
+1. Spawn runs for every eval in the same turn, with-skill and baseline.
+2. Save each eval's prompt and expectations to `eval_metadata.json` in the run
+   directory.
+3. Capture timing/token data from completion notifications when available.
+4. Grade each run against expectations; use scripts for programmatic checks where
+   possible.
+5. Aggregate pass rate, timing, and token usage.
+6. Put outputs and benchmark data in front of the user for review before revising the
+   skill.
+
+If subagents, browser access, or the exact Anthropic eval viewer are unavailable, keep
+the same shape: save run artifacts, present outputs and grades to the user, collect
+feedback, then iterate.
+
+Use `evals/trigger-evals.json` for description optimization:
+
+```json
+[
+  {
+    "query": "Substantive realistic request that should trigger the skill",
+    "should_trigger": true
+  },
+  {
+    "query": "Near-miss request sharing terms but needing another workflow",
+    "should_trigger": false
+  }
+]
+```
+
+Good trigger-eval coverage:
+
+- 8-10 positive natural-language trigger cases with varied phrasing.
+- 8-10 near-miss negatives that share keywords but should use a different workflow.
+- Concrete, substantive queries with realistic details, paths, URLs, typos, or context.
+  Simple one-step queries often do not trigger skills because the agent can handle them
+  directly.
 
 For important skills, compare a baseline run without the skill to a run with the skill.
-Score small, concrete checks first: skill invoked, expected commands run, required files
-created, forbidden files absent, output headings present, no secret exposure, no
-unnecessary network/destructive steps. Use an LLM rubric only for subjective quality.
+Score small, concrete expectations first: expected commands run, required files created,
+forbidden files absent, output headings present, no secret exposure, no unnecessary
+network/destructive steps. Use an LLM rubric only for subjective quality.
 
 Capture traces/artifacts outside the shipped skill (for example
 `evals/artifacts/<date>-<case>/`) and keep the prompt set under version control. When a
@@ -429,7 +483,8 @@ well, tune the description:
 3. Make the should-not-trigger queries near-misses — queries sharing keywords but
    needing something else. "Write a fibonacci function" is a bad negative test for a
    PDF skill; it's too easy to reject.
-4. Record these queries in `evals/evals.json` and score them against trigger behavior.
+4. Record these queries in `evals/trigger-evals.json` and score them against trigger
+   behavior.
 5. Revise the description based on failures. Iterate.
 
 Note: simple one-step queries ("read this file") may not trigger any skill because the

@@ -135,38 +135,41 @@ policy:
 """
 
 EVALS_TEMPLATE = """{{
-  "version": 1,
-  "skill": "{skill_name}",
-  "cases": [
+  "skill_name": "{skill_name}",
+  "evals": [
     {{
-      "id": "explicit-smoke",
+      "id": 1,
       "prompt": "Use ${skill_name} to perform a minimal representative task.",
-      "should_invoke": true,
-      "checks": [
-        "Invokes the skill explicitly",
-        "Completes the task without unrelated files",
-        "Output follows the requested format"
+      "expected_output": "Describe the concrete artifact, answer, or behavior that a successful run should produce.",
+      "files": [],
+      "expectations": [
+        "The output follows the requested format.",
+        "The run follows the skill workflow instead of improvising an unrelated approach."
       ]
     }},
     {{
-      "id": "implicit-trigger",
-      "prompt": "TODO: Natural-language request that should trigger this skill.",
-      "should_invoke": true,
-      "checks": [
-        "Invokes the skill from the description",
-        "Follows the core workflow"
-      ]
-    }},
-    {{
-      "id": "near-miss",
-      "prompt": "TODO: Related request that should not use this skill.",
-      "should_invoke": false,
-      "checks": [
-        "Does not invoke the skill"
+      "id": 2,
+      "prompt": "TODO: Natural-language request that should benefit from this skill.",
+      "expected_output": "Describe what success looks like for this realistic task.",
+      "files": [],
+      "expectations": [
+        "TODO: Add an objectively verifiable expectation."
       ]
     }}
   ]
 }}
+"""
+
+TRIGGER_EVALS_TEMPLATE = """[
+  {{
+    "query": "TODO: Realistic request that should trigger {skill_name}, with enough detail to need the skill.",
+    "should_trigger": true
+  }},
+  {{
+    "query": "TODO: Near-miss request that shares keywords with {skill_name} but should use a different workflow.",
+    "should_trigger": false
+  }}
+]
 """
 
 
@@ -278,11 +281,14 @@ def write_codex_metadata(skill_dir: Path, skill_name: str, skill_title: str) -> 
     return "agents/openai.yaml"
 
 
-def write_evals(skill_dir: Path, skill_name: str) -> str:
+def write_evals(skill_dir: Path, skill_name: str) -> list[str]:
     evals_dir = skill_dir / "evals"
     evals_dir.mkdir()
     (evals_dir / "evals.json").write_text(EVALS_TEMPLATE.format(skill_name=skill_name))
-    return "evals/evals.json"
+    (evals_dir / "trigger-evals.json").write_text(
+        TRIGGER_EVALS_TEMPLATE.format(skill_name=skill_name)
+    )
+    return ["evals/evals.json", "evals/trigger-evals.json"]
 
 
 def init_skill(
@@ -323,14 +329,15 @@ def init_skill(
         print(f"  {write_codex_metadata(skill_dir, skill_name, skill_title)}")
 
     if include_evals:
-        print(f"  {write_evals(skill_dir, skill_name)}")
+        for item in write_evals(skill_dir, skill_name):
+            print(f"  {item}")
 
     print()
     print(f"Skill '{skill_name}' initialized at {skill_dir}")
     print("Next:")
     print("  1. Fill in SKILL.md, especially the description.")
     print("  2. Delete unused target notes and placeholder resource files.")
-    print("  3. Add or refine evals/evals.json if this is non-trivial.")
+    print("  3. Review evals/evals.json and evals/trigger-evals.json with the user.")
     print("  4. Run scripts/quick_validate.py to check the skill structure.")
     return skill_dir
 

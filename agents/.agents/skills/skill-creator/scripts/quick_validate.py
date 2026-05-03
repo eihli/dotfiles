@@ -135,23 +135,27 @@ def _validate_evals(skill_path: Path, skill_name: str) -> str | None:
 
     if not isinstance(payload, dict):
         return "evals/evals.json must be a JSON object"
-    if payload.get("version") != 1:
-        return "evals/evals.json version must be 1"
-    if payload.get("skill") != skill_name:
-        return "evals/evals.json skill must match SKILL.md name"
+    if {"version", "skill", "cases"} <= set(payload):
+        return (
+            "evals/evals.json uses the old local schema. Use Anthropic-style "
+            "fields: skill_name and evals; put trigger checks in "
+            "evals/trigger-evals.json."
+        )
+    if payload.get("skill_name") != skill_name:
+        return "evals/evals.json skill_name must match SKILL.md name"
 
-    cases = payload.get("cases")
-    if not isinstance(cases, list) or not cases:
-        return "evals/evals.json cases must be a non-empty list"
+    evals = payload.get("evals")
+    if not isinstance(evals, list) or not evals:
+        return "evals/evals.json evals must be a non-empty list"
 
-    seen_ids: set[str] = set()
-    for index, case in enumerate(cases):
+    seen_ids: set[int] = set()
+    for index, case in enumerate(evals):
         prefix = f"eval case {index}"
         if not isinstance(case, dict):
             return f"{prefix} must be an object"
         case_id = case.get("id")
-        if not isinstance(case_id, str) or not case_id.strip():
-            return f"{prefix} id must be a non-empty string"
+        if type(case_id) is not int:
+            return f"{prefix} id must be an integer"
         if case_id in seen_ids:
             return f"Duplicate eval case id: {case_id}"
         seen_ids.add(case_id)
@@ -159,14 +163,50 @@ def _validate_evals(skill_path: Path, skill_name: str) -> str | None:
         prompt = case.get("prompt")
         if not isinstance(prompt, str) or not prompt.strip():
             return f"eval case {case_id} prompt must be a non-empty string"
-        if not isinstance(case.get("should_invoke"), bool):
-            return f"eval case {case_id} should_invoke must be boolean"
 
-        checks = case.get("checks")
-        if not isinstance(checks, list) or not checks:
-            return f"eval case {case_id} checks must be a non-empty list"
-        if any(not isinstance(check, str) or not check.strip() for check in checks):
-            return f"eval case {case_id} checks must be non-empty strings"
+        expected_output = case.get("expected_output")
+        if not isinstance(expected_output, str) or not expected_output.strip():
+            return f"eval case {case_id} expected_output must be a non-empty string"
+
+        files = case.get("files", [])
+        if not isinstance(files, list):
+            return f"eval case {case_id} files must be a list"
+        if any(not isinstance(file, str) or not file.strip() for file in files):
+            return f"eval case {case_id} files must be non-empty strings"
+
+        expectations = case.get("expectations", [])
+        if not isinstance(expectations, list):
+            return f"eval case {case_id} expectations must be a list"
+        if any(
+            not isinstance(expectation, str) or not expectation.strip()
+            for expectation in expectations
+        ):
+            return f"eval case {case_id} expectations must be non-empty strings"
+
+    return None
+
+
+def _validate_trigger_evals(skill_path: Path) -> str | None:
+    evals_path = skill_path / "evals" / "trigger-evals.json"
+    if not evals_path.exists():
+        return None
+
+    try:
+        payload = json.loads(evals_path.read_text())
+    except json.JSONDecodeError as exc:
+        return f"Invalid evals/trigger-evals.json: {exc}"
+
+    if not isinstance(payload, list) or not payload:
+        return "evals/trigger-evals.json must be a non-empty JSON array"
+
+    for index, case in enumerate(payload):
+        if not isinstance(case, dict):
+            return f"trigger eval case {index} must be an object"
+        query = case.get("query")
+        if not isinstance(query, str) or not query.strip():
+            return f"trigger eval case {index} query must be a non-empty string"
+        if not isinstance(case.get("should_trigger"), bool):
+            return f"trigger eval case {index} should_trigger must be boolean"
 
     return None
 
@@ -219,6 +259,9 @@ def validate_skill(skill_path: str | Path, target: str = "all") -> tuple[bool, s
     evals_error = _validate_evals(skill_path, frontmatter["name"].strip())
     if evals_error:
         return False, evals_error
+    trigger_evals_error = _validate_trigger_evals(skill_path)
+    if trigger_evals_error:
+        return False, trigger_evals_error
 
     return True, "Skill is valid!"
 

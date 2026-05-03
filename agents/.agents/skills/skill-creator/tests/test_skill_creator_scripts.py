@@ -71,6 +71,7 @@ class InitSkillTests(unittest.TestCase):
             self.assertTrue((skill_dir / "references" / "reference.md").exists())
             self.assertTrue((skill_dir / "agents" / "openai.yaml").exists())
             self.assertTrue((skill_dir / "evals" / "evals.json").exists())
+            self.assertTrue((skill_dir / "evals" / "trigger-evals.json").exists())
 
             valid, message = quick_validate.validate_skill(skill_dir, target="all")
             self.assertTrue(valid, message)
@@ -117,12 +118,66 @@ class QuickValidateTests(unittest.TestCase):
             evals_dir = skill_dir / "evals"
             evals_dir.mkdir()
             (evals_dir / "evals.json").write_text(
-                '{"version": 1, "skill": "other-skill", "cases": []}'
+                '{"skill_name": "other-skill", "evals": []}'
             )
 
             valid, message = quick_validate.validate_skill(skill_dir)
             self.assertFalse(valid)
-            self.assertIn("skill must match", message)
+            self.assertIn("skill_name must match", message)
+
+    def test_legacy_eval_schema_is_rejected_with_migration_hint(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            skill_dir = self.write_skill(
+                tmp,
+                "eval-skill",
+                "name: eval-skill\ndescription: Skill with evals",
+            )
+            evals_dir = skill_dir / "evals"
+            evals_dir.mkdir()
+            (evals_dir / "evals.json").write_text(
+                '{"version": 1, "skill": "eval-skill", "cases": []}'
+            )
+
+            valid, message = quick_validate.validate_skill(skill_dir)
+            self.assertFalse(valid)
+            self.assertIn("old local schema", message)
+
+    def test_eval_id_boolean_is_rejected(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            skill_dir = self.write_skill(
+                tmp,
+                "eval-skill",
+                "name: eval-skill\ndescription: Skill with evals",
+            )
+            evals_dir = skill_dir / "evals"
+            evals_dir.mkdir()
+            (evals_dir / "evals.json").write_text(
+                '{"skill_name": "eval-skill", "evals": ['
+                '{"id": true, "prompt": "Do it", '
+                '"expected_output": "Done", "files": [], "expectations": []}'
+                "]}"
+            )
+
+            valid, message = quick_validate.validate_skill(skill_dir)
+            self.assertFalse(valid)
+            self.assertIn("id must be an integer", message)
+
+    def test_trigger_eval_schema_is_validated(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            skill_dir = self.write_skill(
+                tmp,
+                "trigger-skill",
+                "name: trigger-skill\ndescription: Skill with trigger evals",
+            )
+            evals_dir = skill_dir / "evals"
+            evals_dir.mkdir()
+            (evals_dir / "trigger-evals.json").write_text(
+                '[{"query": "Use it", "should_trigger": "yes"}]'
+            )
+
+            valid, message = quick_validate.validate_skill(skill_dir)
+            self.assertFalse(valid)
+            self.assertIn("should_trigger must be boolean", message)
 
 
 if __name__ == "__main__":

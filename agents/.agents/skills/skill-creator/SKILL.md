@@ -75,6 +75,8 @@ skill-name/
     ├── scripts/                executable code (Python, bash, etc.)
     ├── references/             documentation loaded on demand
     ├── assets/                 files used in the agent's output
+    ├── agents/                 optional grader/analyzer/comparator prompts
+    ├── eval-viewer/            optional human review UI for eval artifacts
     ├── agents/openai.yaml      Codex UI/policy metadata (Codex-specific)
     └── evals/
         ├── evals.json          output-quality test prompts and expectations
@@ -346,6 +348,50 @@ If subagents, browser access, or the exact Anthropic eval viewer are unavailable
 the same shape: save run artifacts, present outputs and grades to the user, collect
 feedback, then iterate.
 
+This skill includes a portable local runner for that shape:
+
+```bash
+scripts/run_skill_evals.py <path/to/skill> --executor mock --grader mock
+scripts/run_skill_evals.py <path/to/skill> \
+  --executor command \
+  --command-template 'agent-cli --prompt-file {prompt_file}' \
+  --grader deterministic
+```
+
+The runner creates:
+
+```text
+<skill-name>-workspace/
+└── iteration-1/
+    ├── eval-1-descriptive-name/
+    │   ├── eval_metadata.json
+    │   ├── inputs/
+    │   ├── with_skill/run-1/{outputs/,transcript.md,timing.json,grading.json}
+    │   └── without_skill/run-1/{outputs/,transcript.md,timing.json,grading.json}
+    ├── benchmark.json
+    ├── benchmark.md
+    └── review.html
+```
+
+Use `--executor mock --grader mock` only to smoke-test the artifact pipeline. For real
+runs, use `--executor command` with a tool-specific noninteractive command. The command
+template receives `{cwd}`, `{prompt_file}`, `{outputs_dir}`, `{run_dir}`, `{config}`,
+and `{skill_path}` placeholders, and the runner installs the skill into project-local
+`.agents/skills`, `.claude/skills`, `.codex/skills`, and `.opencode/skills` directories
+for the `with_skill` config. Baseline runs omit that installed skill. If a user's global
+tool config still loads the same skill, use a wrapper command that isolates that tool's
+config while preserving authentication.
+
+Default deterministic grading supports machine-checkable expectation prefixes:
+
+- `output_contains: text`
+- `transcript_contains: text`
+- `file_exists: relative/path`
+- `file_absent: relative/path`
+
+Free-form expectations fail closed under deterministic grading; use
+`--grader-command-template` or review `review.html` for natural-language judgments.
+
 Use `evals/trigger-evals.json` for description optimization:
 
 ```json
@@ -522,3 +568,8 @@ parallel, do so"), not *specific tools*.
 
 - `references/workflows.md` — sequential and conditional workflow patterns
 - `references/output-patterns.md` — template, example, and formatting patterns
+- `agents/grader.md` — guidance for LLM grading of eval outputs
+- `agents/analyzer.md` — guidance for interpreting benchmark results
+- `scripts/run_skill_evals.py` — artifact-producing eval runner
+- `scripts/aggregate_benchmark.py` — benchmark aggregation from `grading.json`
+- `eval-viewer/generate_review.py` — static HTML review page generator

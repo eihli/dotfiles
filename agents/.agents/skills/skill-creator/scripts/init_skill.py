@@ -143,8 +143,8 @@ EVALS_TEMPLATE = """{{
       "expected_output": "Describe the concrete artifact, answer, or behavior that a successful run should produce.",
       "files": [],
       "expectations": [
-        "The output follows the requested format.",
-        "The run follows the skill workflow instead of improvising an unrelated approach."
+        "output_contains: TODO replace with text that should appear in a successful output.",
+        "transcript_contains: TODO replace with a workflow step the executor should perform."
       ]
     }},
     {{

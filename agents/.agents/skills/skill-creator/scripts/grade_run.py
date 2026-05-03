@@ -92,6 +92,16 @@ def expectation_rule(expectation: str) -> tuple[str, str]:
     return name.strip().lower().replace("-", "_"), value.strip()
 
 
+def resolve_output_path(outputs_dir: Path, value: str) -> tuple[Path | None, str | None]:
+    root = outputs_dir.resolve()
+    candidate = (outputs_dir / value).resolve()
+    try:
+        candidate.relative_to(root)
+    except ValueError:
+        return None, f"Output path `{value}` must stay under {outputs_dir}."
+    return candidate, None
+
+
 def grade_expectation(
     expectation: str,
     transcript: str,
@@ -119,18 +129,20 @@ def grade_expectation(
             else f"`{value}` was not found in transcript."
         )
     elif rule == "file_exists":
-        passed = (outputs_dir / value).exists()
+        candidate, error = resolve_output_path(outputs_dir, value)
+        passed = bool(candidate and candidate.exists())
         evidence = (
             f"Found output file `{value}`."
             if passed
-            else f"Output file `{value}` was not found. Files: {output_files}"
+            else error or f"Output file `{value}` was not found. Files: {output_files}"
         )
     elif rule == "file_absent":
-        passed = not (outputs_dir / value).exists()
+        candidate, error = resolve_output_path(outputs_dir, value)
+        passed = bool(candidate and not candidate.exists())
         evidence = (
             f"Output file `{value}` is absent."
             if passed
-            else f"Output file `{value}` exists but should be absent."
+            else error or f"Output file `{value}` exists but should be absent."
         )
     else:
         passed = False
@@ -191,9 +203,7 @@ def normalize_grading(payload: dict[str, Any]) -> dict[str, Any]:
         )
 
     payload["expectations"] = normalized_expectations
-    payload["summary"] = payload.get("summary") or summarize_expectations(
-        normalized_expectations
-    )
+    payload["summary"] = summarize_expectations(normalized_expectations)
     payload.setdefault("execution_metrics", {})
     payload.setdefault("timing", {})
     payload.setdefault("claims", [])

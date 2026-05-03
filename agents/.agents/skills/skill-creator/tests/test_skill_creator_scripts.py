@@ -257,6 +257,54 @@ class EvalRunnerTests(unittest.TestCase):
             self.assertEqual(payload["summary"]["pass_rate"], 1.0)
             self.assertTrue((run_dir / "grading.json").exists())
 
+    def test_file_expectations_cannot_escape_outputs_dir(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            run_dir = Path(tmp) / "eval-1" / "with_skill" / "run-1"
+            outputs = run_dir / "outputs"
+            outputs.mkdir(parents=True)
+            (run_dir.parent.parent / "eval_metadata.json").write_text(
+                json.dumps(
+                    {
+                        "eval_id": 1,
+                        "expectations": ["file_exists: ../transcript.md"],
+                    }
+                )
+            )
+            (run_dir / "transcript.md").write_text("outside outputs")
+
+            payload = grade_run.grade_run(run_dir)
+            self.assertEqual(payload["summary"]["pass_rate"], 0.0)
+            self.assertIn(
+                "must stay under",
+                payload["expectations"][0]["evidence"],
+            )
+
+    def test_external_grader_summary_is_recomputed(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            run_dir = Path(tmp) / "eval-1" / "with_skill" / "run-1"
+            outputs = run_dir / "outputs"
+            outputs.mkdir(parents=True)
+            (run_dir.parent.parent / "eval_metadata.json").write_text(
+                json.dumps({"eval_id": 1, "expectations": ["external check"]})
+            )
+            helper = Path(tmp) / "write_bad_summary.py"
+            helper.write_text(
+                "import json, pathlib, sys\n"
+                "pathlib.Path(sys.argv[1]).write_text(json.dumps({\n"
+                "  'expectations': ["
+                "{'text': 'external check', 'passed': True, 'evidence': 'ok'}],\n"
+                "  'summary': {'passed': 0, 'failed': 1, 'total': 1, "
+                "'pass_rate': 0.0}\n"
+                "}))\n"
+            )
+
+            payload = grade_run.grade_run(
+                run_dir,
+                command_template=f"python3 {helper} {{grading_json}}",
+            )
+            self.assertEqual(payload["summary"]["passed"], 1)
+            self.assertEqual(payload["summary"]["pass_rate"], 1.0)
+
     def test_aggregate_benchmark_reads_grading_artifacts(self):
         with tempfile.TemporaryDirectory() as tmp:
             iteration = Path(tmp) / "iteration-1"
